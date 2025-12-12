@@ -73,7 +73,7 @@ const Faq = ({ data }: { data: SectionProps }) => {
                                 </div>
                             }
 
-                            <div className="image-absolute" data-aos="zoom-in">
+                            {/* <div className="image-absolute" data-aos="zoom-in">
                                 <Image 
                                     src={BackgroundImage.src}
                                     width={104} 
@@ -81,7 +81,7 @@ const Faq = ({ data }: { data: SectionProps }) => {
                                     loading="lazy" 
                                     alt="Image" 
                                 />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
