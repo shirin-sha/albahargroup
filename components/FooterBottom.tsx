@@ -16,7 +16,7 @@ const FooterBottom = ({
                 <div className="grid grid-cols-2 md:gap-1 footer-bottom-row">
                     <div className="col-span-2 md:col-span-1">
                         <div className="footer-copyright text text-16">
-                            Copyright ©2025 SpreeThemes. All rights reserved.
+                        Copyright ©2025 Mohamed Abdulrahman Al-Bahar
                         </div>
                     </div>
                     <div className="col-span-2 md:col-span-1">

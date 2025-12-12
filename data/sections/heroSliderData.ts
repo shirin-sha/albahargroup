@@ -1,30 +1,43 @@
 export const HeroSlidesData = [
-    {
-      subheading: "welcome to Zentra",
-      heading: "Business Growth Made Simple",
-      text: "Transform your business with expert consultancy services our team of seasoned consultants unparalleled. Transform your business.",
-      button: {
-          label: "Free Consultation",
-          href: "/contact-us",
-          type: "secondary"
-      },
-      image: "/img/slider/hero-1.jpg",
-      imageTablet: "/img/slider/hero-991.jpg",
-      imageMobile: "/img/slider/hero-575.jpg"
+  {
+    subheading: "Diversified Business Group – Since 1937",
+    heading: "Partnering to Shape Kuwait’s Future",
+    text: "For more than eight decades, Mohamed Abdulrahman Al-Bahar Group has connected global brands with local insight. Across five business verticals and 70+ international partners, we bring trusted solutions to homes, businesses, and institutions throughout Kuwait.",
+    button: {
+        label: "Discover Our Story",
+        href: "/contact-us",
+        type: "primary"
     },
-    {
-      subheading: "welcome to Zentra",
-      heading: "Business Growth Made Simple",
-      text: "Transform your business with expert consultancy services our team of seasoned consultants unparalleled. Transform your business.",
-      button: {
-          label: "Free Consultation",
-          href: "/contact-us",
-          type: "secondary"
-      },
-      image: "/img/slider/hero-2.jpg",
-      imageTablet: "/img/slider/hero2-991.jpg",
-      imageMobile: "/img/slider/hero2-575.jpg"
-    }
+    image: "/img/slider/hero-1.jpg",
+    imageTablet: "/img/slider/hero-991.jpg",
+    imageMobile: "/img/slider/hero-575.jpg"
+  },
+  {
+    subheading: "Global Brands. Local Insight.",
+    heading: "Building Stronger Brands in Kuwait",
+    text: "For over 80 years, Al Bahar Group has helped international brands grow in Kuwait by combining deep market understanding with disciplined execution. From FMCG to technology and shipping, we create win–win partnerships that stand the test of time.",
+    button: {
+        label: "View Our Business Verticals",
+        href: "/contact-us",
+        type: "primary"
+    },
+    image: "/img/slider/hero-2.jpg",
+    imageTablet: "/img/slider/hero2-991.jpg",
+    imageMobile: "/img/slider/hero2-575.jpg"
+  },
+  {
+    subheading: "Excellence in Every Detail",
+    heading: "Delivering Reliability Across Every Business Line",
+    text: "From supply chain and logistics to omni-channel execution and customer service, Al Bahar Group is built on disciplined operations. Our business enablers ensure products arrive on time, shelves stay full, and partners experience consistent, measurable performance across Kuwait.",
+    button: {
+        label: "View Our Business Enablers",
+        href: "/contact-us",
+        type: "primary"
+    },
+    image: "/img/slider/hero-1.jpg",
+    imageTablet: "/img/slider/hero-991.jpg",
+    imageMobile: "/img/slider/hero-575.jpg"
+  }
 ];
 
 export const BannerSlides = [

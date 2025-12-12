@@ -19,14 +19,16 @@ const CardPricing = ({ data }: { data: PricingProps }) => {
                 {title && <h2 className="heading text-24">{title}</h2>}
                 {description && <p className="text text-16">{description}</p>}
 
-                <div className="pricing-box">
-                    <span className="subheading text-50 fw-600">{price}</span>
-                    {period && 
-                        <span className="subheading subheading-monthly text-16 fw-400">
-                            {period}
-                        </span>
-                    }
-                </div>
+                {price && (
+                    <div className="pricing-box">
+                        <span className="subheading text-50 fw-600">{price}</span>
+                        {period && 
+                            <span className="subheading subheading-monthly text-16 fw-400">
+                                {period}
+                            </span>
+                        }
+                    </div>
+                )}
             </div>
 
             {features &&
@@ -47,9 +49,9 @@ const CardPricing = ({ data }: { data: PricingProps }) => {
                 <Link
                     href={link ? link : '#'}
                     className="button button--primary"
-                    aria-label="More About Us"
+                    aria-label="Learn More"
                 >
-                    Choose Package
+                    Learn More
                     <Icons.ArrowRotate />
                 </Link>
             </div>

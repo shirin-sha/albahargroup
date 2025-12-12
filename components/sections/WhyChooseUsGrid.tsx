@@ -105,24 +105,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                     </div>
                                 }
 
-                                {rotatingLogo &&
-                                    <div className="choose-logo">
-                                        <div 
-                                            className="choose-rotating-logo" 
-                                            data-aos="zoom-in-up"
-                                        >
-                                            {rotatingLogo.logo && 
-                                                <span className="svg-wrapper infinite-rotate">
-                                                    {rotatingLogo.logo}
-                                                </span>
-                                            }
-
-                                            {rotatingLogo.text && 
-                                                <span className="text-abs">{rotatingLogo.text}</span>
-                                            }
-                                        </div>
-                                    </div>
-                                }
+                              
                             </div>
                         </div>
                     </div>
@@ -151,7 +134,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                                 }
 
                                                 {item.text && 
-                                                    <p className="text text-16">
+                                                    <p className="text text-16" style={{ whiteSpace: 'pre-line' }}>
                                                         {item.text}
                                                     </p>
                                                 }
@@ -163,21 +146,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                         </div>
                     }
 
-                    {promoImage && 
-                        <div 
-                            className="choose-media-absolute radius18" 
-                            data-aos="fade-up" 
-                            data-aos-delay="400"
-                        >
-                            <Image 
-                                src={promoImage.src}
-                                alt={promoImage.alt ? promoImage.alt : 'Image'}
-                                width={promoImage.width}
-                                height={promoImage.height}
-                                loading={promoImage.loading}
-                            />
-                        </div>
-                    }
+                  
                 </div>
             </div>
         </div>

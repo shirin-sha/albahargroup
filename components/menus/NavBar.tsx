@@ -14,6 +14,7 @@ import {
   LinkWithDesc, 
   BottomMenuLink 
 } from "./MenuLinks";
+import { MenuItem } from "@/types/menu";
 
 const NavBar = () => {
   return (
@@ -39,7 +40,7 @@ const NavBar = () => {
         </div>
         <ul className="header-menu list-unstyled">
           {
-            Menus?.map((link, index) => (
+            Menus?.map((link: MenuItem, index) => (
               <li className={`nav-item${link.megamenu || link.megamenutwocolumn ? ' nav-item-static': ''}`} key={`link-${index}`}>
                   <ParentLink 
                     title={link.title} 
@@ -55,7 +56,7 @@ const NavBar = () => {
                               <ChildLink 
                                 title={childlink.title} 
                                 path={childlink.path} 
-                                dropdown={childlink.dropdown ? true : false} 
+                                dropdown={childlink.dropdown && childlink.dropdown.length > 0 ? true : false} 
                               />
 
                               {childlink.dropdown &&                                 

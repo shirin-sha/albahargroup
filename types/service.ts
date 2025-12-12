@@ -8,6 +8,7 @@ export interface ServiceProps {
     image?: string;
     icon?: string;
     title?: string;
+    detailTitle?: string;
     description?: string;
     content?: string;
     list?: ServiceListProps[];

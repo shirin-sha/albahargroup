@@ -170,17 +170,17 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
                                         type="email"
                                         placeholder="Email Here*"
                                         name="email"
-                                        required={false}
+                                        required={true}
                                     />
 
                                     <TextField 
                                         cls="text-16"
-                                        id="ContactForm-service"
-                                        label="Service Type"
+                                        id="ContactForm-subject"
+                                        label="Subject"
                                         type="text"
-                                        placeholder="Service Type"
-                                        name="service"
-                                        required={false}
+                                        placeholder="Subject*"
+                                        name="subject"
+                                        required={true}
                                     />
 
                                     <TextArea 

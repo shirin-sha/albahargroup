@@ -61,6 +61,35 @@ footer .social-link:hover {
   margin-block-start: 28px;
 }
 
+.footer-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-contact-list .contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-contact-list .contact-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.footer-contact-list .contact-value {
+  font-size: 16px;
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.footer-contact-list .contact-value:hover {
+  opacity: 0.75;
+}
+
 .footer-top {
   padding: 100px 0;
 }

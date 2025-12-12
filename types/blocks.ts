@@ -7,4 +7,5 @@ export interface BlockListProps {
     text?: string;
     button?: ButtonProps;
     image?: ImageProps;
+    icon?: any;
 }

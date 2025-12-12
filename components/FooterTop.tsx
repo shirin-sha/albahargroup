@@ -6,6 +6,7 @@ import {
 
 import FooterBrand from "./FooterBrand";
 import FooterMenu from "./FooterMenu";
+import FooterContactInfo from "./FooterContactInfo";
 
 interface FooterTopProps {
     container: string;
@@ -23,33 +24,18 @@ const FooterTop = ({
               </div>
               <div className="max-md:col-span-12 max-lg:col-span-6">
                 <FooterMenu 
-                    heading="Quick Link"
+                    heading="Our Business"
                     menus={QuickLink}
                 />
               </div>
               <div className="max-md:col-span-12 max-lg:col-span-6">
-                <div
-                  className="footer-widget footer-widget-menu"
-                  data-aos="fade-up"
-                  data-aos-anchor=".footer-top"
-                >
-                    <FooterMenu 
-                        heading="Services"
-                        menus={Services}
-                    />
-                </div>
+                <FooterMenu 
+                    heading="Business Enablers"
+                    menus={Services}
+                />
               </div>
               <div className="max-md:col-span-12 max-lg:col-span-6">
-                <div
-                  className="footer-widget footer-widget-menu"
-                  data-aos="fade-up"
-                  data-aos-anchor=".footer-top"
-                >
-                    <FooterMenu 
-                        heading="Information"
-                        menus={Information}
-                    />
-                </div>
+                <FooterContactInfo />
               </div>
             </div>
           </div>

@@ -5,47 +5,51 @@ interface MenuType {
 
 export const QuickLink: MenuType[] = [
     {
-        title: 'About Us',
-        path: '/about-us'
+        title: 'Technology',
+        path: '/services/technology'
     },
     {
-        title: 'Our Team',
-        path: '/teams'
+        title: 'Consumer Goods',
+        path: '/services/consumer'
     },
     {
-        title: 'Pricing Plans',
-        path: '/pricing-plan'
+        title: 'Shipping',
+        path: '/services/shipping'
     },
     {
-        title: 'Blogs',
-        path: '/blogs'
+        title: 'Travel',
+        path: '/services/travel'
     },
     {
-        title: 'Contact Us',
-        path: '/contact-us'
+        title: 'Retail',
+        path: '/services/retail'
     }
 ];
 
 export const Services: MenuType[] = [
     {
-        title: 'UI/UX Design',
-        path: '/projects'
+        title: 'Human Capital',
+        path: '/services/human-capital'
     },
     {
-        title: 'App Development',
-        path: '/projects'
+        title: 'Logistics',
+        path: '/services/logistics'
     },
     {
-        title: 'Digital Marketing',
-        path: '/services'
+        title: 'Supply Chain',
+        path: '/services/supply-chain'
     },
     {
-        title: 'Web Development',
-        path: '/pricing-plan'
+        title: 'Omni Channel',
+        path: '/services/omni-channel'
     },
     {
-        title: 'Cyber Security',
-        path: '/projects/business-development'
+        title: 'Business Excellence',
+        path: '/services/business-excellence'
+    },
+    {
+        title: 'Knowledge Capital',
+        path: '/services/knowledge-capital'
     }
 ];
 

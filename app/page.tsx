@@ -1,22 +1,25 @@
 import { HeroSlidesData } from '@/data/sections/heroSliderData';
-import { ImageTextData } from '@/data/sections/imageTextData';
-import { ScrollingTextData } from '@/data/sections/scrollingTextData';
-import { OurServicesData } from '@/data/sections/ourServicesData';
-import { RecentProjectData } from '@/data/sections/recentProjectData';
-import { WhyChooseUsData } from '@/data/sections/whyChooseUsData';
-import { TeamSliderData } from '@/data/sections/teamSliderData';
-import { TestimonialData } from '@/data/sections/testimonialData';
-import { FeaturedBlogGridData } from '@/data/sections/featuredBlogGridData';
+
 
 import HeroSlider from '@/components/sections/HeroSlider';
-import ImageText from '@/components/sections/ImageText';
-import ScrollingText from '@/components/sections/ScrollingText';
-import OurServices from '@/components/sections/OurServices';
-import RecentProject from '@/components/sections/RecentProject';
-import WhyChooseUs from '@/components/sections/WhyChooseUs';
-import TeamSlider from '@/components/sections/TeamSlider';
-import Testimonials from '@/components/sections/Testimonials';
-import FeaturedBlogGrid from '@/components/sections/FeaturedBlogGrid';
+
+import { ImageText2Data } from '@/data/sections/imageText2Data';
+import { OurServicesDataAccordion } from '@/data/sections/ourServicesDataAccordion';
+import { FeaturedProjectData } from '@/data/sections/featuredProjectData';
+import { WhyChooseUsGridData } from '@/data/sections/whyChooseUsGridData';
+import { PricingPlanData } from '@/data/sections/pricingPlanData';
+import { FaqData } from '@/data/sections/faqData';
+import { BusinessVerticalsData } from '@/data/sections/businessVerticalsData';
+import { FeaturedBlogData } from '@/data/sections/featuredBlogData';
+
+import ImageText2 from '@/components/sections/ImageText2';
+import OurServicesAccordion from '@/components/sections/OurServicesAccordion';
+import ProjectSlider from '@/components/sections/ProjectSlider';
+import WhyChooseUsGrid from '@/components/sections/WhyChooseUsGrid';
+import PricingPlan from '@/components/sections/PricingPlan';
+import BusinessVerticals from '@/components/sections/BusinessVerticals';
+import Faq from '@/components/sections/Faq';
+import FeaturedBlog from '@/components/sections/FeaturedBlog';
 
 
 const Home = () => {
@@ -30,31 +33,28 @@ const Home = () => {
       />
 
       {/* Image Text */}
-      <ImageText data={ImageTextData} />
+      <ImageText2 data={ImageText2Data} />
 
-      {/* Scrolling Text */}
-      <ScrollingText data={ScrollingTextData} />
+{/* Service Section */}
+<OurServicesAccordion data={OurServicesDataAccordion} />
 
-      {/* Service Section */}
-      <OurServices data={OurServicesData} />
+{/* Recent Projects */}
+<ProjectSlider data={FeaturedProjectData} />
 
-      {/* Recent Projects */}
-      <RecentProject data={RecentProjectData} />
+{/* Why Choose Us */}
+<WhyChooseUsGrid data={WhyChooseUsGridData} />
 
-      {/* Why Choose Us */}
-      <WhyChooseUs data={WhyChooseUsData} />
+{/* Pricing Plan */}
+<PricingPlan data={PricingPlanData} />
 
-      {/* Our Team */}
-      <TeamSlider 
-        data={TeamSliderData} 
-        pagination={true}
-      />
+{/* Business Verticals */}
+<BusinessVerticals data={BusinessVerticalsData} />
 
-      {/* Testimonials */}
-      <Testimonials data={TestimonialData} />
+{/* FAQ */}
+<Faq data={FaqData} />
 
-      {/* Featured Blog */}
-      <FeaturedBlogGrid data={FeaturedBlogGridData} />
+{/* Featured Blog */}
+<FeaturedBlog data={FeaturedBlogData} />
     </>
   );
 }

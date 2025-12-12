@@ -20,7 +20,7 @@ const FooterBrand = () => {
                 loading="lazy"
             />
             <p className="text text-16">
-                Each demo built with Teba will look different. You can customize almost anything in the appearance of your website with only a few
+                Mohamed Abdulrahman Al-Bahar Group is a diversified Kuwaiti business group representing leading global brands across technology, consumer goods, shipping, travel and retail, committed to long-term partnerships, operational excellence and contributing to Kuwait's sustainable growth.
             </p>
             <Social 
                 wrapperCls="social-icons"

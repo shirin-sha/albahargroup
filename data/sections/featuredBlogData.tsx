@@ -3,10 +3,10 @@ import { SectionProps } from "@/types/sectionProps";
 export const FeaturedBlogData: SectionProps = {
     wrapperCls: "mt-100 section-padding",
     container: "container",
-    subheading: "Our Blog",
-    heading: "Latest News From Us",
+    subheading: "Our News",
+    heading: "Latest Stories from Our Group",
     button: {
-        label: "Discover More",
+        label: "Discover More News",
         href: "/blogs",
         type: "primary"
     },

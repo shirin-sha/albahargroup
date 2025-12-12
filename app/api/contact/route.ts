@@ -3,9 +3,9 @@ import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, message, service } = await req.json();
+    const { name, email, subject, message } = await req.json();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { error: "All fields are required" }, 
         { status: 400 }
@@ -23,30 +23,20 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    let html = `
+    const html = `
       <h3>New Contact Form Message</h3>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Subject:</strong> ${subject}</p>
       <p><strong>Message:</strong></p>
       <p>${message}</p>
     `
-
-    if(service) {
-      html = `
-        <h3>New Contact Form Message</h3>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Service type:</strong> ${service}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `
-    }
 
     // Email options
     const mailOptions = {
       from: `"${name}" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER, // Receiver
-      subject: `Consulo Contact Form Message`,
+      subject: `Contact Form: ${subject}`,
       text: message,
       html: html,
     };

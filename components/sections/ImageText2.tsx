@@ -6,6 +6,8 @@ import Text from "../Text";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import { SectionProps } from "@/types/sectionProps";
+import ScrollingTextGradient from "../sections/ScrollingTextGradient";
+import { ScrollingTextGradientData } from "@/data/sections/scrollingTextGradientData";
 
 const ImageText2 = ({ data }: { data: SectionProps }) => {
     const {
@@ -52,6 +54,14 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                                     />
                                 </div>
                             }
+                        </div>
+                        
+                        {/* Logo Slider */}
+                        <div className="w-full">
+                            <ScrollingTextGradient data={{
+                                ...ScrollingTextGradientData,
+                                container: "w-full"
+                            }} />
                         </div>
                     </div>
 

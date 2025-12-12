@@ -6,19 +6,19 @@ import Image2 from '@/public/img/image-text/img-small.png';
 export const ImageText2Data: SectionProps = {
     wrapperCls: "mt-100",
     container: "container",
-    subheading: "Our Company",
-    heading: "Redesigning business for solutions",
-    text: "Our mission is to empowers businesses off all size to thrive in an our businesses ever changing marketplace.",
+    subheading: "Al Bahar Group",
+    heading: "Redefining Partnership for a New Era of Growth",
+    text: "Founded in 1937 by Mr. Mohamed Abdulrahman Al-Bahar, our group has grown from a pioneering trading house into a diversified business leader. Grounded in our Kuwaiti heritage and guided by a long-term view, we collaborate with market-leading brands to deliver relevant, high-quality products and services that improve everyday life.",
     textList: [
         {
             icon: <Icons.Ambition />,
             title: "Our ambition",
-            text: "Businesses off all size thrive in an our businesses."
+            text: "To be the partner of choice for global brands seeking sustainable growth in Kuwait, combining local market expertise with international standards of excellence."
         },
         {
             icon: <Icons.Purpose />,
             title: "Our purpose",
-            text: "Businesses off all size thrive in an our businesses."
+            text: "To enable progress for customers, partners, and communities by delivering reliable solutions, building long-term relationships, and investing in people and innovation."
         }
     ],
     button: {

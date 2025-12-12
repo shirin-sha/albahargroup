@@ -15,9 +15,9 @@ export const WhyChooseUsGridData: SectionProps = {
         loading: "lazy",
         alt: "Choose us image"
     },
-    subheading: "Why Choose Us",
-    heading: "Supporting Growth on a Global Scale",
-    text: "We provide dependable and tailored consulting services that help your business navigate challenges, seize opportunities.",
+    subheading: "Why Al Bahar Group",
+    heading: "A Heritage of Trust, A Future of Possibilities",
+    text: "As one of Kuwait's long-established business groups, we combine decades of experience with a constant focus on what comes next. Our success is built on strong values, disciplined execution and partnerships that stand the test of time.",
     button: {
         label: "More About Us",
         href: "/about-us",
@@ -31,17 +31,17 @@ export const WhyChooseUsGridData: SectionProps = {
         {
             icon: <Icons.Mission />,
             title: "Our Mission",
-            text: "Our mission is push engage boundaries, enga audiences, and driv engage.",
+            text: "Delivering excellence and success by directing our values, talents, resources and expertise to maximize customer satisfaction and to achieve sustainable growth for all stakeholders.",
         },
         {
             icon: <Icons.Vision />,
             title: "Our Vision",
-            text: "Our mission is push engage boundaries, enga audiences, and driv engage.",
+            text: "To Always be the Most Trusted and Best-in-Class Partner.",
         },
         {
-            icon: <Icons.Awards />,
-            title: "Our Awards",
-            text: "Our mission is push engage boundaries, enga audiences, and driv engage.",
+            icon: <Icons.Purpose />,
+            title: "Our Values",
+            text: "• We always deliver on our commitments\n• We consider our people to be our strength\n• We are one team\n• We listen, we care, we respect\n• We constantly work towards improvement",
         },
     ],
     promoImage: {

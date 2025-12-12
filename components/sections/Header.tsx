@@ -9,7 +9,7 @@ const Header = () => {
 
     return (
         <>        
-            {pathname == '/home-2' ? <HeaderStyle2 /> : <HeaderStyle1 />}
+          <HeaderStyle1 />
         </>
     )
 }
