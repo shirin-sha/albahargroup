@@ -12,14 +12,13 @@ import ScrollTop from "@/components/ScrollToTop";
 export const metadata: Metadata = {
   title: {
     template: '%s',
-    default: 'Consulo Creative Business Consulting Template',
+    default: 'Al Bahar Group',
   },
-  description: "Consulo is a creative business consulting template designed for corporate entities and professional businesses.",
+  description: "",
   openGraph: {
-    title: 'Consulo Creative Business Consulting Template',
-    description: 'A versatile HTML template designed for corporate entities and professional businesses.',
-    url: 'https://themeforest.net/user/spreethemes/portfolio',
-    type: 'website',
+    title: 'Al Bahar Group',
+    description: '',
+   
   },
 };
 
