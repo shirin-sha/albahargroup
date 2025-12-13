@@ -4,6 +4,8 @@ import BreadcrumbBannerImageTablet from '@/public/img/banner/page-banner-991.jpg
 import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg';
 
 import { ImageTextData } from '@/data/sections/imageTextData';
+import { HeritageData } from '@/data/sections/heritageData';
+import { CollaborationData } from '@/data/sections/collaborationData';
 import { ScrollingTextData } from '@/data/sections/scrollingTextData';
 import { WhyChooseUsGridBgData } from '@/data/sections/whyChooseUsGridBgData';
 import { TeamSliderData } from '@/data/sections/teamSliderData';
@@ -12,6 +14,8 @@ import { Faq2Data } from '@/data/sections/faq2Data';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import ImageText from '@/components/sections/ImageText';
+import Heritage from '@/components/sections/Heritage';
+import Collaboration from '@/components/sections/Collaboration';
 import ScrollingText from '@/components/sections/ScrollingText';
 import WhyChooseUsGrid from '@/components/sections/WhyChooseUsGrid';
 import TeamSlider from '@/components/sections/TeamSlider';
@@ -46,6 +50,7 @@ const About = () => {
             {/* Image Text */}
             <ImageText data={ImageTextData} />
 
+
             {/* Scrolling Text */}
             <ScrollingText data={ScrollingTextData} />
 
@@ -58,11 +63,17 @@ const About = () => {
                 pagination={true}
             />
 
+            {/* Heritage Section */}
+            <Heritage data={HeritageData} />
+
+            {/* Collaboration Section */}
+            <Collaboration data={CollaborationData} />
+
             {/* Testimonials */}
-            <Testimonials data={TestimonialData} />
+            {/* <Testimonials data={TestimonialData} /> */}
 
             {/* FAQ */}
-            <Faq data={Faq2Data} />
+            {/* <Faq data={Faq2Data} /> */}
         </>
     )
 }

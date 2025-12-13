@@ -1,8 +1,5 @@
 import { SectionProps } from "@/types/sectionProps";
 import WhyChooseUsBg from "@/public/img/why-choose-us/bg.jpg";
-import WhyChooseUsImage from "@/public/img/why-choose-us/1.jpg";
-import WhyChooseUsImageMobile from "@/public/img/why-choose-us/575.jpg";
-import PromoImage from "@/public/img/why-choose-us/2.jpg";
 import Icons from "@/components/Icons";
 
 export const WhyChooseUsGridBgData: SectionProps = {
@@ -15,48 +12,28 @@ export const WhyChooseUsGridBgData: SectionProps = {
         loading: "lazy",
         alt: "Background image"
     },
-    image: {
-        src: WhyChooseUsImage.src,
-        srcMobile: WhyChooseUsImageMobile.src,
-        width: 1000,
-        height: 742,
-        loading: "lazy",
-        alt: "Choose us image"
-    },
     subheading: "Why Choose Us",
-    heading: "Supporting Growth on a Global Scale",
-    text: "We provide dependable and tailored consulting services that help your business navigate challenges, seize opportunities.",
-    button: {
-        label: "More About Us",
-        href: "/about-us",
-        type: "primary"
-    },
+    heading: "OUR Vision, Mission & Values",
+    text: "",
     rotatingLogo: {
         logo: <Icons.ChooseRotatingLogo />,
-        text: "25",
+        text: "0605",
     },
     promotions: [
         {
-            icon: <Icons.Mission />,
-            title: "Our Mission",
-            text: "Our mission is push engage boundaries, enga audiences, and driv engage.",
-        },
-        {
             icon: <Icons.Vision />,
-            title: "Our Vision",
-            text: "Our mission is push engage boundaries, enga audiences, and driv engage.",
+            title: "VISION",
+            text: "To Always be the Most Trusted and Best-in-Class Partner.",
         },
         {
-            icon: <Icons.Awards />,
-            title: "Our Awards",
-            text: "Our mission is push engage boundaries, enga audiences, and driv engage.",
+            icon: <Icons.Mission />,
+            title: "MISSION",
+            text: "Delivering excellence and success by directing our values, talents, resources and expertise to maximize customer satisfaction and to achieve sustainable growth for all stakeholders.",
+        },
+        {
+            icon: <Icons.Values />,
+            title: "VALUES",
+            text: "• We deliver on our commitments.\n• We view our people as the source of our strength.\n• We work together as a team.\n• We listen, we care, we respect.\n• We seek continual self and work improvement.",
         },
     ],
-    promoImage: {
-        src: PromoImage.src,
-        width: 800,
-        height: 834,
-        loading: "lazy",
-        alt: "Choose us image"
-    },
 }

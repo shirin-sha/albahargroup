@@ -51,7 +51,7 @@ const ImageText = ({ data }: { data: SectionProps }) => {
                             {heading && 
                                 <Heading 
                                     title={heading}
-                                    cls="text-50"
+                                    cls="text-28"
                                     aos="fade-up"
                                 />
                             }

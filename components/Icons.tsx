@@ -60,6 +60,7 @@ import Quote2 from "@/public/icons/quote2.svg";
 import ChooseRotatingLogo from "@/public/icons/choose-rotating-logo.svg";
 import Mission from "@/public/icons/mission.svg";
 import Vision from "@/public/icons/vision.svg";
+import Values from "@/public/icons/values.svg";
 import Awards from "@/public/icons/awards.svg";
 import ThumbsUp from "@/public/icons/thumbs-up.svg";
 import Clients from "@/public/icons/clients.svg";
@@ -71,6 +72,6 @@ import Analyze from "@/public/icons/analyze.svg";
 import Discover from "@/public/icons/discover.svg";
 
 
-const Icons = { Admin, Ambition, ArrowRotate, ArrowRotate2, ArrowLong, ArrowLong2, ArrowLongLeft, ArrowLongRight, ArrowCircle, ArrowCircleStraight, Purpose, Check, Email, Search, SearchBlog, CloseCircle, CaretDown, CaretRight, Contact, Video, Webinar, Hamburger, Location, Phone, Phone2, PhoneLarge, Pdf, Envelope, ChevronLeft, ChevronRight, ChevronDown, Subheading, FaceBook, Twitter, LinkedIn, Instagram, Calendar, Calendar2, Filter, Comment, Reply, SliderNavPrev, SliderNavNext, Support, LogoRotate, Plus, Consulting, Development, Finance, Investment, Risk, Plan, Winning, ScrollTop, PlusCircle, MinusCircle, Rating, Quote, Quote2, ChooseRotatingLogo, Mission, Vision, Awards, ThumbsUp, Clients, Launch, Refine, Design, Strategy, Analyze, Discover }
+const Icons = { Admin, Ambition, ArrowRotate, ArrowRotate2, ArrowLong, ArrowLong2, ArrowLongLeft, ArrowLongRight, ArrowCircle, ArrowCircleStraight, Purpose, Check, Email, Search, SearchBlog, CloseCircle, CaretDown, CaretRight, Contact, Video, Webinar, Hamburger, Location, Phone, Phone2, PhoneLarge, Pdf, Envelope, ChevronLeft, ChevronRight, ChevronDown, Subheading, FaceBook, Twitter, LinkedIn, Instagram, Calendar, Calendar2, Filter, Comment, Reply, SliderNavPrev, SliderNavNext, Support, LogoRotate, Plus, Consulting, Development, Finance, Investment, Risk, Plan, Winning, ScrollTop, PlusCircle, MinusCircle, Rating, Quote, Quote2, ChooseRotatingLogo, Mission, Vision, Values, Awards, ThumbsUp, Clients, Launch, Refine, Design, Strategy, Analyze, Discover }
 
 export default Icons;

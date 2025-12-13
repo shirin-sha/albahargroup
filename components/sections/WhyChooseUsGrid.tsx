@@ -38,9 +38,9 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
             }
             <div className={container}>
                 <div className="choose-top">
-                    <div className="grid grid-cols-2 lg:gap-1">
-                        <div className="col-span-2 lg:col-span-1">
-                            {image && 
+                    <div className={`grid grid-cols-2 lg:gap-1 ${!image ? 'justify-center items-center' : ''}`}>
+                        {image && (
+                            <div className="col-span-2 lg:col-span-1">
                                 <picture className="choose-media radius18" data-aos="fade-right">
                                     {image.srcMobile &&
                                         <source
@@ -56,11 +56,11 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                     loading={image.loading}
                                 />
                                 </picture>
-                            }
-                        </div>
+                            </div>
+                        )}
                         
-                        <div className="col-span-2 lg:col-span-1">
-                            <div className="choose-us-content section-headings">
+                        <div className={`col-span-2 ${image ? 'lg:col-span-1' : 'lg:col-span-2'}`}>
+                            <div className="choose-us-content section-headings text-center">
                                 {subheading &&
                                     <Subheading 
                                         title={subheading}
@@ -114,7 +114,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                 <div className="choose-bottom">
                     {promotions &&
                         <div className="choose-bottom-cards">
-                            <div className="grid grid-cols-12 gap-1">
+                            <div className="grid grid-cols-12 gap-1 justify-center">
                                 {promotions.map((item, index) => (                                   
                                     <div 
                                         className="col-span-12 lg:col-span-6 xl:col-span-4" 

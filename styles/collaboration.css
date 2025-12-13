@@ -1,0 +1,266 @@
+.collaboration-section-alt {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fafbfc 0%, #ffffff 50%, #fafbfc 100%);
+  padding: 60px 0;
+}
+
+.collaboration-section-alt::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(32, 40, 45, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(32, 40, 45, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.collaboration-content-alt {
+  position: relative;
+  z-index: 1;
+}
+
+.collaboration-header-alt {
+  margin-bottom: 50px;
+}
+
+.collaboration-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+/* Intro Card - Full Width */
+.collaboration-intro-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(32, 40, 45, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.collaboration-intro-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #20282D 0%, transparent 100%);
+}
+
+.collaboration-intro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.card-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #20282D 0%, #3a4a55 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(32, 40, 45, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.collaboration-intro-card:hover .card-icon {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.card-icon svg {
+  width: 40px;
+  height: 40px;
+  fill: white;
+}
+
+.card-content {
+  text-align: center;
+}
+
+.card-content .text {
+  line-height: 1.8;
+  color: #555;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Feature Cards - Two Columns */
+.collaboration-feature-card {
+  grid-column: span 6;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(32, 40, 45, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.collaboration-feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(32, 40, 45, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(30px, -30px);
+  pointer-events: none;
+}
+
+.collaboration-feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+  border-color: rgba(32, 40, 45, 0.15);
+}
+
+.feature-card-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(32, 40, 45, 0.1);
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  transition: transform 0.3s ease;
+}
+
+.collaboration-feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.feature-card-header .heading {
+  margin: 0;
+  color: #20282D;
+  flex: 1;
+}
+
+.feature-card-body {
+  flex: 1;
+}
+
+.feature-card-body .text {
+  line-height: 1.8;
+  color: #666;
+  margin: 0;
+}
+
+.mt-60 {
+  margin-top: 60px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .collaboration-section-alt {
+    padding: 40px 0;
+  }
+
+  .collaboration-grid {
+    gap: 25px;
+  }
+
+  .collaboration-feature-card {
+    grid-column: span 12;
+  }
+
+  .collaboration-intro-card {
+    padding: 30px 25px;
+  }
+
+  .collaboration-feature-card {
+    padding: 30px 25px;
+  }
+
+  .feature-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .card-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .card-icon svg {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 575px) {
+  .collaboration-section-alt {
+    padding: 30px 0;
+  }
+
+  .collaboration-header-alt {
+    margin-bottom: 40px;
+  }
+
+  .collaboration-grid {
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .collaboration-intro-card {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .collaboration-feature-card {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+  }
+
+  .card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+  }
+}

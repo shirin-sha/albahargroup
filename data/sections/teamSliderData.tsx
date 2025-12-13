@@ -4,5 +4,5 @@ export const TeamSliderData: SectionProps = {
     wrapperCls: "mt-100",
     container: "container",
     subheading: "Our Team",
-    heading: "Meet the experts behind your success",
+    heading: "Meet the executive management team",
 }
