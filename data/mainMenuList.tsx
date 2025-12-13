@@ -72,11 +72,11 @@ const Menus: MenuItem[] = [
         dropdown: [
             {
                 title: 'NEWS & UPDATES',
-                path: '/corporate-info/news-updates'
+                path: '/news'
             },
             {
                 title: 'CAREERS',
-                path: '/corporate-info/careers'
+                path: '/careers'
             },
             {
                 title: 'OUR PARTNERSHIPS',
