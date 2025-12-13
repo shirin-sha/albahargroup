@@ -2,18 +2,20 @@ import type { Metadata } from 'next';
 import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
 import BreadcrumbBannerImageTablet from '@/public/img/banner/page-banner-991.jpg';
 import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg';
-import { CareerData, JobListingsData } from '@/data/sections/careerData';
+
+import { PartnershipsData } from '@/data/sections/partnershipsData';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
-import CareerSection from '@/components/sections/Career';
+import Partnerships from '@/components/sections/Partnerships';
 
 
-const PAGE_TITLE: string = 'Careers';
+const PAGE_TITLE: string = 'Our Partnerships';
 export const metadata: Metadata = {
   title: PAGE_TITLE,
 }
 
-const Careers = () => {
+
+const PartnershipsPage = () => {
     return(
         <>
             {/* Breadcrumb Banner */}
@@ -31,16 +33,12 @@ const Careers = () => {
                 }}
             />
 
-            {/* Career Section - Job Listings */}
-            <CareerSection data={CareerData} jobListings={JobListingsData} />
-       
+            {/* Partnerships Section */}
+            <Partnerships data={PartnershipsData} />
         </>
     )
 }
 
-export default Careers;
-
-
-
+export default PartnershipsPage;
 
 

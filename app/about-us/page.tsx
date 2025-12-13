@@ -6,6 +6,7 @@ import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg
 import { ImageTextData } from '@/data/sections/imageTextData';
 import { HeritageData } from '@/data/sections/heritageData';
 import { CollaborationData } from '@/data/sections/collaborationData';
+import { TimelineData } from '@/data/sections/timelineData';
 import { ScrollingTextData } from '@/data/sections/scrollingTextData';
 import { WhyChooseUsGridBgData } from '@/data/sections/whyChooseUsGridBgData';
 import { TeamSliderData } from '@/data/sections/teamSliderData';
@@ -16,6 +17,7 @@ import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import ImageText from '@/components/sections/ImageText';
 import Heritage from '@/components/sections/Heritage';
 import Collaboration from '@/components/sections/Collaboration';
+import Timeline from '@/components/sections/Timeline';
 import ScrollingText from '@/components/sections/ScrollingText';
 import WhyChooseUsGrid from '@/components/sections/WhyChooseUsGrid';
 import TeamSlider from '@/components/sections/TeamSlider';
@@ -68,6 +70,9 @@ const About = () => {
 
             {/* Collaboration Section */}
             <Collaboration data={CollaborationData} />
+
+            {/* Timeline Section */}
+            <Timeline data={TimelineData} />
 
             {/* Testimonials */}
             {/* <Testimonials data={TestimonialData} /> */}
