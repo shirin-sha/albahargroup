@@ -42,3 +42,4 @@ const PartnershipsPage = () => {
 export default PartnershipsPage;
 
 
+

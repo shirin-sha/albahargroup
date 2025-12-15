@@ -13,32 +13,72 @@ const Menus: MenuItem[] = [
     {
         title: 'BUSINESSES',
         path: '/businesses',
-        dropdown: [
+        megamenutwocolumn: [
             {
-                title: 'CONSUMER GOODS',
-                path: '/businesses/consumer-goods'
+                title: 'OUR BUSINESS VERTICALS',
+                path: '/businesses',
+                dropdown: [
+                    {
+                        title: 'Consumer Goods',
+                        text: 'Leading FMCG brands across Kuwait’s key channels.',
+                        path: '/businesses/consumer-goods',
+                    },
+                    {
+                        title: 'Consumer Electronics',
+                        text: 'Home and personal electronics from global innovators.',
+                        path: '/businesses/consumer-electronics',
+                    },
+                    {
+                        title: 'Home Automation',
+                        text: 'Smart home solutions for comfort, security and convenience.',
+                        path: '/businesses/home-automation',
+                    },
+                    {
+                        title: 'Enterprise Technology',
+                        text: 'End-to-end IT, print and AV solutions.',
+                        path: '/businesses/enterprise-technology',
+                    },
+                    {
+                        title: 'Shipping',
+                        text: 'Port-to-door shipping, agency services and logistics.',
+                        path: '/businesses/shipping',
+                    },
+                    {
+                        title: 'Travel & Tourism',
+                        text: 'Corporate, leisure and group travel across destinations.',
+                        path: '/businesses/travel-tourism',
+                    },
+                ],
             },
             {
-                title: 'CONSUMER ELECTRONICS',
-                path: '/businesses/consumer-electronics'
+                title: 'Spotlight on Our Businesses',
+                path: '/businesses',
+                dropdown: [
+                    {
+                        title: 'Inside the Group Portfolio',
+                        text: 'Six diverse businesses connecting consumers, enterprises and traders with leading global brands.',
+                        path: '/businesses',
+                    },
+                ],
+            },
+        ],
+        bottommenu: [
+            {
+                title: 'Contact Sales',
+                path: '/contact-us',
+                icon: <Icons.Contact />,
             },
             {
-                title: 'HOME AUTOMATION',
-                path: '/businesses/home-automation'
+                title: 'Download Profile',
+                path: '/corporate-info',
+                icon: <Icons.Pdf />,
             },
             {
-                title: 'ENTERPRISE TECHNOLOGY',
-                path: '/businesses/enterprise-technology'
+                title: 'Our Partners',
+                path: '/corporate-info/partnerships',
+                icon: <Icons.Clients />,
             },
-            {
-                title: 'SHIPPING',
-                path: '/businesses/shipping'
-            },
-            {
-                title: 'TRAVEL & TOURISM',
-                path: '/businesses/travel-tourism'
-            }
-        ]
+        ],
     },
     {
         title: 'CAPABILITIES',
