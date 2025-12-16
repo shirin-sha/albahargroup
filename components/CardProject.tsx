@@ -30,7 +30,7 @@ const CardProject = ({ data }: ProjectDataType) => {
             <div className="card-project-content-absolute">
                 <div className="card-project-content">
                     {title && <h2 className="heading text-24">{title}</h2>}
-                    {category && <p className="text text-16">{category}</p>}
+                    {/* {category && <p className="text text-16">{category}</p>} */}
                 </div>
             </div>
 
