@@ -2,6 +2,9 @@
   display: block;
   position: relative;
   overflow: hidden;
+  --color-background: rgba(242, 242, 242, 1);
+  background-color: var(--color-background);
+  padding: 100px 0;
 }
 
 .team-slider .swiper-slide {
@@ -128,20 +131,26 @@
   height: 14px;
   display: inline-block;
   border-radius: 10px;
-  background: var(--swiper-pagination-bullet-inactive-color);
-  opacity: var(--swiper-pagination-bullet-inactive-opacity);
+  background: rgba(200, 200, 200, 1);
+  opacity: 1;
   transition: all 0.3s;
   margin: 0 !important;
 }
 
 .team-slider .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background: var(--swiper-pagination-color);
+  background: rgba(28, 37, 57, 1);
   width: 40px;
 }
 
 .card-team .social-list svg {
   min-width: 18px;
   height: 18px;
+}
+
+@media (max-width: 991px) {
+  .team-slider {
+    padding: 80px 0;
+  }
 }
 
 @media (max-width: 767px) {
@@ -151,6 +160,10 @@
 
   .team-slider .swiper-pagination-bullets.swiper-pagination-horizontal {
     margin-block-start: 40px;
+  }
+
+  .team-slider {
+    padding: 60px 0;
   }
 }
 

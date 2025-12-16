@@ -6,4 +6,6 @@ export interface TestimonialProps {
     rating?: number;
     image?: string;
     created_at?: string;
+    heading?: string;
+    icon?: string;
 }

@@ -1,34 +1,52 @@
 [
   {
     "id": 1,
+    "heading": "Technology Solutions",
     "name": "John Carter",
     "role": "CEO, BTech",
-    "review": "Working with several word themes templates the last years only can say this is best in every level use it for my reviews that I have already are company and the reviews that I have already are all excellent. Not only the design.",
+    "review": "Al Bahar's Technology division delivers integrated office, print, imaging and IT solutions that help organisations work smarter and more securely. From hardware and software to after-sales support, we provide end-to-end services backed by global technology partners.",
     "rating": 5,
-    "image": "/img/testimonial/t1.jpg"
+    "image": "/img/testimonial/t1.jpg",
+    "icon": "Consulting"
   },
   {
     "id": 2,
+    "heading": "Consumer & FMCG",
     "name": "Sophia Ahmed",
     "role": "Manager, PixelPro",
-    "review": "Working with several word themes templates the last years only can say this is best in every level use it for my reviews that I have already are company and the reviews that I have already are all excellent. Not only the design.",
+    "review": "Our Consumer division represents trusted international food and household brands across Kuwait. We combine strong channel coverage, disciplined in-store execution and data-driven planning to ensure our brands are always visible, available and in demand.",
     "rating": 5,
-    "image": "/img/testimonial/t2.jpg"
+    "image": "/img/testimonial/t2.jpg",
+    "icon": "Clients"
   },
   {
     "id": 3,
+    "heading": "Shipping & Logistics",
     "name": "Liam Johnson",
     "role": "Designer, Innovix",
-    "review": "Working with several word themes templates the last years only can say this is best in every level use it for my reviews that I have already are company and the reviews that I have already are all excellent. Not only the design.",
+    "review": "The Shipping & Logistics division connects Kuwait to major global ports and trade lanes. Acting as a reliable partner for shipping lines and cargo owners, we provide agency services, documentation, and logistics support that keep goods moving efficiently and on time.",
     "rating": 5,
-    "image": "/img/testimonial/t3.jpg"
+    "image": "/img/testimonial/t3.jpg",
+    "icon": "Support"
   },
   {
     "id": 4,
+    "heading": "Travel & Tourism",
     "name": "Emily Brown",
     "role": "Developer, SoftMind",
-    "review": "Working with several word themes templates the last years only can say this is best in every level use it for my reviews that I have already are company and the reviews that I have already are all excellent. Not only the design.",
+    "review": "Our Travel division serves both corporate and leisure customers with tailored travel solutions. From ticketing and itineraries to group and incentive travel, we combine global networks with attentive local service to deliver smooth, stress-free journeys.",
     "rating": 5,
-    "image": "/img/testimonial/t4.jpg"
+    "image": "/img/testimonial/t4.jpg",
+    "icon": "Location"
+  },
+  {
+    "id": 5,
+    "heading": "Retail & Lifestyle",
+    "name": "Retail & Lifestyle Team",
+    "role": "Division Overview",
+    "review": "The Retail & Lifestyle division develops and operates modern retail concepts that bring global trends closer to Kuwait's consumers. With a focus on quality, convenience and experience, we curate brands and formats that fit the evolving lifestyles of our customers.",
+    "rating": 5,
+    "image": "/img/testimonial/t4.jpg",
+    "icon": "Awards"
   }
 ]

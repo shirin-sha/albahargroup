@@ -1,10 +1,10 @@
 [
   {
     "id": 1,
-    "slug": "ethan-reynolds",
-    "name": "Ethan Reynolds",
-    "designation": "Managing Director",
-    "image": "/img/team/1.jpg",
+    "slug": "ihab-al-khatib",
+    "name": "Ihab Al Khatib",
+    "designation": "Group General Manager - BKGH",
+    "image": "/img/team/team1.jpg",
     "social": {
       "facebook": "Ethan Reynolds",
       "facebook_url": "https://facebook.com",
@@ -30,10 +30,10 @@
   },
   {
     "id": 2,
-    "slug": "olivia-carter",
-    "name": "Olivia Carter",
-    "designation": "Business Consultant",
-    "image": "/img/team/2.jpg",
+    "slug": "abdullateef-al-bahar",
+    "name": "Abdullateef Al-Bahar",
+    "designation": "Group General Manager - FMCG Group",
+    "image": "/img/team/team2.jpg",
     "social": {
       "facebook": "Olivia Carter",
       "facebook_url": "https://facebook.com",
@@ -59,10 +59,10 @@
   },
   {
     "id": 3,
-    "slug": "liam-anderson",
-    "name": "Liam Anderson",
-    "designation": "Financial Advisor",
-    "image": "/img/team/3.jpg",
+    "slug": "dariusz-sobieraj",
+    "name": "Dariusz Sobieraj",
+    "designation": "Group Chief Financial Officer - BKGH",
+    "image": "/img/team/team3.jpg",
     "social": {
       "facebook": "Liam Anderson",
       "facebook_url": "https://facebook.com",
@@ -88,10 +88,10 @@
   },
   {
     "id": 4,
-    "slug": "sophia-martinez",
-    "name": "Sophia Martinez",
-    "designation": "Operations Head",
-    "image": "/img/team/4.jpg",
+    "slug": "ayman-samir-ayad",
+    "name": "Ayman Samir Ayad",
+    "designation": "Group Head of Risk & Compliance",
+    "image": "/img/team/team4.jpg",
     "social": {
       "facebook": "Sophia Martinez",
       "facebook_url": "https://facebook.com",
@@ -117,10 +117,10 @@
   },
   {
     "id": 5,
-    "slug": "noah-bennett",
-    "name": "Noah Bennett",
-    "designation": "Brand Specialist",
-    "image": "/img/team/5.jpg",
+    "slug": "nishad-victor",
+    "name": "Nishad Victor",
+    "designation": "General Manager, Shipping",
+    "image": "/img/team/team5.jpg",
     "social": {
       "facebook": "Noah Bennett",
       "facebook_url": "https://facebook.com",
@@ -146,10 +146,10 @@
   },
   {
     "id": 6,
-    "slug": "ava-mitchell",
-    "name": "Ava Mitchell",
-    "designation": "Human Resource",
-    "image": "/img/team/6.jpg",
+    "slug": "rajee-rajab",
+    "name": "Rajee Rajab",
+    "designation": "General Manager - Food Division",
+    "image": "/img/team/team6.jpg",
     "social": {
       "facebook": "Ava Mitchell",
       "facebook_url": "https://facebook.com",
@@ -175,10 +175,10 @@
   },
   {
     "id": 7,
-    "slug": "james-collins",
-    "name": "James Collins",
-    "designation": "Marketing Specialist",
-    "image": "/img/team/7.jpg",
+    "slug": "arz-naim",
+    "name": "Arz Naim",
+    "designation": "General Manager – HAT",
+    "image": "/img/team/team7.jpg",
     "social": {
       "facebook": "James Collins",
       "facebook_url": "https://facebook.com",
@@ -204,10 +204,10 @@
   },
   {
     "id": 8,
-    "slug": "isabella-turner",
-    "name": "Isabella Turner",
-    "designation": "Client Success Manager",
-    "image": "/img/team/8.jpg",
+    "slug": "bassil-hadad",
+    "name": "Bassil Hadad",
+    "designation": "Group Head of Human Resources",
+    "image": "/img/team/team8.jpg",
     "social": {
       "facebook": "Isabella Turner",
       "facebook_url": "https://facebook.com",

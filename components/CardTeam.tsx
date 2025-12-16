@@ -42,40 +42,16 @@ const CardTeam = ({
                 </div>
             </div>
 
-            {social &&
+            {social && social.linkedin_url &&
                 <div className="social-list">
-                    {social.linkedin_url &&
-                        <Link 
-                            href={social.linkedin_url} 
-                            className="svg-wrapper" 
-                            aria-label="LinkedIn" 
-                            target="_blank"
-                        >
-                            <Icons.LinkedIn />
-                        </Link>
-                    }
-                    
-                    {social.twitter_url &&
-                        <Link 
-                            href={social.twitter_url} 
-                            className="svg-wrapper" 
-                            aria-label="Twitter" 
-                            target="_blank"
-                        >
-                            <Icons.Twitter />
-                        </Link>
-                    }
-
-                    {social.instagram_url &&
-                        <Link 
-                            href={social.instagram_url} 
-                            className="svg-wrapper" 
-                            aria-label="instagram" 
-                            target="_blank"
-                        >
-                            <Icons.Instagram />
-                        </Link>
-                    }
+                    <Link 
+                        href={social.linkedin_url} 
+                        className="svg-wrapper" 
+                        aria-label="LinkedIn" 
+                        target="_blank"
+                    >
+                        <Icons.LinkedIn />
+                    </Link>
                 </div>
             }
         </div>

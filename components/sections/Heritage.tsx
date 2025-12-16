@@ -21,7 +21,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
             <div className={container ? container : 'container'}>
                 <div className="heritage-content">
                     {/* Header Section */}
-                    <div className="heritage-header text-center" data-aos="fade-up">
+                    <div className="section-headings text-center" data-aos="fade-up">
                         {subheading && 
                             <Subheading 
                                 title={subheading}
@@ -40,7 +40,8 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                     </div>
 
                     {/* Main Content Grid */}
-                    <div className="grid lg:grid-cols-2 lg:gap-1 items-start">
+                    <div className="section-content">
+                        <div className="grid lg:grid-cols-2 lg:gap-1 items-start">
                         {/* Founder Image Section */}
                         <div className="lg:col-span-1 col-span-2">
                             {image &&
@@ -94,6 +95,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                                 )}
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

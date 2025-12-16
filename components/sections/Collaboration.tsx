@@ -21,7 +21,7 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
             <div className={container ? container : 'container'}>
                 <div className="collaboration-content-alt">
                     {/* Header Section */}
-                    <div className="collaboration-header-alt text-center" data-aos="fade-up">
+                    <div className="section-headings text-center" data-aos="fade-up">
                         {subheading && 
                             <Subheading 
                                 title={subheading}
@@ -40,7 +40,8 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
                     </div>
 
                     {/* Main Content Grid */}
-                    <div className="collaboration-grid mt-60">
+                    <div className="section-content">
+                        <div className="collaboration-grid">
                         {/* Intro Text Card */}
                         {text && 
                             <div className="collaboration-intro-card" data-aos="fade-up" data-aos-delay="50">
@@ -113,6 +114,7 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
                                 )}
                             </div>
                         )}
+                        </div>
                     </div>
                 </div>
             </div>

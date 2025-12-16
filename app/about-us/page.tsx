@@ -55,15 +55,16 @@ const About = () => {
 
             {/* Scrolling Text */}
             <ScrollingText data={ScrollingTextData} />
+                <ScrollingText data={ScrollingTextData} />
+                
+            <ScrollingText data={ScrollingTextData} />
+                {/* Scrolling Text */}
+                <ScrollingText data={ScrollingTextData} />
 
             {/* Why Choose Us */}
             <WhyChooseUsGrid data={WhyChooseUsGridBgData} />
 
-            {/* Our Team */}
-            <TeamSlider 
-                data={TeamSliderData} 
-                pagination={true}
-            />
+         
 
             {/* Heritage Section */}
             <Heritage data={HeritageData} />
@@ -79,6 +80,11 @@ const About = () => {
 
             {/* FAQ */}
             {/* <Faq data={Faq2Data} /> */}
+               {/* Our Team */}
+               <TeamSlider 
+                data={TeamSliderData} 
+                pagination={true}
+            />
         </>
     )
 }

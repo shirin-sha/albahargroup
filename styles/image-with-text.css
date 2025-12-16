@@ -32,7 +32,6 @@
   flex-direction: column;
   gap: 0;
   align-items: flex-start;
-  max-width: 225px;
   margin: 0;
 }
 
@@ -58,6 +57,14 @@
 
 .list-block .text-item {
   margin-block-start: 0;
+}
+
+.image-text .content .list-block {
+  margin-block-start: 24px;
+}
+
+.image-text .content .buttons {
+  margin-block-start: 30px;
 }
 
 .image-small {

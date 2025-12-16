@@ -30,7 +30,7 @@ const Menus: MenuItem[] = [
                     },
                     {
                         title: 'Home Automation',
-                        text: 'Smart home solutions for comfort, security and convenience.',
+                        text: 'Smart home solutions for comfort & security.',
                         path: '/businesses/home-automation',
                     },
                     {
@@ -55,12 +55,16 @@ const Menus: MenuItem[] = [
                 path: '/businesses',
                 dropdown: [
                     {
+                        imageUrl: '/img/menu/megamenu.png',
+                        imageUrlMobile: '/img/menu/575.jpg',
                         title: 'Inside the Group Portfolio',
                         text: 'Six diverse businesses connecting consumers, enterprises and traders with leading global brands.',
                         path: '/businesses',
-                    },
-                ],
+                        showbutton: true,
+                    }
+                ]
             },
+       
         ],
         bottommenu: [
             {
@@ -71,15 +75,16 @@ const Menus: MenuItem[] = [
             {
                 title: 'Download Profile',
                 path: '/corporate-info',
-                icon: <Icons.Pdf />,
+                icon: <Icons.Download />,
             },
             {
                 title: 'Our Partners',
                 path: '/corporate-info/partnerships',
-                icon: <Icons.Clients />,
+                icon: <Icons.Handshake />,
             },
         ],
     },
+ 
     {
         title: 'CAPABILITIES',
         path: '/capabilities',

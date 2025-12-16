@@ -711,7 +711,11 @@ h6,
   background-color: var(--color-primary-button-icon-background);
   transition: all 0.3s;
   min-width: 36px;
+  width: 36px;
   height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 100%;
 }
 

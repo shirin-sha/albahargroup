@@ -71,7 +71,7 @@ const Timeline = ({ data }: { data: SectionProps & { timelineItems?: TimelineIte
             <div className="container">
                 <div className="timeline-content">
                     {/* Header */}
-                    <div className="timeline-header text-center" data-aos="fade-up">
+                    <div className="section-headings text-center" data-aos="fade-up">
                         {subheading && 
                             <Subheading 
                                 title={subheading}
@@ -90,7 +90,8 @@ const Timeline = ({ data }: { data: SectionProps & { timelineItems?: TimelineIte
                     </div>
 
                     {/* Timeline Container */}
-                    <div className="timeline-container" data-aos="fade-up">
+                    <div className="section-content">
+                        <div className="timeline-container" data-aos="fade-up">
                         {/* Left Navigation Button */}
                         <button 
                             className={`timeline-nav-btn timeline-nav-left ${!canScrollLeft ? 'disabled' : ''}`}
@@ -155,6 +156,7 @@ const Timeline = ({ data }: { data: SectionProps & { timelineItems?: TimelineIte
                         >
                             <Icons.ChevronRight />
                         </button>
+                        </div>
                     </div>
                 </div>
             </div>

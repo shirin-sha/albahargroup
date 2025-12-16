@@ -38,7 +38,7 @@ const PricingPlan = ({ data }: { data: SectionProps }) => {
                     {subheading &&
                         <Subheading 
                             title={subheading}
-                            cls="text-20"
+                            cls="text-18"
                             aos="fade-up"
                         />
                     }
@@ -46,7 +46,7 @@ const PricingPlan = ({ data }: { data: SectionProps }) => {
                     {heading &&
                         <Heading 
                             title={heading}
-                            cls="text-50"
+                            cls="text-40"
                             aos="fade-up"
                         />
                     }         

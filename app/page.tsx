@@ -20,6 +20,8 @@ import PricingPlan from '@/components/sections/PricingPlan';
 import BusinessVerticals from '@/components/sections/BusinessVerticals';
 import Faq from '@/components/sections/Faq';
 import FeaturedBlog from '@/components/sections/FeaturedBlog';
+import TestimonialSliderWithThumb from '@/components/sections/TestimonialSliderWithThumb';
+import { TestimonialSliderThumbData } from '@/data/sections/testimonialSliderThumbData';
 
 
 const Home = () => {
@@ -40,21 +42,20 @@ const Home = () => {
 
 {/* Recent Projects */}
 <ProjectSlider data={FeaturedProjectData} />
-
 {/* Why Choose Us */}
 <WhyChooseUsGrid data={WhyChooseUsGridData} />
 
 {/* Pricing Plan */}
 <PricingPlan data={PricingPlanData} />
 
-{/* Business Verticals */}
-<BusinessVerticals data={BusinessVerticalsData} />
-
+{/* Testimonial Slider with Thumb */}
+<TestimonialSliderWithThumb data={TestimonialSliderThumbData} />
 {/* FAQ */}
 <Faq data={FaqData} />
 
 {/* Featured Blog */}
 <FeaturedBlog data={FeaturedBlogData} />
+
     </>
   );
 }

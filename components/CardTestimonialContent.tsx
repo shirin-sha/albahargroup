@@ -1,20 +1,21 @@
 import { TestimonialProps } from "@/types/testimonialProps";
 import parser from "html-react-parser";
-import Icons from "./Icons";
+import PrimaryButton from "./buttons/PrimaryButton";
 
 const CardTestimonialContent = ({ data }: {data: TestimonialProps}) => {
     const {
-        name,
-        role,
         review,
     } = data || {};
 
     return (
         <div className="thumb-card">
-            <span className="icon icon-80"><Icons.Quote2 /></span>        
-            {review && <p className="text text-24">{parser(review)}</p>}
-            {name && <h2 className="user-name heading text-24">{name}</h2>}
-            {role && <div className="user-desig text text-19">{role}</div>}
+            {review && <p className="text text-18">{parser(review)}</p>}
+            <PrimaryButton
+                label="View Detail"
+                ariaLabel="View testimonial details"
+            href="/testimonials"
+                cls="mt-4"
+            />
         </div>
     )
 }

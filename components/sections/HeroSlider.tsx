@@ -76,21 +76,21 @@ const HeroSlider = ({
                                         {slide.subheading && 
                                             <Subheading 
                                                 title={slide.subheading}
-                                                cls="text-20"
+                                                cls="text-18"
                                             />
                                         }
 
                                         {slide.heading && 
                                             <Heading 
                                                 title={slide.heading}
-                                                cls="text-90 fw-700"
+                                                cls="text-80 fw-600"
                                             />
                                         }
 
                                         {slide.text && 
                                             <Text 
                                                 text={slide.text}
-                                                cls="text-18"
+                                                cls="text-16"
                                             />
                                         }
 

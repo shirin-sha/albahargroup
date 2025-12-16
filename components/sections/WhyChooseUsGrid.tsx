@@ -60,11 +60,11 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                         )}
                         
                         <div className={`col-span-2 ${image ? 'lg:col-span-1' : 'lg:col-span-2'}`}>
-                            <div className="choose-us-content section-headings text-center">
+                            <div className="choose-us-content section-headings ">
                                 {subheading &&
                                     <Subheading 
                                         title={subheading}
-                                        cls="text-20"
+                                        cls="text-18"
                                         aos="fade-up"
                                     />
                                 }
@@ -72,7 +72,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                 {heading &&
                                     <Heading 
                                         title={heading}
-                                        cls="text-50"
+                                        cls="text-40"
                                         aos="fade-up"
                                     />
                                 }

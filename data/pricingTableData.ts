@@ -25,8 +25,8 @@ export const PricingTableData: PricingProps[] = [
     active: true,
   },
   {
-    title: "People & Community-Centric",
-    description: "Investing in talent and the nation's progress",
+    title: "Community-Centric",
+    description: "An inclusive, strongly values-driven culture",
     features: [
       "Structured learning and development programs",
       "Focus on attracting and developing local talent",

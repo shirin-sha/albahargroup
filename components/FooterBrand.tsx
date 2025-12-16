@@ -11,8 +11,8 @@ const FooterBrand = () => {
         >
             <Logo 
                 src={LogoImage.src}
-                width={189}
-                height={32}
+                width={290}
+                height={50}
                 url="/"
                 cls="footer-logo"
                 alt="Consulo logo"

@@ -9,6 +9,7 @@ import 'swiper/css/thumbs';
 
 import "@/styles/testimonial.css";
 import { SectionProps } from "@/types/sectionProps";
+import { TestimonialProps } from "@/types/testimonialProps";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
 import CardTestimonialContent from "../CardTestimonialContent";
@@ -18,8 +19,12 @@ import Image from 'next/image';
 
 const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
     const [thumbSwiper, setThumbSwiper] = useState<any>(null);
-    const testimonialList = TestimonialList;
+    const testimonialList = TestimonialList as TestimonialProps[];
     if(testimonialList.length == 0) return null;
+
+    const [activeHeading, setActiveHeading] = useState<string | undefined>(
+        testimonialList[0]?.heading || data?.heading
+    );
 
     const {
         wrapperCls,
@@ -28,6 +33,12 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
         subheading,
         heading,
     } = data || {};
+
+    const updateHeading = (index: number) => {
+        setActiveHeading(testimonialList[index]?.heading || heading);
+    };
+
+    const displayHeading = activeHeading || heading;
 
     return (
         <div className={wrapperCls}>
@@ -48,15 +59,15 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                     {subheading &&
                         <Subheading 
                             title={subheading}
-                            cls="text-20"
+                            cls="text-18"
                             aos="fade-up"
                         />
                     }
 
-                    {heading &&
+                    {displayHeading &&
                         <Heading 
-                            title={heading}
-                            cls="text-50"
+                            title={displayHeading}
+                            cls="text-40"
                             aos="fade-up"
                         />
                     }
@@ -81,7 +92,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                         <SwiperSlide key={`testimonial-main-${index}`}>
                                             <div className="main-img radius18">
                                                 <Image 
-                                                    src={item.image}
+                                                    src={item.image || ''}
                                                     width={1000} 
                                                     height={1096} 
                                                     loading="lazy" 
@@ -101,14 +112,14 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                     {subheading &&
                                         <Subheading 
                                             title={subheading}
-                                            cls="text-20"
+                                            cls="text-18"
                                             aos="fade-up"
                                         />
                                     }
 
-                                    {heading &&
+                                    {displayHeading &&
                                         <Heading 
-                                            title={heading}
+                                            title={displayHeading}
                                             cls="text-50"
                                             aos="fade-up"
                                         />
@@ -118,7 +129,11 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                 <div className="thumb-content">
                                     <Swiper
                                         modules={[Thumbs]}
-                                        onSwiper={setThumbSwiper}
+                                        onSwiper={(swiper) => {
+                                            setThumbSwiper(swiper);
+                                            updateHeading(swiper.activeIndex || 0);
+                                        }}
+                                        onSlideChange={(swiper) => updateHeading(swiper.activeIndex || 0)}
                                         watchSlidesProgress
                                         allowTouchMove={true}
                                         className="swiper"

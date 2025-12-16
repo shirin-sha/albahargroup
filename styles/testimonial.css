@@ -66,11 +66,23 @@
   color: var(--color-background);
 }
 
-.testimonial-slider .thumb-card svg,
+.testimonial-slider .thumb-card svg:not(.button svg),
 .card-testimonial .icon-quote svg {
     width: inherit;
     height: inherit;
     min-width: inherit;
+}
+
+.testimonial-slider .thumb-card .button .svg-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-slider .thumb-card .button .svg-wrapper svg {
+    width: auto;
+    height: auto;
+    min-width: auto;
 }
 
 .testi-slider .card-testimonial {

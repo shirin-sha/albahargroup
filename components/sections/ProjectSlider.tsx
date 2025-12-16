@@ -56,11 +56,11 @@ const ProjectSlider = ({ data }: {data: SectionProps}) => {
     return (
         <project-slider className={`project-slider ${wrapperCls}`}>
             <div className={container}>
-                <div className="section-headings headings-width text-center">
+                <div className="section-headings text-center">
                     {subheading &&
                         <Subheading 
                             title={subheading}
-                            cls="text-20"
+                            cls="text-18"
                             aos="fade-right"
                         />
                     }
@@ -68,7 +68,7 @@ const ProjectSlider = ({ data }: {data: SectionProps}) => {
                     {heading &&
                         <Heading 
                             title={heading}
-                            cls="text-50"
+                            cls="text-40"
                             aos="fade-right"
                         />
                     }

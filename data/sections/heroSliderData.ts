@@ -2,13 +2,13 @@ export const HeroSlidesData = [
   {
     subheading: "Diversified Business Group – Since 1937",
     heading: "Partnering to Shape Kuwait’s Future",
-    text: "For more than eight decades, Mohamed Abdulrahman Al-Bahar Group has connected global brands with local insight. Across five business verticals and 70+ international partners, we bring trusted solutions to homes, businesses, and institutions throughout Kuwait.",
+    text: "For more than eight decades, Al-Bahar Group has connected global brands with local insight. Across five business verticals and 70+ international partners, we bring trusted solutions to homes, businesses, and institutions throughout Kuwait.",
     button: {
         label: "Discover Our Story",
         href: "/contact-us",
         type: "primary"
     },
-    image: "/img/slider/hero-1.jpg",
+    image: "/img/slider/hero-1.png",
     imageTablet: "/img/slider/hero-991.jpg",
     imageMobile: "/img/slider/hero-575.jpg"
   },
@@ -27,7 +27,7 @@ export const HeroSlidesData = [
   },
   {
     subheading: "Excellence in Every Detail",
-    heading: "Delivering Reliability Across Every Business Line",
+    heading: "Reliability Across Every Business",
     text: "From supply chain and logistics to omni-channel execution and customer service, Al Bahar Group is built on disciplined operations. Our business enablers ensure products arrive on time, shelves stay full, and partners experience consistent, measurable performance across Kuwait.",
     button: {
         label: "View Our Business Enablers",

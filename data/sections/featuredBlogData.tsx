@@ -7,7 +7,7 @@ export const FeaturedBlogData: SectionProps = {
     heading: "Latest Stories from Our Group",
     button: {
         label: "Discover More News",
-        href: "/blogs",
+        href: "/news",
         type: "primary"
     },
 }

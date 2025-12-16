@@ -2,19 +2,19 @@
     {
         "id": 1,
         "name": "Leanne Graham",
-        "username": "Bret",
+        "username": "Admin",
         "email": "sincere@april.biz"
     },
     {
         "id": 2,
         "name": "Ervin Howell",
-        "username": "Antonette",
+        "username": "Admin",
         "email": "shanna@melissa.tv"
     },
     {
         "id": 3,
         "name": "Clementine Bauch",
-        "username": "Samantha",
+        "username": "Admin",
         "email": "nathan@yesenia.net"
     }
 ]

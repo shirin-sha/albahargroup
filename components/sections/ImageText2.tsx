@@ -70,7 +70,7 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                             {subheading && 
                                 <Subheading 
                                     title={subheading}
-                                    cls="text-20"
+                                    cls="text-18"
                                     aos="fade-up"
                                 />
                             }
@@ -78,7 +78,7 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                             {heading && 
                                 <Heading 
                                     title={heading}
-                                    cls="text-50"
+                                    cls="text-40"
                                     aos="fade-up"
                                     aosDelay="50"
                                 />
@@ -87,9 +87,9 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                             {text && 
                                 <Text 
                                     text={text}
-                                    cls="text-18"
+                                    cls="text-16"
                                     aos="fade-up"
-                                    aosDelay="80"
+                                    aosDelay="50"
                                 />
                             }
 
@@ -97,14 +97,14 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                                 <ul className="list-block list-unstyled">
                                     {textList.map((item, index) => (
                                         <li 
-                                            className="text-item text text-18" 
+                                            className="text-item text text-16" 
                                             data-aos="fade-up" 
                                             key={`text-item-${index}`}
                                         >
                                             {item.icon}
 
                                             {item.title && 
-                                                <h3 className="title text text-22 fw-600">
+                                                <h3 className="title text text-20 fw-600">
                                                     {item.title}
                                                 </h3>
                                             }
