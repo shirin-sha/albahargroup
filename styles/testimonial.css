@@ -160,11 +160,26 @@
 .testimonial-2 .custom-bullet {
   width: 100px;
   height: 100px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 100%;
-  overflow: hidden;
-  display: flex;
+  background-color: rgba(0, 0, 0, 1);
   margin: 0 !important;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.testimonial-2 .custom-bullet svg {
+  width: 40px;
+  height: 40px;
+  color: rgba(255, 255, 255, 1);
+  fill: rgba(255, 255, 255, 1);
+}
+
+.testimonial-2 .custom-bullet svg path {
+  fill: rgba(255, 255, 255, 1);
+  stroke: rgba(255, 255, 255, 1);
 }
 
 .testimonial-2 .custom-bullet img {
@@ -187,7 +202,7 @@
 .testimonial-2 .swiper-pagination-bullet-active {
   --style-pagination-border-width: 2px;
   --pagination-item-active-border: rgba(32, 40, 45, 1);
-  background: transparent;
+  background-color: rgba(0, 0, 0, 1) !important;
   outline: var(--style-pagination-border-width) solid
     var(--pagination-item-active-border);
   outline-offset: 10px;

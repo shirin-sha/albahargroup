@@ -15,26 +15,57 @@ const ScrollingTextGradient = ({ data }: { data: SectionProps }) => {
             <div className={container}>
                 <div className="content-inner radius18">
                     <div className="logos-background p-2">
-                        <div className="content-lists running-animation">
-                            {Array.from({ length: 4 }).map((_, i) => (                            
-                                <div className="content-item" key={i}>
+                        <div className="content-lists-wrapper">
+                            <div className="content-lists running-animation">
+                                {/* First set */}
+                                <div className="content-item">
                                     {imageList && imageList.map((item, index) => (
                                         <Link 
                                             href={item.href ? item.href : ''} 
                                             className="content-link" 
-                                            key={`scroll-img-${index}`}
+                                            key={`scroll-img-1-${index}`}
                                         >
                                             <Image
                                                 src={item.src}
-                                                width={108}
-                                                height={36}
-                                                loading="lazy"
-                                                alt="Brand Image"
+                                                width={item.width || 160}
+                                                height={item.height || 55}
+                                                loading={item.loading || "lazy"}
+                                                alt={item.alt || "Brand Image"}
+                                                className="brand-logo-image"
+                                                style={{
+                                                    width: `${item.width || 160}px`,
+                                                    height: `${item.height || 55}px`,
+                                                    objectFit: 'contain'
+                                                }}
                                             />
                                         </Link>
                                     ))}
                                 </div>
-                            ))}
+                                {/* Duplicate set for seamless loop */}
+                                <div className="content-item">
+                                    {imageList && imageList.map((item, index) => (
+                                        <Link 
+                                            href={item.href ? item.href : ''} 
+                                            className="content-link" 
+                                            key={`scroll-img-2-${index}`}
+                                        >
+                                            <Image
+                                                src={item.src}
+                                                width={item.width || 160}
+                                                height={item.height || 55}
+                                                loading={item.loading || "lazy"}
+                                                alt={item.alt || "Brand Image"}
+                                                className="brand-logo-image"
+                                                style={{
+                                                    width: `${item.width || 160}px`,
+                                                    height: `${item.height || 55}px`,
+                                                    objectFit: 'contain'
+                                                }}
+                                            />
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

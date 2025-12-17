@@ -1,6 +1,12 @@
+.running-content {
+  width: 100%;
+  overflow: hidden;
+}
+
 .running-content .content-inner {
   overflow: hidden;
   background-color: var(--color-background, rgba(255, 255, 255, 0));
+  width: 100%;
 }
 
 .running-content-bg {
@@ -12,12 +18,17 @@
   inset: 0%;
 }
 
+.running-content .content-lists-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
 .running-content .content-lists {
   display: flex;
   align-items: center;
-  justify-content: center;
   white-space: nowrap;
-  gap: 80px;
+  gap: 40px;
+  width: fit-content;
 }
 
 .running-content .content-lists:hover {
@@ -31,7 +42,7 @@
   position: relative;
   flex-wrap: nowrap;
   flex-shrink: 0;
-  gap: 80px;
+  gap: 40px;
 }
 
 .running-content .content-link {
@@ -39,6 +50,10 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  min-width: 160px;
+  min-height: 55px;
+  max-width: 160px;
+  max-height: 55px;
 }
 
 .running-animation {
@@ -46,8 +61,13 @@
   animation: scroll 20s linear infinite;
 }
 
-.running-content .content-link img {
+.running-content .content-link img,
+.running-content .content-link .brand-logo-image {
+  width: 160px !important;
+  height: 55px !important;
   object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 }
 
 @keyframes scroll {
@@ -55,14 +75,27 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(-100%);
+    transform: translateX(-50%);
   }
 }
 
 @media (max-width: 991px) {
   .running-content .content-item,
   .running-content .content-lists {
-    gap: 60px;
+    gap: 30px;
+  }
+  
+  .running-content .content-link {
+    min-width: 140px;
+    max-width: 140px;
+    min-height: 48px;
+    max-height: 48px;
+  }
+  
+  .running-content .content-link img,
+  .running-content .content-link .brand-logo-image {
+    width: 140px !important;
+    height: 48px !important;
   }
 }
 
@@ -74,6 +107,19 @@
 
   .running-content .content-item,
   .running-content .content-lists {
-    gap: 48px;
+    gap: 24px;
+  }
+  
+  .running-content .content-link {
+    min-width: 110px;
+    max-width: 110px;
+    min-height: 40px;
+    max-height: 40px;
+  }
+  
+  .running-content .content-link img,
+  .running-content .content-link .brand-logo-image {
+    width: 110px !important;
+    height: 40px !important;
   }
 }

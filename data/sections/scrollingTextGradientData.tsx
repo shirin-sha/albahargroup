@@ -12,40 +12,40 @@ export const ScrollingTextGradientData: SectionProps = {
         {
             src: Image1.src,
             alt: "Scrolling image",
-            width: 108,
-            height: 36,
+            width: 160,
+            height: 55,
             loading: "lazy",
             href: "/about-us"
         },
         {
             src: Image2.src,
             alt: "Scrolling image",
-            width: 108,
-            height: 36,
+            width: 160,
+            height: 55,
             loading: "lazy",
             href: "/about-us"
         },
         {
             src: Image3.src,
             alt: "Scrolling image",
-            width: 108,
-            height: 36,
+            width: 160,
+            height: 55,
             loading: "lazy",
             href: "/about-us"
         },
         {
             src: Image4.src,
             alt: "Scrolling image",
-            width: 108,
-            height: 36,
+            width: 160,
+            height: 55,
             loading: "lazy",
             href: "/about-us"
         },
         {
             src: Image5.src,
             alt: "Scrolling image",
-            width: 108,
-            height: 36,
+            width: 160,
+            height: 55,
             loading: "lazy",
             href: "/about-us"
         }
