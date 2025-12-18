@@ -21,7 +21,7 @@ export const HeroSlidesData = [
         href: "/business-verticals",
         type: "primary"
     },
-    image: "/img/slider/hero-2.jpg",
+    image: "/img/slider/hero-2.png",
     imageTablet: "/img/slider/hero2-991.jpg",
     imageMobile: "/img/slider/hero2-575.jpg"
   },
@@ -34,7 +34,7 @@ export const HeroSlidesData = [
         href: "/contact-us",
         type: "primary"
     },
-    image: "/img/slider/hero-3.jpg",
+    image: "/img/slider/hero-3.png",
     imageTablet: "/img/slider/hero-991.jpg",
     imageMobile: "/img/slider/hero-575.jpg"
   }
