@@ -15,20 +15,6 @@
   @apply w-full mx-auto px-[calc(theme('spacing')*.5)];
 }
 
-@media (max-width: 767px) {
-  .container,
-  .container-fluid {
-    padding-inline-start: 15px;
-    padding-inline-end: 15px;
-  }
-  
-  /* Ensure no unwanted margins on mobile */
-  .section-padding {
-    padding-inline-start: 0;
-    padding-inline-end: 0;
-  }
-}
-
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
@@ -196,8 +182,6 @@ body {
   flex-direction: column;
   margin: 0;
   min-height: 100svh;
-  overflow-x: hidden;
-  width: 100%;
 }
 
 html {
@@ -205,8 +189,6 @@ html {
   scrollbar-width: thin;
   /* scrollbar-color: var(--color-foreground); */
   scroll-behavior: smooth;
-  overflow-x: hidden;
-  width: 100%;
 }
 
 .scroll-lock {
