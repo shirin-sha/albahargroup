@@ -1,13 +1,9 @@
-<svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="70" height="70" rx="10" fill="white"></rect>
-<g clip-path="url(#clip0_9088_8915)">
-<path d="M35 18L37.5 25.5L45 26L39 31L40.5 38.5L35 34.5L29.5 38.5L31 31L25 26L32.5 25.5L35 18Z" fill="#20282D"></path>
-<path d="M35 22L36.5 27L41 27.5L37 31L38 35L35 32.5L32 35L33 31L29 27.5L33.5 27L35 22Z" fill="#20282D"></path>
-<circle cx="35" cy="30" r="2" fill="#20282D"></circle>
-</g>
-<defs>
-<clipPath id="clip0_9088_8915">
-<rect width="40" height="40" fill="white" transform="translate(15 15)"></rect>
-</clipPath>
-</defs>
+<svg width="70" height="70" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+  <rect width="70" height="70" rx="10" fill="white"/>
+  <g fill="#20282D">
+    <circle cx="28" cy="30" r="6"/>
+    <circle cx="42" cy="30" r="6"/>
+    <path d="M18 48c0-6 6-10 10-10s10 4 10 10"/>
+    <path d="M32 48c0-6 6-10 10-10s10 4 10 10"/>
+  </g>
 </svg>

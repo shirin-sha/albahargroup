@@ -101,17 +101,35 @@ sticky-header[data-sticky-type="always"] {
   border: var(--style-border-width) dotted var(--color-border);
   border-radius: 50%;
   text-decoration: none;
-  color: var(--color-foreground);
-  font-weight: 600;
-  font-size: 18px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 900;
+  font-size: 28px;
   transition: opacity 0.3s;
-  opacity: 0.6;
+  opacity: 1;
   cursor: pointer;
+  padding: 0;
+  position: relative;
+  padding-bottom: 10px;
 }
 
 .header-language:hover,
 .header-language:focus {
   opacity: 1;
+}
+
+.header-language .language-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+  position: relative;
+  top: 0;
+  left: 0;
 }
 
 .header-search {

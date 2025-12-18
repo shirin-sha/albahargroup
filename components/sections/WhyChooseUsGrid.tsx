@@ -18,8 +18,6 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
         button,
         image,
         promotions,
-        rotatingLogo,
-        promoImage,
         backgroundImage,
     } = data || {};
 
@@ -115,33 +113,43 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                     {promotions &&
                         <div className="choose-bottom-cards">
                             <div className="grid grid-cols-12 gap-1 justify-center">
-                                {promotions.map((item, index) => (                                   
-                                    <div 
-                                        className="col-span-12 lg:col-span-6 xl:col-span-4" 
-                                        data-aos="fade-up" 
-                                        key={`promo-${index}`} 
-                                    >
-                                        <div className="card-icon-text card-icon-text-horizontal">
-                                            {item.icon && 
-                                                <div className="svg-wrapper">{item.icon}</div>
-                                            }
-
-                                            <div className="content">
-                                                {item.title && 
-                                                    <h2 className="heading text-20 fw-700">
-                                                        {item.title}
-                                                    </h2>
+                                {promotions.map((item, index) => {
+                                    // Give values card (index 2) more columns to prevent wrapping
+                                    const isValuesCard = index === 2;
+                                    const colClass = isValuesCard 
+                                        ? "col-span-12 lg:col-span-6 xl:col-span-5" 
+                                        : index === 0
+                                        ? "col-span-12 lg:col-span-6 xl:col-span-4"
+                                        : "col-span-12 lg:col-span-6 xl:col-span-3";
+                                    
+                                    return (
+                                        <div 
+                                            className={colClass} 
+                                            data-aos="fade-up" 
+                                            key={`promo-${index}`} 
+                                        >
+                                            <div className="card-icon-text card-icon-text-horizontal">
+                                                {item.icon && 
+                                                    <div className="svg-wrapper">{item.icon}</div>
                                                 }
 
-                                                {item.text && 
-                                                    <p className="text text-16" style={{ whiteSpace: 'pre-line' }}>
-                                                        {item.text}
-                                                    </p>
-                                                }
+                                                <div className="content">
+                                                    {item.title && 
+                                                        <h2 className="heading text-20 fw-700">
+                                                            {item.title}
+                                                        </h2>
+                                                    }
+
+                                                    {item.text && 
+                                                        <p className={`text text-16 ${isValuesCard ? 'values-text' : ''}`} style={{ whiteSpace: 'pre-line' }}>
+                                                            {item.text}
+                                                        </p>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                    </div> 
-                                ))}    
+                                    );
+                                })}    
                             </div>
                         </div>
                     }

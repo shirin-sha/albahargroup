@@ -63,6 +63,25 @@
   row-gap: 24px;
 }
 
+/* Ensure each bullet point in values card stays on single line */
+.why-choose-us .values-text {
+  white-space: pre-line;
+  word-break: keep-all;
+}
+
+@media (min-width: 1280px) {
+  .why-choose-us .card-icon-text-horizontal .content {
+    min-width: 0;
+    flex: 1;
+  }
+  
+  .why-choose-us .values-text {
+    white-space: pre-line;
+    overflow-wrap: normal;
+    word-wrap: normal;
+  }
+}
+
 @media (min-width: 768px) {
   .choose-bottom {
   

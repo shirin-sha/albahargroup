@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Thumbs, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+import { Thumbs } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
@@ -15,10 +16,13 @@ import Heading from "../Heading";
 import CardTestimonialContent from "../CardTestimonialContent";
 import TestimonialList from "@/data/testimonials.json";
 import Image from 'next/image';
+import Icons from "../Icons";
 
 
 const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
     const [thumbSwiper, setThumbSwiper] = useState<any>(null);
+    const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
     const testimonialList = TestimonialList as TestimonialProps[];
     if(testimonialList.length == 0) return null;
 
@@ -36,9 +40,16 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
 
     const updateHeading = (index: number) => {
         setActiveHeading(testimonialList[index]?.heading || heading);
+        setActiveIndex(index);
     };
 
     const displayHeading = activeHeading || heading;
+
+    const getIconComponent = (iconName: string | undefined) => {
+        if (!iconName) return null;
+        const IconComponent = Icons[iconName as keyof typeof Icons];
+        return IconComponent ? <IconComponent /> : null;
+    };
 
     return (
         <div className={wrapperCls}>
@@ -76,16 +87,15 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                 <testimonial-slider className="testimonial-slider">
                     <div className="grid grid-cols-2 lg:gap-1">
                         <div className="lg:col-span-1 col-span-2">
-                            <div className="main-img">
+                            <div className="main-img testimonial-2">
                                 <Swiper
-                                    modules={[Pagination, Thumbs]}
+                                    modules={[Thumbs]}
                                     thumbs={{ swiper: thumbSwiper }}
-                                    pagination={{
-                                        el: '.custom-pagination-thumb-img',
-                                        clickable: true,
-                                        renderBullet: (index, className) =>
-                                        `<div class="${className} custom-bullet"><img src="${testimonialList[index].image}" alt="thumb-${index}" /></div>`,
+                                    onSwiper={(swiper) => {
+                                        setMainSwiper(swiper);
+                                        updateHeading(swiper.activeIndex || 0);
                                     }}
+                                    onSlideChange={(swiper) => updateHeading(swiper.activeIndex || 0)}
                                     className="swiper"
                                 >
                                     {testimonialList.map((item, index) => (
@@ -94,7 +104,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                                 <Image 
                                                     src={item.image || ''}
                                                     width={1000} 
-                                                    height={1096} 
+                                                    height={800} 
                                                     loading="lazy" 
                                                     alt="main image" 
                                                 />
@@ -102,7 +112,30 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
-                                <div className="swiper-pagination custom-pagination-thumb-img"></div>
+                                <div className="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal custom-pagination-thumb-img">
+                                    {testimonialList.map((item, index) => {
+                                        const IconComponent = getIconComponent(item.icon);
+                                        return (
+                                            <div
+                                                key={`pagination-${index}`}
+                                                className={`swiper-pagination-bullet custom-bullet ${activeIndex === index ? 'swiper-pagination-bullet-active' : ''}`}
+                                                onClick={() => {
+                                                    if (mainSwiper) {
+                                                        mainSwiper.slideTo(index);
+                                                    }
+                                                    if (thumbSwiper) {
+                                                        thumbSwiper.slideTo(index);
+                                                    }
+                                                    updateHeading(index);
+                                                }}
+                                                role="button"
+                                                aria-label={`Go to slide ${index + 1}`}
+                                            >
+                                                {IconComponent}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
 
@@ -120,7 +153,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                     {displayHeading &&
                                         <Heading 
                                             title={displayHeading}
-                                            cls="text-50"
+                                            cls="text-40"
                                             aos="fade-up"
                                         />
                                     }

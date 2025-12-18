@@ -34,14 +34,14 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
                     {subheading && 
                         <Subheading 
                             title={subheading}
-                            cls="text-20"
+                            cls="text-18"
                             aos="fade-up"
                         />
                     }
                     {heading && 
                         <Heading 
                             title={heading}
-                            cls="text-50"
+                            cls="text-40"
                             aos="fade-up"
                         />
                     }

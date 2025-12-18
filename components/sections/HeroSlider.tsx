@@ -83,7 +83,7 @@ const HeroSlider = ({
                                         {slide.heading && 
                                             <Heading 
                                                 title={slide.heading}
-                                                cls="text-80 fw-600"
+                                                cls="text-76 fw-600"
                                             />
                                         }
 

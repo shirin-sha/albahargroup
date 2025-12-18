@@ -7,7 +7,7 @@ export const OurServicesDataAccordion: SectionProps = {
     heading: "Capabilities that Power Every Al Bahar Division",
     button: {
         label: "More Details",
-        href: "/services",
+        href: "#",
         type: "secondary"
     },
 }

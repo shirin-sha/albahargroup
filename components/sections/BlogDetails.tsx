@@ -63,8 +63,6 @@ const BlogDetails = ({
                             </div>
                         </div>
 
-                        <Comments />
-                        <CommentForm />
                     </div>
 
                     <div className="col-span-12 lg:col-span-5">

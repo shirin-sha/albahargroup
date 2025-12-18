@@ -29,27 +29,27 @@ export const QuickLink: MenuType[] = [
 export const Services: MenuType[] = [
     {
         title: 'Human Capital',
-        path: '/services/human-capital'
+        path: '#'
     },
     {
         title: 'Logistics',
-        path: '/services/logistics'
+        path: '#'
     },
     {
         title: 'Supply Chain',
-        path: '/services/supply-chain'
+        path: '#'
     },
     {
         title: 'Omni Channel',
-        path: '/services/omni-channel'
+        path: '#'
     },
     {
         title: 'Business Excellence',
-        path: '/services/business-excellence'
+        path: '#'
     },
     {
         title: 'Knowledge Capital',
-        path: '/services/knowledge-capital'
+        path: '#'
     }
 ];
 
@@ -74,12 +74,12 @@ export const Information: MenuType[] = [
 
 export const MenuPolicies: MenuType[] = [
     {
-        title: 'Privacy Policy',
-        path: '/privacy-policy'
+        title: 'Careers',
+        path: '/careers'
     },
     {
-        title: 'FAQ',
-        path: '/faq'
+        title: 'Partnerships',
+        path: '/corporate-info/partnerships'
     },
     {
         title: 'Contact',

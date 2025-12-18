@@ -82,10 +82,10 @@ const ProjectSlider = ({ data }: {data: SectionProps}) => {
                         onSwiper={setSwiperInstance}
                         breakpoints={{
                             0: { spaceBetween: 20, slidesPerView: 1.2 },
-                            575: { spaceBetween: 20, slidesPerView: 1.8 },
-                            768: { spaceBetween: 20, slidesPerView: 2 },
-                            992: { spaceBetween: 30, slidesPerView: 3 },
-                            1280: { spaceBetween: 40, slidesPerView: 4 },
+                            575: { spaceBetween: 20, slidesPerView: 1.6 },
+                            768: { spaceBetween: 24, slidesPerView: 2 },
+                            992: { spaceBetween: 30, slidesPerView: 2.5 },
+                            1280: { spaceBetween: 40, slidesPerView: 3 },
                         }}
                         className="swiper"
                     >

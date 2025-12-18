@@ -45,16 +45,7 @@ const CardPricing = ({ data }: { data: PricingProps }) => {
                     ))}
                 </ul>
             }
-            <div className="buttons" data-aos="fade-up">
-                <Link
-                    href={link ? link : '#'}
-                    className="button button--primary"
-                    aria-label="Learn More"
-                >
-                    Learn More
-                    <Icons.ArrowRotate />
-                </Link>
-            </div>
+        
         </div>
     )
 }

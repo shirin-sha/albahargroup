@@ -419,7 +419,10 @@ h6,
   font-size: 80px;
   line-height: 1.17;
 }
-
+.text-76 {
+  font-size: 76px;
+  line-height: 1.15;
+}
 .text-50 {
   font-size: 50px;
   line-height: 1.2;
@@ -508,6 +511,9 @@ h6,
   .text-80 {
     font-size: 60px;
   }
+  .text-76 {
+    font-size: 50px;
+  }
 
   .text-50 {
     font-size: 44px;
@@ -519,7 +525,9 @@ h6,
   .text-80 {
     font-size: 60px;
   }
-
+.text-76 {
+  font-size: 40px;
+}
   .text-50 {
     font-size: 40px;
   }
@@ -530,7 +538,9 @@ h6,
   .text-80 {
     font-size: 50px;
   }
-
+  .text-76 {
+    font-size: 30px;
+  } 
   .text-50 {
     font-size: 38px;
   }

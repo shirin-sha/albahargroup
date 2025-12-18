@@ -39,7 +39,7 @@ export const WhyChooseUsGridData: SectionProps = {
             text: "To Always be the Most Trusted and Best-in-Class Partner.",
         },
         {
-            icon: <Icons.Purpose />,
+            icon: <Icons.Values />,
             title: "Our Values",
             text: "• We always deliver on our commitments\n• We consider our people to be our strength\n• We are one team\n• We listen, we care, we respect\n• We constantly work towards improvement",
         },

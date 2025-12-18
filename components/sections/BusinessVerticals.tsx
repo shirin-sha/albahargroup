@@ -45,7 +45,7 @@ const BusinessVerticals = ({ data }: { data: SectionProps }) => {
                                 {heading &&
                                     <Heading 
                                         title={heading}
-                                        cls="text-50 fw-700"
+                                        cls="text-40 fw-700"
                                         aos="fade-up"
                                     />
                                 }
@@ -53,7 +53,7 @@ const BusinessVerticals = ({ data }: { data: SectionProps }) => {
                                 {subheading &&
                                     <Subheading 
                                         title={subheading}
-                                        cls="text-16 fw-600"
+                                        cls="text-18 fw-600"
                                         aos="fade-up"
                                     />
                                 }
@@ -115,7 +115,7 @@ const BusinessVerticals = ({ data }: { data: SectionProps }) => {
                                                 {activeItem.heading &&
                                                     <Heading 
                                                         title={activeItem.heading}
-                                                        cls="text-50 fw-700 text-white"
+                                                        cls="text-40 fw-700 text-white"
                                                         aos="fade-up"
                                                     />
                                                 }

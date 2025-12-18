@@ -1,6 +1,7 @@
 export interface ProjectType {
     slug?: string;
     title?: string;
+    description?: string;
     category?: string;
     client?: string;
     owner?: string;

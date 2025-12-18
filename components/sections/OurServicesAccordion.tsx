@@ -30,7 +30,7 @@ const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
                         {subheading && 
                             <Subheading 
                                 title={subheading}
-                                cls="text-20"
+                                cls="text-18"
                                 aos="fade-right"
                             />
                         }
@@ -38,7 +38,7 @@ const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
                         {heading && 
                             <Heading 
                                 title={heading}
-                                cls="text-50"
+                                cls="text-40"
                                 aos="fade-right"
                             />
                         }

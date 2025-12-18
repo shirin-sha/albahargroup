@@ -5,7 +5,7 @@ export const HeroSlidesData = [
     text: "For more than eight decades, Al-Bahar Group has connected global brands with local insight. Across five business verticals and 70+ international partners, we bring trusted solutions to homes, businesses, and institutions throughout Kuwait.",
     button: {
         label: "Discover Our Story",
-        href: "/contact-us",
+        href: "/about-us",
         type: "primary"
     },
     image: "/img/slider/hero-1.png",
@@ -18,7 +18,7 @@ export const HeroSlidesData = [
     text: "For over 80 years, Al Bahar Group has helped international brands grow in Kuwait by combining deep market understanding with disciplined execution. From FMCG to technology and shipping, we create win–win partnerships that stand the test of time.",
     button: {
         label: "View Our Business Verticals",
-        href: "/contact-us",
+        href: "/business-verticals",
         type: "primary"
     },
     image: "/img/slider/hero-2.jpg",
@@ -34,7 +34,7 @@ export const HeroSlidesData = [
         href: "/contact-us",
         type: "primary"
     },
-    image: "/img/slider/hero-1.jpg",
+    image: "/img/slider/hero-3.jpg",
     imageTablet: "/img/slider/hero-991.jpg",
     imageMobile: "/img/slider/hero-575.jpg"
   }
