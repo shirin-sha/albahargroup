@@ -54,12 +54,7 @@ const About = () => {
 
 
             {/* Scrolling Text */}
-            <ScrollingText data={ScrollingTextData} />
-                <ScrollingText data={ScrollingTextData} />
-                
-            <ScrollingText data={ScrollingTextData} />
-                {/* Scrolling Text */}
-                <ScrollingText data={ScrollingTextData} />
+          
 
             {/* Why Choose Us */}
             <WhyChooseUsGrid data={WhyChooseUsGridBgData} />
