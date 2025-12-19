@@ -18,7 +18,7 @@ export const HeroSlidesData = [
     text: "For over 80 years, Al Bahar Group has helped international brands grow in Kuwait by combining deep market understanding with disciplined execution. From FMCG to technology and shipping, we create win–win partnerships that stand the test of time.",
     button: {
         label: "View Our Business Verticals",
-        href: "/business-verticals",
+        href: "#",
         type: "primary"
     },
     image: "/img/slider/hero-2.png",
