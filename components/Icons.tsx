@@ -41,6 +41,10 @@ import Purpose from "@/public/icons/purpose.svg";
 import Ambition from "@/public/icons/ambition.svg";
 import Plus from "@/public/icons/plus.svg";
 import Consulting from "@/public/icons/consulting.svg";
+import ConsumerFmcg from "@/public/icons/consumer-fmcg.svg";
+import CargoShip from "@/public/icons/cargo-ship.svg";
+import Airplane from "@/public/icons/airplane.svg";
+import Storefront from "@/public/icons/storefront.svg";
 import Development from "@/public/icons/development.svg";
 import Finance from "@/public/icons/finance.svg";
 import Investment from "@/public/icons/investment.svg";
@@ -74,6 +78,6 @@ import Download from "@/public/icons/download.svg";
 import Handshake from "@/public/icons/handshake.svg";
 
 
-const Icons = { Admin, Ambition, ArrowRotate, ArrowRotate2, ArrowLong, ArrowLong2, ArrowLongLeft, ArrowLongRight, ArrowCircle, ArrowCircleStraight, Purpose, Check, Email, Search, SearchBlog, CloseCircle, CaretDown, CaretRight, Contact, Video, Webinar, Hamburger, Location, Phone, Phone2, PhoneLarge, Pdf, Envelope, ChevronLeft, ChevronRight, ChevronDown, Subheading, FaceBook, Twitter, LinkedIn, Instagram, Calendar, Calendar2, Filter, Comment, Reply, SliderNavPrev, SliderNavNext, Support, LogoRotate, Plus, Consulting, Development, Finance, Investment, Risk, Plan, Winning, ScrollTop, PlusCircle, MinusCircle, Rating, Quote, Quote2, ChooseRotatingLogo, Mission, Vision, Values, Awards, ThumbsUp, Clients, Launch, Refine, Design, Strategy, Analyze, Discover, Download, Handshake }
+const Icons = { Admin, Ambition, ArrowRotate, ArrowRotate2, ArrowLong, ArrowLong2, ArrowLongLeft, ArrowLongRight, ArrowCircle, ArrowCircleStraight, Purpose, Check, Email, Search, SearchBlog, CloseCircle, CaretDown, CaretRight, Contact, Video, Webinar, Hamburger, Location, Phone, Phone2, PhoneLarge, Pdf, Envelope, ChevronLeft, ChevronRight, ChevronDown, Subheading, FaceBook, Twitter, LinkedIn, Instagram, Calendar, Calendar2, Filter, Comment, Reply, SliderNavPrev, SliderNavNext, Support, LogoRotate, Plus, Consulting, ConsumerFmcg, CargoShip, Airplane, Storefront, Development, Finance, Investment, Risk, Plan, Winning, ScrollTop, PlusCircle, MinusCircle, Rating, Quote, Quote2, ChooseRotatingLogo, Mission, Vision, Values, Awards, ThumbsUp, Clients, Launch, Refine, Design, Strategy, Analyze, Discover, Download, Handshake }
 
 export default Icons;
