@@ -12,11 +12,11 @@ const Menus: MenuItem[] = [
     },
     {
         title: 'BUSINESSES',
-        path: '/businesses',
+        path: '#',
         megamenutwocolumn: [
             {
                 title: 'OUR BUSINESS VERTICALS',
-                path: '/businesses',
+                path: '#',
                 dropdown: [
                     {
                         title: 'Consumer Goods',
