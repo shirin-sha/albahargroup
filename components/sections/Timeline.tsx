@@ -113,6 +113,7 @@ const Timeline = ({ data }: { data: SectionProps & { timelineItems?: TimelineIte
                                         data-aos-delay={index * 50}
                                     >
                                         {/* Year at the center */}
+                                        
                                         <div className="timeline-year">{item.year}</div>
                                         
                                         {/* Vertical connector line */}

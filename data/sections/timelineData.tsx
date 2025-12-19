@@ -35,7 +35,9 @@ export const TimelineData: SectionProps & { timelineItems?: Array<{
         {
             year: "1951",
             title: "Incorporates Bahar Shipping Company.",
-            position: "below"
+            position: "below",  logos: [
+                { src: "/img/brand/albaharshiping.png", alt: "Bahar Shipping Company", width: 100, height: 60 }
+            ]
         },
         {
             year: "1954",
@@ -56,14 +58,18 @@ export const TimelineData: SectionProps & { timelineItems?: Array<{
         {
             year: "1961",
             title: "Setup Bahar & Partners.",
-            position: "above"
+            position: "above",
+            logos: [
+                { src: "/img/brand/partners.png", alt: "Bahar & Partners", width: 100, height: 60 }
+            ]
         },
         {
             year: "1963",
             title: "Incorporates BEEA and signs up with GE Appliances.",
             position: "below",
             logos: [
-                { src: "/img/brand/ge.png", alt: "GE Appliances", width: 100, height: 60 }
+                { src: "/img/brand/ge.png", alt: "GE Appliances", width: 100, height: 60 },
+                { src: "/img/brand/albaharelectro.png", alt: "Bahar & Partners", width: 100, height: 60 }
             ]
         },
         {
