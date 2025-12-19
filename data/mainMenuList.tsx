@@ -87,7 +87,7 @@ const Menus: MenuItem[] = [
  
     {
         title: 'CAPABILITIES',
-        path: '/capabilities',
+        path: '#',
         dropdown: [
             {
                 title: 'HUMAN CAPITAL',
@@ -113,7 +113,7 @@ const Menus: MenuItem[] = [
     },
     {
         title: 'CORPORATE INFO',
-        path: '/corporate-info',
+        path: '#',
         dropdown: [
             {
                 title: 'NEWS & UPDATES',
