@@ -184,6 +184,10 @@ body {
   min-height: 100svh;
 }
 
+main {
+  flex: 1;
+}
+
 html {
   /* Firefox */
   scrollbar-width: thin;

@@ -89,6 +89,9 @@
 
 hero-slider {
   display: flex;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .slider-card {
@@ -129,14 +132,18 @@ hero-slider {
   left: 0;
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .slider-content {
   display: flex;
   width: 100%;
+  max-width: 100%;
   height: 100%;
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 @media (max-width: 1600px) {
