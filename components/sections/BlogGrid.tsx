@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useMemo } from 'react';
 import '@/styles/blog.css';
 import { AuthorType } from '@/types/author';
 import Posts from "@/data/posts.json";
@@ -6,9 +9,24 @@ import CardBlog from "../CardBlog";
 import NotFoundMsg from "../NotFoundMsg";
 import Pagination from "../Pagination";
 
+const ITEMS_PER_PAGE = 9;
 
 const BlogGrid = ({ cls }: { cls: string }) => {
+    const [currentPage, setCurrentPage] = useState(1);
     const posts = Posts;
+
+    const totalPages = Math.ceil(posts.length / ITEMS_PER_PAGE);
+
+    const paginatedPosts = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        return posts.slice(startIndex, endIndex);
+    }, [currentPage, posts]);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     if(posts.length == 0) {
         return <NotFoundMsg message="No posts found!" />
@@ -18,7 +36,7 @@ const BlogGrid = ({ cls }: { cls: string }) => {
         <div className={`page-blog ${cls}`}>
             <div className="container">
                 <div className="grid grid-cols-12 md:gap-1 product-grid">
-                    {posts.map((article) => {
+                    {paginatedPosts.map((article) => {
                         const author: AuthorType | undefined = Authors.find((author: AuthorType) => author.id === article.authorId);
                         return (                            
                             <div
@@ -39,7 +57,13 @@ const BlogGrid = ({ cls }: { cls: string }) => {
                     )})}
                 </div>
                 
-                <Pagination />
+                {totalPages > 1 && (
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                )}
             </div>
         </div>
     )
