@@ -4,14 +4,14 @@ import Icons from "@/components/Icons";
 export const ContactData: SectionProps = {
     wrapperCls: "section-padding",
     container: "container",
-    subheading: "Contact Us",
+    subheading: " How To Reach",
     heading: "Contact Us",
     text: "If you would like to know more about Mohamed Abdulrahman Al-Bahar Group or have any inquiries, kindly reach out to us.",
     promotions: [
         {
             icon: <Icons.Location />,
             title: "Address",
-            text: "The experienced management team includes seasoned veterans with expertise in consumer goods, automotive, heavy equipment, retail, consumer electronics, logistics, supply chain, strategy",
+            text: "Kuwait City, Abu Bakr Street 2,<br />Al Bahar Tower, Kuwait",
         },
         {
             icon: <Icons.Phone />,

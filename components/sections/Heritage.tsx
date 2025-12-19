@@ -17,7 +17,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
     } = data || {};
 
     return (
-        <div className={'mt-40'}>
+        <div className={wrapperCls}>
             <div className={container ? container : 'container'}>
                 <div className="heritage-content">
                     {/* Header Section */}
@@ -25,7 +25,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                         {subheading && 
                             <Subheading 
                                 title={subheading}
-                                cls="text-20"
+                                cls="text-18"
                                 aos="fade-up"
                             />
                         }
@@ -33,7 +33,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                         {heading && 
                             <Heading 
                                 title={heading}
-                                cls="text-50"
+                                cls="text-40"
                                 aos="fade-up"
                             />
                         }
@@ -68,7 +68,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                                     <div className="heritage-intro">
                                         <Text 
                                             text={text}
-                                            cls="text-18"
+                                            cls="text-16"
                                             aos="fade-up"
                                         />
                                     </div>
@@ -87,7 +87,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                                         {block.text && 
                                             <Text 
                                                 text={block.text}
-                                                cls="text-18"
+                                                cls="text-16"
                                                 aos="fade-up"
                                             />
                                         }

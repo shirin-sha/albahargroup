@@ -6,8 +6,8 @@ import "@/styles/testimonial.css";
 import { SectionProps } from "@/types/sectionProps";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
-import CardTestimonial from "../CardTestimonial";
-import TestimonialList from "@/data/testimonials.json";
+import CardTextOnly from "../CardTextOnly";
+import TestimonialList from "@/data/abouttestimonial.json";
 
 
 const Testimonials = ({ data }: { data: SectionProps }) => {
@@ -30,7 +30,7 @@ const Testimonials = ({ data }: { data: SectionProps }) => {
                             {subheading &&
                                 <Subheading 
                                     title={subheading}
-                                    cls="text-20"
+                                    cls="text-18"
                                     aos="fade-up"
                                 />
                             }
@@ -38,7 +38,7 @@ const Testimonials = ({ data }: { data: SectionProps }) => {
                             {heading &&
                                 <Heading 
                                     title={heading}
-                                    cls="text-50"
+                                    cls="text-40"
                                     aos="fade-up"
                                 />
                             }
@@ -47,8 +47,8 @@ const Testimonials = ({ data }: { data: SectionProps }) => {
                     <div className="lg:col-span-7 col-span-12">
                         <div className="testimonial-card-inner">
                             {testimonialList.map((item, index) => (
-                                <React.Fragment key={`card-tstimonial-${index}`}>
-                                    <CardTestimonial data={item} />
+                                 <React.Fragment key={`card-tstimonial-${index}`}>
+                                    <CardTextOnly text={item.text} />
                                 </React.Fragment>
                             ))}
                         </div>

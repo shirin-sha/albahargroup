@@ -121,7 +121,7 @@ const BusinessVerticals = ({ data }: { data: SectionProps }) => {
                                                 }
 
                                                 {activeItem.text &&
-                                                    <p className="text text-18" style={{ color: 'rgba(255, 255, 255, 0.9)' }} data-aos="fade-up">
+                                                    <p className="text text-16" style={{ color: 'rgba(255, 255, 255, 0.9)' }} data-aos="fade-up">
                                                         {activeItem.text}
                                                     </p>
                                                 }

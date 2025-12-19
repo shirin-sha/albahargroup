@@ -40,7 +40,7 @@ const TeamSlider = ({
                     {subheading &&
                         <Subheading 
                             title={subheading}
-                            cls="text-20"
+                            cls="text-18"
                             aos="fade-up"
                         />
                     }
@@ -48,7 +48,7 @@ const TeamSlider = ({
                     {heading &&
                         <Heading 
                             title={heading}
-                            cls="text-50"
+                            cls="text-40"
                             aos="fade-up"
                         />
                     }

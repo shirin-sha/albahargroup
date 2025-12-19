@@ -21,45 +21,45 @@ const Menus: MenuItem[] = [
                     {
                         title: 'Consumer Goods',
                         text: 'Leading FMCG brands across Kuwait’s key channels.',
-                        path: '/businesses/consumer-goods',
+                        path: '#',
                     },
                     {
                         title: 'Consumer Electronics',
                         text: 'Home and personal electronics from global innovators.',
-                        path: '/businesses/consumer-electronics',
+                        path: '#',
                     },
                     {
                         title: 'Home Automation',
                         text: 'Smart home solutions for comfort & security.',
-                        path: '/businesses/home-automation',
+                        path: '#',
                     },
                     {
                         title: 'Enterprise Technology',
                         text: 'End-to-end IT, print and AV solutions.',
-                        path: '/businesses/enterprise-technology',
+                        path: '#',
                     },
                     {
                         title: 'Shipping',
                         text: 'Port-to-door shipping, agency services and logistics.',
-                        path: '/businesses/shipping',
+                        path: '#',
                     },
                     {
                         title: 'Travel & Tourism',
                         text: 'Corporate, leisure and group travel across destinations.',
-                        path: '/businesses/travel-tourism',
+                        path: '#',
                     },
                 ],
             },
             {
                 title: 'Spotlight on Our Businesses',
-                path: '/businesses',
+                path: '#',
                 dropdown: [
                     {
                         imageUrl: '/img/menu/megamenu.png',
                         imageUrlMobile: '/img/menu/575.jpg',
                         title: 'Inside the Group Portfolio',
                         text: 'Six diverse businesses connecting consumers, enterprises and traders with leading global brands.',
-                        path: '/businesses',
+                        path: '#',
                         showbutton: true,
                     }
                 ]
@@ -74,7 +74,7 @@ const Menus: MenuItem[] = [
             },
             {
                 title: 'Download Profile',
-                path: '/corporate-info',
+                path: '#',
                 icon: <Icons.Download />,
             },
             {
@@ -91,23 +91,23 @@ const Menus: MenuItem[] = [
         dropdown: [
             {
                 title: 'HUMAN CAPITAL',
-                path: '/capabilities/human-capital'
+                path: '#',
             },
             {
                 title: 'KNOWLEDGE CAPITAL',
-                path: '/capabilities/knowledge-capital'
+                path: '#',
             },
             {
                 title: 'BUSINESS EXCELLENCE',
-                path: '/capabilities/business-excellence'
+                path: '#',
             },
             {
                 title: 'WAREHOUSE & LOGISTICS',
-                path: '/capabilities/warehouse-logistics'
+                path: '#',
             },
             {
                 title: 'CUSTOMER CARE',
-                path: '/capabilities/customer-care'
+                path: '#',
             }
         ]
     },

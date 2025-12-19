@@ -6,58 +6,43 @@ import Image3 from "@/public/img/project/3.jpg";
 export const StickyBannerData: SectionProps = {
     wrapperCls: "mt-100",
     container: "container",
-    heading: "Explore the Recent Works We Have Done!",
-    text: "The solar solution company specializes in providing innovative, eco-friendly energy systems harness the power, reducing carbon footprints and energy for clients worldwide.",
+    heading: "What Guides Us and Drives Our Future",
+    text: "Guided by a clear vision, driven by a shared mission and anchored in strong values, we partner with stakeholders to create sustainable, long-term success.",
     blockList: [
         {
-            subheading: "Investment Idea",
-            heading: "Innovation meets business needs",
-            text: "Our mission is to empowers businesses off all size to thrive in an our businesses ever changing marketplace.",    
-            button: {
-                label: "Learn More",
-                href: "/projects",
-                type: "primary"
-            },
+            subheading: "Vision",
+            heading: "Our long-term direction and aspiration.",
+            text: "To Always be the Most Trusted and Best-in-Class Partner.",
             image: {
                 src: Image1.src,
                 width: 1000,
                 height: 707,
                 loading: "lazy",
-                alt: "Image",
+                alt: "Vision",
             },
         },
         {
-            subheading: "Risk Management",
-            heading: "Protecting business from uncertainty",
-            text: "Our mission is to empowers businesses off all size to thrive in an our businesses ever changing marketplace.",    
-            button: {
-                label: "Learn More",
-                href: "/projects",
-                type: "primary"
-            },
+            subheading: "Mission",
+            heading: "How we create value every day.",
+            text: "Delivering excellence and success by directing our values, talents, resources and expertise to maximize customer satisfaction and to achieve sustainable growth for all stakeholders.",
             image: {
                 src: Image2.src,
                 width: 1000,
                 height: 707,
                 loading: "lazy",
-                alt: "Image",
+                alt: "Mission",
             },
         },
         {
-            subheading: "Business Growth",
-            heading: "Redesigning business for solutions",
-            text: "Our mission is to empowers businesses off all size to thrive in an our businesses ever changing marketplace.",    
-            button: {
-                label: "Learn More",
-                href: "/projects",
-                type: "primary"
-            },
+            subheading: "Values",
+            heading: "Principles that guide our behaviour and decisions.",
+            text: "<ul style='list-style-type: disc; padding-left: 20px;'><li>We deliver on our commitments.</li><li>We view our people as the source of our strength.</li><li>We work together as a team.</li><li>We listen, we care, we respect.</li><li>We seek continual self and work improvement.</li></ul>",
             image: {
                 src: Image3.src,
                 width: 1000,
                 height: 707,
                 loading: "lazy",
-                alt: "Image",
+                alt: "Values",
             },
         }
     ]

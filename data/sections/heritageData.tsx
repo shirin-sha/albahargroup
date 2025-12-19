@@ -2,7 +2,7 @@ import { SectionProps } from "@/types/sectionProps";
 import FounderImage from '@/public/img/image-text/img1.png'; // Placeholder - user will replace
 
 export const HeritageData: SectionProps = {
-    wrapperCls: "mt-60",
+    wrapperCls: "mt-100",
     container: "container",
     subheading: "OUR Heritage",
     heading: "A Legacy of Enduring Alliances",

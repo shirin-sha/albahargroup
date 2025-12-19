@@ -2,9 +2,9 @@ import { BlockListProps } from "@/types/blocks";
 import Image from "next/image";
 import Heading from "./Heading";
 import Subheading from "./Subheading";
-import Text from "./Text";
 import PrimaryButton from "./buttons/PrimaryButton";
 import SecondaryButton from "./buttons/SecondaryButton";
+import parser from "html-react-parser";
 
 const CardImageText = ({ data }: { data: BlockListProps }) => {
     const {
@@ -23,7 +23,7 @@ const CardImageText = ({ data }: { data: BlockListProps }) => {
                         {subheading && 
                             <Subheading 
                                 title={subheading}
-                                cls="text-20"
+                                cls="text-18"
                                 aos="fade-up"
                             />
                         }
@@ -31,17 +31,15 @@ const CardImageText = ({ data }: { data: BlockListProps }) => {
                         {heading && 
                             <Heading 
                                 title={heading}
-                                cls="text-50"
+                                cls="text-40"
                                 aos="fade-up"
                             />
                         }
 
                         {text && 
-                            <Text 
-                                text={text}
-                                cls="text-18"
-                                aos="fade-up"
-                            />
+                            <div className="text text-16" data-aos="fade-up">
+                                {parser(text)}
+                            </div>
                         }
 
                          {button && 

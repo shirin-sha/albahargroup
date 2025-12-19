@@ -7,7 +7,7 @@ import Brand5 from '@/public/img/brand/b5.png';
 import Brand6 from '@/public/img/brand/b6.png';
 
 export const PartnershipsData: SectionProps = {
-    wrapperCls: "mt-100 section-padding",
+    wrapperCls: "mt-100 ",
     container: "container",
     subheading: "Our Partnerships",
     heading: "Trusted Global Partners",

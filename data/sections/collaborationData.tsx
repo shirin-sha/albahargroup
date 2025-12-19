@@ -1,7 +1,7 @@
 import { SectionProps } from "@/types/sectionProps";
 
 export const CollaborationData: SectionProps = {
-    wrapperCls: "mt-60",
+    wrapperCls: "mt-100 section-padding",
     container: "container",
     subheading: "Empowering Kuwait through",
     heading: "Collaboration and Innovation",

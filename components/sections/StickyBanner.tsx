@@ -21,7 +21,7 @@ const StickyBanner = ({ data }: { data: SectionProps }) => {
                         <div className="section-headings-left">
                             <Heading 
                                 title={heading}
-                                cls="text-50"
+                                cls="text-40"
                                 aos="fade-right"
                             />
                         </div>
@@ -29,7 +29,7 @@ const StickyBanner = ({ data }: { data: SectionProps }) => {
 
                     {text &&
                         <div
-                            className="section-headings-right text text-18"
+                            className="section-headings-right text text-16"
                             data-aos="fade-left"
                         >
                             {text}

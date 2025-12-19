@@ -16,15 +16,15 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
     } = data || {};
 
     return (
-        <div className={`partnerships-section ${wrapperCls || ''}`}>
+        <div className={wrapperCls}>
             <div className={container ? container : 'container'}>
                 <div className="partnerships-content">
                     {/* Header Section */}
-                    <div className="partnerships-header text-center" data-aos="fade-up">
+                    <div className="partnerships-header section-headings text-center" data-aos="fade-up">
                         {subheading && 
                             <Subheading 
                                 title={subheading}
-                                cls="text-20"
+                                cls="text-18"
                                 aos="fade-up"
                             />
                         }
@@ -32,8 +32,9 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
                         {heading && 
                             <Heading 
                                 title={heading}
-                                cls="text-50"
+                                cls="text-40"
                                 aos="fade-up"
+                                aosDelay="50"
                             />
                         }
 
@@ -41,7 +42,7 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
                             <div className="partnerships-intro mt-30">
                                 <Text 
                                     text={text}
-                                    cls="text-18"
+                                    cls="text-16"
                                     aos="fade-up"
                                 />
                             </div>
@@ -61,8 +62,8 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
                                     <div className="partner-logo-wrapper">
                                         <Image
                                             src={partner.src}
-                                            width={partner.width || 200}
-                                            height={partner.height || 120}
+                                            width={200}
+                                            height={120}
                                             alt={partner.alt || `Partner ${index + 1}`}
                                             loading={partner.loading || "lazy"}
                                             className="partner-logo"

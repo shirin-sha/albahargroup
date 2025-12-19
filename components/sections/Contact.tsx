@@ -11,6 +11,7 @@ import TextField from "../TextField";
 import TextArea from "../TextArea";
 import { SectionProps } from "@/types/sectionProps";
 import SecondaryButton from "../buttons/SecondaryButton";
+import parser from "html-react-parser";
 
 const ContactSection = ({ data }: { data: SectionProps }) => {
     const [status, setStatus] = useState("");
@@ -122,7 +123,7 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
 
                                             {item.text &&
                                                 <p className="text text-16" data-aos="fade-up">
-                                                    {item.text}
+                                                    {parser(item.text)}
                                                 </p>
                                             }
                                         </div>

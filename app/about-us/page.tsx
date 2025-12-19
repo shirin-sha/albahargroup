@@ -4,9 +4,6 @@ import BreadcrumbBannerImageTablet from '@/public/img/banner/page-banner-991.jpg
 import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg';
 
 import { ImageTextData } from '@/data/sections/imageTextData';
-import { HeritageData } from '@/data/sections/heritageData';
-import { CollaborationData } from '@/data/sections/collaborationData';
-import { TimelineData } from '@/data/sections/timelineData';
 import { ScrollingTextData } from '@/data/sections/scrollingTextData';
 import { WhyChooseUsGridBgData } from '@/data/sections/whyChooseUsGridBgData';
 import { TeamSliderData } from '@/data/sections/teamSliderData';
@@ -15,27 +12,30 @@ import { Faq2Data } from '@/data/sections/faq2Data';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import ImageText from '@/components/sections/ImageText';
-import Heritage from '@/components/sections/Heritage';
-import Collaboration from '@/components/sections/Collaboration';
-import Timeline from '@/components/sections/Timeline';
 import ScrollingText from '@/components/sections/ScrollingText';
 import WhyChooseUsGrid from '@/components/sections/WhyChooseUsGrid';
 import TeamSlider from '@/components/sections/TeamSlider';
 import Testimonials from '@/components/sections/Testimonials';
 import Faq from '@/components/sections/Faq';
-
-
+import { StickyBannerData } from "@/data/sections/stickyBannerData";
+import StickyBanner from "@/components/sections/StickyBanner";
+import { HeritageData } from '@/data/sections/heritageData';
+import Heritage from '@/components/sections/Heritage';
+import Collaboration from '@/components/sections/Collaboration';
+import { CollaborationData } from '@/data/sections/collaborationData';
+import Timeline from '@/components/sections/Timeline';
+import { TimelineData } from '@/data/sections/timelineData';
 const PAGE_TITLE: string = 'About Us';
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
+    title: PAGE_TITLE,
 }
 
 
 const About = () => {
-    return(
+    return (
         <>
             {/* Breadcrumb Banner */}
-            <BreadcrumbBanner 
+            <BreadcrumbBanner
                 title={PAGE_TITLE}
                 image={{
                     src: BreadcrumbBannerImage.src,
@@ -49,17 +49,12 @@ const About = () => {
                 }}
             />
 
-            {/* Image Text */}
-            <ImageText data={ImageTextData} />
+            {/* Testimonials */}
+            <Testimonials data={TestimonialData} />
+            <StickyBanner data={StickyBannerData} />
 
 
-            {/* Scrolling Text */}
-          
 
-            {/* Why Choose Us */}
-            <WhyChooseUsGrid data={WhyChooseUsGridBgData} />
-
-         
 
             {/* Heritage Section */}
             <Heritage data={HeritageData} />
@@ -67,19 +62,18 @@ const About = () => {
             {/* Collaboration Section */}
             <Collaboration data={CollaborationData} />
 
-            {/* Timeline Section */}
-            <Timeline data={TimelineData} />
-
-            {/* Testimonials */}
-            {/* <Testimonials data={TestimonialData} /> */}
-
-            {/* FAQ */}
-            {/* <Faq data={Faq2Data} /> */}
-               {/* Our Team */}
-               <TeamSlider 
-                data={TeamSliderData} 
+   {/* Timeline Section */}
+   <Timeline data={TimelineData} />
+            {/* Our Team */}
+            <TeamSlider
+                data={TeamSliderData}
                 pagination={true}
             />
+
+
+
+            {/* FAQ */}
+            <Faq data={Faq2Data} />
         </>
     )
 }

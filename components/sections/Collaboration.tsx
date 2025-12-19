@@ -17,7 +17,7 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
     } = data || {};
 
     return (
-        <div className={'collaboration-section-alt mt-40'}>
+        <div className={`collaboration-section-alt ${wrapperCls || ''}`}>
             <div className={container ? container : 'container'}>
                 <div className="collaboration-content-alt">
                     {/* Header Section */}
@@ -25,7 +25,7 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
                         {subheading && 
                             <Subheading 
                                 title={subheading}
-                                cls="text-20"
+                                cls="text-18"
                                 aos="fade-up"
                             />
                         }
@@ -33,7 +33,7 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
                         {heading && 
                             <Heading 
                                 title={heading}
-                                cls="text-50"
+                                cls="text-40"
                                 aos="fade-up"
                             />
                         }
@@ -49,7 +49,7 @@ const Collaboration = ({ data }: { data: SectionProps }) => {
                                 <div className="card-content">
                                     <Text 
                                         text={text}
-                                        cls="text-18"
+                                        cls="text-16"
                                         aos="fade-up"
                                     />
                                 </div>
