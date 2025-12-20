@@ -38,7 +38,7 @@ const Testimonials = ({ data }: { data: SectionProps }) => {
                             {heading &&
                                 <Heading 
                                     title={heading}
-                                    cls="text-40"
+                                    cls="text-30"
                                     aos="fade-up"
                                 />
                             }
