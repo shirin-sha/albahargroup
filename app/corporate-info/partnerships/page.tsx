@@ -9,7 +9,7 @@ import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import Partnerships from '@/components/sections/Partnerships';
 
 
-const PAGE_TITLE: string = 'Our Partnerships';
+const PAGE_TITLE: string = 'Partnerships';
 export const metadata: Metadata = {
   title: PAGE_TITLE,
 }
@@ -40,6 +40,8 @@ const PartnershipsPage = () => {
 }
 
 export default PartnershipsPage;
+
+
 
 
 
