@@ -1,6 +1,6 @@
 import { SectionProps } from "@/types/sectionProps";
 import Icons from "@/components/Icons";
-import Image1 from '@/public/img/image-text/img2.png';
+import Image1 from '@/public/img/image-text/img4_new.png';
 import Image2 from '@/public/img/image-text/img-small.png';
 
 export const ImageText2Data: SectionProps = {
