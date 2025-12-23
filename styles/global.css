@@ -387,13 +387,13 @@ h1,
 h2,
 .h2 {
   font-size: var(--font-h2--size);
-  line-height: 1;
+  line-height: 1.2;
 }
 
 h3,
 .h3 {
   font-size: var(--font-h3--size);
-  line-height: 1;
+  line-height: 1.2;
 }
 
 h4,
