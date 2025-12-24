@@ -103,8 +103,8 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                             <div className="main-img radius18">
                                                 <Image 
                                                     src={item.image || ''}
-                                                    width={1000} 
-                                                    height={800} 
+                                                    width={700} 
+                                                    height={636} 
                                                     loading="lazy" 
                                                     alt="main image" 
                                                 />
