@@ -80,6 +80,9 @@
 
 .image-small img {
   border-radius: inherit;
+  width: 195px;
+  height: 202px;
+  object-fit: contain;
 }
 
 /* Text Image Sticky */

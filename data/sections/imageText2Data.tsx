@@ -1,7 +1,6 @@
 import { SectionProps } from "@/types/sectionProps";
 import Icons from "@/components/Icons";
 import Image1 from '@/public/img/image-text/img4_new.png';
-import Image2 from '@/public/img/image-text/img-small.png';
 
 export const ImageText2Data: SectionProps = {
     wrapperCls: "mt-100",
@@ -35,7 +34,7 @@ export const ImageText2Data: SectionProps = {
             loading: 'lazy'
         },
         {
-            src: Image2.src,
+            src: '/img/image-text/img-small.svg',
             width: 195,
             height: 202,
             alt: 'Image',
