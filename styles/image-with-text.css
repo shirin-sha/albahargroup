@@ -110,12 +110,12 @@
 }
 
 .text-image-sticky .image-text-card:nth-child(2) {
-  --color-background: #c3e6fe;
+  --color-background: #d4e6e9;
   --top: 100px;
 }
 
 .text-image-sticky .image-text-card:nth-child(3) {
-  --color-background: rgba(212, 230, 233, 1);
+  --color-background:#efeefb;
   --top: 160px;
 }
 
