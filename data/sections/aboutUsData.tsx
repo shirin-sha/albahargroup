@@ -1,5 +1,5 @@
 import { SectionProps } from "@/types/sectionProps";
-import ImageDesktop from "@/public/img/slider/hero-2.png";
+import ImageDesktop from "@/public/img/slider/hero2.png";
 import ImageTablet from "@/public/img/slider/hero2-991.jpg";
 import ImageMobile from "@/public/img/slider/hero2-575.jpg";
 
