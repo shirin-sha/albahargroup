@@ -67,9 +67,7 @@
   margin-block-start: 30px;
 }
 
-.image-text-card .subheading-bg {
-  --color-background-subheading: #c3e6fe;
-}
+
 
 .image-small {
   position: absolute;
@@ -112,7 +110,7 @@
 }
 
 .text-image-sticky .image-text-card:nth-child(2) {
-  --color-background: rgba(235, 250, 165, 1);
+  --color-background: #EBF5FF;
   --top: 100px;
 }
 
