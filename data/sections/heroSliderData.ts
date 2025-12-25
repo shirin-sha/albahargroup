@@ -8,9 +8,9 @@ export const HeroSlidesData = [
         href: "/about-us",
         type: "primary"
     },
-    image: "/img/slider/hero-1.png",
-    imageTablet: "/img/slider/hero-1.png",
-    imageMobile: "/img/slider/hero-1.png"
+    image: "/img/slider/hero1.png",
+    imageTablet: "/img/slider/hero1.png",
+    imageMobile: "/img/slider/hero1.png"
   },
   {
     subheading: "Global Brands. Local Insight.",
@@ -21,9 +21,9 @@ export const HeroSlidesData = [
         href: "#",
         type: "primary"
     },
-    image: "/img/slider/hero-2.png",
-    imageTablet: "/img/slider/hero-2.png",
-    imageMobile: "/img/slider/hero-2.png"
+    image: "/img/slider/hero2.png",
+    imageTablet: "/img/slider/hero2.png",
+    imageMobile: "/img/slider/hero2.png"
   },
   {
     subheading: "Excellence in Every Detail",
@@ -34,9 +34,9 @@ export const HeroSlidesData = [
         href: "/contact-us",
         type: "primary"
     },
-    image: "/img/slider/hero-3.png",
-    imageTablet: "/img/slider/hero-3.png",
-    imageMobile: "/img/slider/hero-3.png"
+    image: "/img/slider/hero3.png",
+    imageTablet: "/img/slider/hero3.png",
+    imageMobile: "/img/slider/hero3.png"
   }
 ];
 
