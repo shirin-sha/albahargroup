@@ -24,13 +24,13 @@ footer {
 }
 
 footer .social-link {
-  background-color: #1c2539;
+  background-color:#151719;
   transition: 0.3s;
 }
 
 footer .social-link:focus,
 footer .social-link:hover {
-  background-color: #20325b;
+  background-color: #151719;
 }
 
 .footer-widget-brand > .text {
