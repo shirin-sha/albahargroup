@@ -109,7 +109,7 @@ footer .social-link:hover {
 
 .footer-bottom {
   --color-background: rgba(28, 37, 57, 1);
-  background: var(--color-background);
+  background: #151719;
   padding: 20px 0;
 }
 
