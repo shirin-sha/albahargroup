@@ -67,6 +67,10 @@
   margin-block-start: 30px;
 }
 
+.image-text-card .subheading-bg {
+  --color-background-subheading: #c3e6fe;
+}
+
 .image-small {
   position: absolute;
   right: 0;

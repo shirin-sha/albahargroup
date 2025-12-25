@@ -45,7 +45,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                         {/* Founder Image Section */}
                         <div className="lg:col-span-1 col-span-2">
                             {image &&
-                                <div className="founder-image-wrapper" data-aos="fade-right">
+                               
                                     <div className="founder-image-container">
                                         <Image
                                             src={image.src}
@@ -57,7 +57,7 @@ const Heritage = ({ data }: { data: SectionProps }) => {
                                         />
                                         <div className="founder-image-overlay"></div>
                                     </div>
-                                </div>
+                             
                             }
                         </div>
 
