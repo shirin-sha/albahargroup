@@ -97,8 +97,8 @@
   height: 20px;
   border-radius: 50%;
   transform: translateX(-50%);
-  border: 4px solid #20282D;
-  background-color: #ffffff;
+  border: 4px solid #ffffff;
+  background-color: #20282D;
   transition: all 0.3s ease;
 }
 
