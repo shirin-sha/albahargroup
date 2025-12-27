@@ -108,41 +108,37 @@ const Timeline = ({ data }: { data: SectionProps & { timelineItems?: TimelineIte
                                 {timelineItems.map((item, index) => (
                                     <div 
                                         key={`timeline-${index}`}
-                                        className={`timeline-item ${item.position || 'below'}`}
+                                        className="timeline-item"
                                         data-aos="fade-up"
                                         data-aos-delay={index * 50}
                                     >
-                                        {/* Year at the center */}
-                                        
-                                        <div className="timeline-year">{item.year}</div>
+                                        {/* Timeline dot/marker */}
+                                        <div className="timeline-dot"></div>
                                         
                                         {/* Vertical connector line */}
                                         <div className="timeline-connector"></div>
                                         
-                                        {/* Content box with description */}
+                                        {/* Content box with year, description and image */}
                                         <div className="timeline-content-box">
+                                            <div className="timeline-year">{item.year}</div>
                                             <div className="timeline-title">{item.title}</div>
-                                        </div>
-                                        
-                                        {/* Logos on opposite side */}
-                                        {item.logos && item.logos.length > 0 && (
-                                            <div className="timeline-logos-wrapper">
-                                                <div className="timeline-logos">
+                                            {item.logos && item.logos.length > 0 && (
+                                                <div className="timeline-image-container">
                                                     {item.logos.map((logo, logoIndex) => (
-                                                        <div key={`logo-${index}-${logoIndex}`} className="timeline-logo">
+                                                        <div key={`logo-${index}-${logoIndex}`} className="timeline-image">
                                                             <Image
                                                                 src={logo.src}
                                                                 alt={logo.alt}
-                                                                width={logo.width || 100}
-                                                                height={logo.height || 60}
+                                                                width={logo.width || 200}
+                                                                height={logo.height || 150}
                                                                 loading="lazy"
-                                                                className="logo-image"
+                                                                className="timeline-logo-image"
                                                             />
                                                         </div>
                                                     ))}
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
