@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
-import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
-import BreadcrumbBannerImageTablet from '@/public/img/banner/page-banner-991.jpg';
-import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg';
-
+import BreadcrumbBannerImage from '@/public/img/banner/about-page-banner.jpg';
 import { ImageTextData } from '@/data/sections/imageTextData';
 import { ScrollingTextData } from '@/data/sections/scrollingTextData';
 import { WhyChooseUsGridBgData } from '@/data/sections/whyChooseUsGridBgData';
@@ -39,8 +36,8 @@ const About = () => {
                 title={PAGE_TITLE}
                 image={{
                     src: BreadcrumbBannerImage.src,
-                    srcMobile: BreadcrumbBannerImageTablet.src,
-                    srcTablet: BreadcrumbBannerImageMobile.src,
+                    srcMobile: BreadcrumbBannerImage.src,
+                    srcTablet: BreadcrumbBannerImage.src,
                     width: 1920,
                     height: 520,
                     cls: "media media-bg",
@@ -63,7 +60,7 @@ const About = () => {
             <Collaboration data={CollaborationData} />
 
    {/* Timeline Section */}
-   <Timeline data={TimelineData} />
+   <Timeline  />
             {/* Our Team */}
             <TeamSlider
                 data={TeamSliderData}
