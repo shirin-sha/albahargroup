@@ -1,165 +1,138 @@
-'use client';
-
-import "@/styles/timeline.css";
-import { SectionProps } from "@/types/sectionProps";
+"use client";
+import { TimelineData } from "@/data/sections/timelineData";
+import React, { useRef, useState } from "react";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from 'swiper';
+import Image from "next/image";
+import Icons from "../Icons";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
-import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
-import Icons from "../Icons";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import "@/styles/timeline.css";
 
-interface TimelineItem {
-    year: string;
-    title: string;
-    logos?: Array<{
-        src: string;
-        alt: string;
-        width?: number;
-        height?: number;
-    }>;
-    position?: 'above' | 'below';
-}
+export default function History() {
+  const swiperRef = useRef<SwiperType | null>(null);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  
+  const { subheading, heading, timelineItems } = TimelineData;
 
-const Timeline = ({ data }: { data: SectionProps & { timelineItems?: TimelineItem[] } }) => {
-    const {
-        subheading,
-        heading,
-        timelineItems = []
-    } = data || {};
+  const handleSlideChange = (swiper: SwiperType) => {
+    setIsBeginning(swiper.isBeginning);
+    setIsEnd(swiper.isEnd);
+  };
 
-    const timelineRef = useRef<HTMLDivElement>(null);
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(true);
+  return (
+    <div className="timeline-section">
+      <div className="container">
+        <div className="timeline-content">
+          {/* Header */}
+          <div className="section-headings text-center" data-aos="fade-up">
+            {subheading && 
+              <Subheading 
+                title={subheading}
+                cls="text-20"
+                aos="fade-up"
+              />
+            }
 
-    const checkScrollability = () => {
-        if (timelineRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = timelineRef.current;
-            setCanScrollLeft(scrollLeft > 0);
-            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-        }
-    };
+            {heading && 
+              <Heading 
+                title={heading}
+                cls="text-50"
+                aos="fade-up"
+              />
+            }
+          </div>
 
-    useEffect(() => {
-        checkScrollability();
-        const timeline = timelineRef.current;
-        if (timeline) {
-            timeline.addEventListener('scroll', checkScrollability);
-            window.addEventListener('resize', checkScrollability);
-            return () => {
-                timeline.removeEventListener('scroll', checkScrollability);
-                window.removeEventListener('resize', checkScrollability);
-            };
-        }
-    }, [timelineItems]);
+          {/* Timeline Container */}
+          <div className="section-content">
+            <div className="timeline-container" data-aos="fade-up">
+              {/* Left Navigation Button */}
+              <button 
+                className={`timeline-nav-btn timeline-nav-left ${isBeginning ? 'disabled' : ''}`}
+                onClick={() => swiperRef.current?.slidePrev()}
+                aria-label="Previous slide"
+                disabled={isBeginning}
+              >
+                <Icons.ChevronLeft />
+              </button>
 
-    const scroll = (direction: 'left' | 'right') => {
-        if (timelineRef.current) {
-            const scrollAmount = 400;
-            const scrollTo = direction === 'left' 
-                ? timelineRef.current.scrollLeft - scrollAmount
-                : timelineRef.current.scrollLeft + scrollAmount;
-            
-            timelineRef.current.scrollTo({
-                left: scrollTo,
-                behavior: 'smooth'
-            });
-        }
-    };
-
-    return (
-        <div className="timeline-section">
-            <div className="container">
-                <div className="timeline-content">
-                    {/* Header */}
-                    <div className="section-headings text-center" data-aos="fade-up">
-                        {subheading && 
-                            <Subheading 
-                                title={subheading}
-                                cls="text-20"
-                                aos="fade-up"
-                            />
-                        }
-
-                        {heading && 
-                            <Heading 
-                                title={heading}
-                                cls="text-50"
-                                aos="fade-up"
-                            />
-                        }
-                    </div>
-
-                    {/* Timeline Container */}
-                    <div className="section-content">
-                        <div className="timeline-container" data-aos="fade-up">
-                        {/* Left Navigation Button */}
-                        <button 
-                            className={`timeline-nav-btn timeline-nav-left ${!canScrollLeft ? 'disabled' : ''}`}
-                            onClick={() => scroll('left')}
-                            aria-label="Scroll timeline left"
-                            disabled={!canScrollLeft}
-                        >
-                            <Icons.ChevronLeft />
-                        </button>
-
-                        {/* Timeline Scroll Area */}
-                        <div className="timeline-scroll-wrapper" ref={timelineRef}>
-                            <div className="timeline-items">
-                                {timelineItems.map((item, index) => (
-                                    <div 
-                                        key={`timeline-${index}`}
-                                        className="timeline-item"
-                                        data-aos="fade-up"
-                                        data-aos-delay={index * 50}
-                                    >
-                                        {/* Timeline dot/marker */}
-                                        <div className="timeline-dot"></div>
-                                        
-                                        {/* Vertical connector line */}
-                                        <div className="timeline-connector"></div>
-                                        
-                                        {/* Content box with year, description and image */}
-                                        <div className="timeline-content-box">
-                                            <div className="timeline-year">{item.year}</div>
-                                            <div className="timeline-title">{item.title}</div>
-                                            {item.logos && item.logos.length > 0 && (
-                                                <div className="timeline-image-container">
-                                                    {item.logos.map((logo, logoIndex) => (
-                                                        <div key={`logo-${index}-${logoIndex}`} className="timeline-image">
-                                                            <Image
-                                                                src={logo.src}
-                                                                alt={logo.alt}
-                                                                width={logo.width || 200}
-                                                                height={logo.height || 150}
-                                                                loading="lazy"
-                                                                className="timeline-logo-image"
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+              {/* Timeline Swiper */}
+              <Swiper
+                modules={[Navigation]}
+                spaceBetween={40}
+                slidesPerView={1}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  setIsBeginning(swiper.isBeginning);
+                  setIsEnd(swiper.isEnd);
+                }}
+                onSlideChange={handleSlideChange}
+                breakpoints={{
+                  575: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                  },
+                  768: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                  },
+                }}
+                className="timeline-swiper"
+              >
+                {timelineItems?.map((item, index) => (
+                  <SwiperSlide key={`timeline-${index}`}>
+                    <div
+                      className="time-line-item"
+                      data-aos="fade-up"
+                      data-aos-delay={index * 50}
+                    >
+                      <div className="time-line-content">
+                        <div className="heading">
+                          <div className="label">{item.year}</div>
+                          <h5 className="title-content">{item.title}</h5>
                         </div>
-
-                        {/* Right Navigation Button */}
-                        <button 
-                            className={`timeline-nav-btn timeline-nav-right ${!canScrollRight ? 'disabled' : ''}`}
-                            onClick={() => scroll('right')}
-                            aria-label="Scroll timeline right"
-                            disabled={!canScrollRight}
-                        >
-                            <Icons.ChevronRight />
-                        </button>
-                        </div>
+                        {item.logos && item.logos.length > 0 && (
+                          <div className="time-line-logos">
+                            {item.logos.map((logo, logoIndex) => (
+                              <div key={`logo-${index}-${logoIndex}`} className="time-line-logo-item">
+                                <Image
+                                  src={logo.src}
+                                  alt={logo.alt}
+                                  width={100}
+                                  height={60}
+                                  loading="lazy"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              {/* Right Navigation Button */}
+              <button 
+                className={`timeline-nav-btn timeline-nav-right ${isEnd ? 'disabled' : ''}`}
+                onClick={() => swiperRef.current?.slideNext()}
+                aria-label="Next slide"
+                disabled={isEnd}
+              >
+                <Icons.ChevronRight />
+              </button>
             </div>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
-
-export default Timeline;
-
