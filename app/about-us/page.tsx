@@ -60,7 +60,7 @@ const About = () => {
             <Collaboration data={CollaborationData} />
 
    {/* Timeline Section */}
-   <Timeline  />
+    <Timeline data={TimelineData} />
             {/* Our Team */}
             <TeamSlider
                 data={TeamSliderData}
