@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
-import { Navigation } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "@/styles/hero-slider.css";
@@ -50,7 +50,13 @@ const HeroSlider = ({
             <Swiper
                 slidesPerView={1}
                 loop={true}
-                modules={[Navigation]}
+                modules={[Navigation, Autoplay]}
+                autoplay={{
+                    delay: 5000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                }}
+                speed={1000}
                 onSwiper={setSwiperInstance}
             >
                 {slides.map((slide, index) => (
