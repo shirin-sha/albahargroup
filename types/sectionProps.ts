@@ -32,6 +32,29 @@ export interface SectionProps {
     promotions?: PromotionProps[];
     counterData?: CounterItemProps[];
     textList?: TextProps[];
+    items?: Array<{
+        textheading1?: string;
+        textdescr1?: string;
+        title?: string;
+        text?: string;
+        image?: string;
+        subheading?: string;
+        heading?: string;
+        description?: string;
+        review?: string;
+        button?: {
+            label?: string;
+            href?: string;
+        };
+        icon?: string;
+    }>;
+    cards?: Array<{
+        title?: string;
+        description?: string;
+        features?: string[];
+        link?: string;
+        active?: boolean;
+    }>;
     rotatingLogo?: {
         logo?: any;
         text?: string;

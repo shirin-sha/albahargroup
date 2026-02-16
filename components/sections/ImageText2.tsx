@@ -8,6 +8,7 @@ import SecondaryButton from "../buttons/SecondaryButton";
 import { SectionProps } from "@/types/sectionProps";
 import ScrollingTextGradient from "../sections/ScrollingTextGradient";
 import { ScrollingTextGradientData } from "@/data/sections/scrollingTextGradientData";
+import Icons from "../Icons";
 
 const ImageText2 = ({ data }: { data: SectionProps }) => {
     const {
@@ -18,11 +19,18 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
         heading,
         text,
         textList,
+        items,
         button
     } = data || {};
 
     const image1 = imageList ? imageList[0] : null;
     const image2 = imageList ? imageList[1] : null;
+    
+    // Use items if available, otherwise fallback to textList for backward compatibility
+    const displayItems = items || (textList ? textList.map((item: any) => ({
+        textheading1: item.title || '',
+        textdescr1: item.text || ''
+    })) : []);
 
     return (
         <div className={`image-text ${wrapperCls}`}>
@@ -93,23 +101,24 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                                 />
                             }
 
-                            {textList &&
+                            {displayItems && displayItems.length > 0 &&
                                 <ul className="list-block list-unstyled">
-                                    {textList.map((item, index) => (
+                                    {displayItems.map((item: any, index: number) => (
                                         <li 
                                             className="text-item text text-16" 
                                             data-aos="fade-up" 
                                             key={`text-item-${index}`}
                                         >
-                                            {item.icon}
+                                            {/* Static icon - alternating between Ambition and Purpose */}
+                                            {index % 2 === 0 ? <Icons.Ambition /> : <Icons.Purpose />}
 
-                                            {item.title && 
+                                            {item.textheading1 && 
                                                 <h3 className="title text text-20 fw-600">
-                                                    {item.title}
+                                                    {item.textheading1}
                                                 </h3>
                                             }
 
-                                            {item.text && <div className="text text-16">{item.text}</div>}
+                                            {item.textdescr1 && <div className="text text-16">{item.textdescr1}</div>}
                                         </li>
                                     ))}
                                 </ul>

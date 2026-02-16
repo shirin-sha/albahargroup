@@ -8,16 +8,35 @@ import Image from "next/image";
 import Icons from "../Icons";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
+import { SectionProps } from "@/types/sectionProps";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "@/styles/timeline.css";
 
-export default function History() {
+interface TimelineItem {
+  year: string;
+  title: string;
+  logos?: Array<{
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+  }>;
+  position?: 'above' | 'below';
+}
+
+interface TimelineProps {
+  data?: SectionProps & { timelineItems?: TimelineItem[] };
+}
+
+export default function Timeline({ data }: TimelineProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   
-  const { subheading, heading, timelineItems } = TimelineData;
+  // Use CMS data if provided, otherwise fall back to static data
+  const timelineData = data || TimelineData;
+  const { subheading, heading, timelineItems } = timelineData;
 
   const handleSlideChange = (swiper: SwiperType) => {
     setIsBeginning(swiper.isBeginning);

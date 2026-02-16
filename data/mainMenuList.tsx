@@ -79,7 +79,7 @@ const Menus: MenuItem[] = [
             },
             {
                 title: 'Our Partners',
-                path: '/corporate-info/partnerships',
+                path: '/ourpartnerships',
                 icon: <Icons.Handshake />,
             },
         ],
@@ -125,7 +125,7 @@ const Menus: MenuItem[] = [
             },
             {
                 title: 'OUR PARTNERSHIPS',
-                path: '/corporate-info/partnerships'
+                path: '/ourpartnerships'
             }
         ]
     },

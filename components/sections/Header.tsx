@@ -7,6 +7,11 @@ import HeaderStyle2 from '../HeaderStyle2';
 const Header = () => {
     const pathname = usePathname();
 
+    // Hide header on admin routes
+    if (pathname?.startsWith('/admin')) {
+        return null;
+    }
+
     return (
         <>        
           <HeaderStyle1 />

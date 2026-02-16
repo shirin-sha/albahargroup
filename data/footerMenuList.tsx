@@ -79,7 +79,7 @@ export const MenuPolicies: MenuType[] = [
     },
     {
         title: 'Partnerships',
-        path: '/corporate-info/partnerships'
+        path: '/ourpartnerships'
     },
     {
         title: 'Contact',

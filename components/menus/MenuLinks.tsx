@@ -2,12 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import Icons from "../Icons";
 import { MenuType } from "@/types/menu";
+import LanguageLink from "../LanguageLink";
 
 export const LinkHeading = ({ title, path }: MenuType) => {
     return(
-        <Link className="menu-link heading fw-300" href={path}>
+        <LanguageLink className="menu-link heading fw-300" href={path}>
             {title}
-        </Link>
+        </LanguageLink>
     )
 }
 
@@ -15,14 +16,14 @@ export const ParentLink = ({ title, path, dropdown }: MenuType) => {
     return(
         <>
             {dropdown ? (
-                <Link className="menu-link menu-link-main menu-accrodion" href={path}>
+                <LanguageLink className="menu-link menu-link-main menu-accrodion" href={path}>
                     {title}
                     <Icons.CaretDown />
-                </Link>
+                </LanguageLink>
             ) : (
-                <Link className="menu-link menu-link-main" href={path}>
+                <LanguageLink className="menu-link menu-link-main" href={path}>
                     {title}
-                </Link>
+                </LanguageLink>
             )}
         </>
     )
@@ -32,14 +33,14 @@ export const ChildLink = ({ title, path, dropdown }: MenuType) => {
     return(
         <>
             {dropdown ? (
-                <Link className="menu-link menu-accrodion" href={path}>
+                <LanguageLink className="menu-link menu-accrodion" href={path}>
                     {title}
                     <Icons.CaretDown />
-                </Link>
+                </LanguageLink>
             ) : (
-                <Link className="menu-link" href={path}>
+                <LanguageLink className="menu-link" href={path}>
                     {title}
-                </Link>
+                </LanguageLink>
             )}
         </>
     )
@@ -47,7 +48,7 @@ export const ChildLink = ({ title, path, dropdown }: MenuType) => {
 
 export const LinkWithImg = ({ title, path, text, showbutton, altText, imageUrl, imageUrlMobile }: MenuType) => {
     return (
-        <Link className="menu-link megamenu-image-wrap" href={path}>
+        <LanguageLink className="menu-link megamenu-image-wrap" href={path}>
             <picture>
                 {imageUrlMobile && <source media="(max-width: 575px)" srcSet={imageUrlMobile} />}
                 <Image 
@@ -69,24 +70,24 @@ export const LinkWithImg = ({ title, path, text, showbutton, altText, imageUrl, 
                     </div>
                 }
             </div>
-        </Link>
+        </LanguageLink>
     )
 }
 
 export const LinkWithDesc = ({ title, path, text }: MenuType) => {
     return(        
-        <Link className="menu-link" href={path}>
+        <LanguageLink className="menu-link" href={path}>
             {title && <div className="heading text-20 fw-600">{title}</div>}
             {text && <div className="text text-14">{text}</div>}
-        </Link>
+        </LanguageLink>
     )
 }
 
 export const BottomMenuLink = ({ title, path, icon }: MenuType) => {
     return(
-        <Link className="menu-link text-14 fw-300" href={path}>
+        <LanguageLink className="menu-link text-14 fw-300" href={path}>
             {icon}
             {title}
-        </Link>
+        </LanguageLink>
     )
 }

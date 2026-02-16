@@ -1,18 +1,23 @@
+'use client';
+
 import SlimButton from "./buttons/SlimButton";
 import HeaderSeparator from "./HeaderSeparator";
 import Hamburger from "./menus/Hamburger";
-import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeaderActions = () => {
+    const { language, toggleLanguage } = useLanguage();
+
     return (
         <div className="header-actions flex items-center">
-            <Link 
-                href="#" 
+            <button
+                onClick={toggleLanguage}
                 className="header-language"
-                aria-label="Switch to Arabic"
+                aria-label={language === 'en' ? 'Switch to Arabic' : 'Switch to English'}
+                type="button"
             >
-                <span className="language-text">ع</span>
-            </Link>
+                <span className="language-text">{language === 'en' ? 'ع' : 'EN'}</span>
+            </button>
             <HeaderSeparator />
             <SlimButton 
                 label="Profile"

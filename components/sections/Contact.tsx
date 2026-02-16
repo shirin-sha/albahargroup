@@ -11,6 +11,7 @@ import TextField from "../TextField";
 import TextArea from "../TextArea";
 import { SectionProps } from "@/types/sectionProps";
 import SecondaryButton from "../buttons/SecondaryButton";
+import Icons from "../Icons";
 import parser from "html-react-parser";
 
 const ContactSection = ({ data }: { data: SectionProps }) => {
@@ -103,16 +104,41 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
                                     />
                                 }
 
-                                {promotions?.map((item, index) => (
-                                    <div 
-                                        className="card-icon-text card-icon-text-horizontal" 
-                                        key={`promo-${index}`}
-                                    >
-                                        {item.icon &&
-                                            <div className="svg-wrapper" data-aos="fade-up">
-                                                {item.icon}
-                                            </div>
+                                {promotions?.map((item: any, index: number) => {
+                                    // Map icon based on iconType or fallback to icon prop
+                                    let iconElement = item.icon;
+                                    if (!iconElement && item.iconType) {
+                                        const iconType = item.iconType.toLowerCase();
+                                        if (iconType === 'phone') {
+                                            iconElement = <Icons.Phone />;
+                                        } else if (iconType === 'email') {
+                                            iconElement = <Icons.Email />;
+                                        } else if (iconType === 'location') {
+                                            iconElement = <Icons.Location />;
                                         }
+                                    }
+                                    // Fallback: map based on title if no icon or iconType
+                                    if (!iconElement) {
+                                        const titleLower = item.title?.toLowerCase() || '';
+                                        if (titleLower.includes('call') || titleLower.includes('phone')) {
+                                            iconElement = <Icons.Phone />;
+                                        } else if (titleLower.includes('email') || titleLower.includes('mail')) {
+                                            iconElement = <Icons.Email />;
+                                        } else {
+                                            iconElement = <Icons.Location />;
+                                        }
+                                    }
+                                    
+                                    return (
+                                        <div 
+                                            className="card-icon-text card-icon-text-horizontal" 
+                                            key={`promo-${index}`}
+                                        >
+                                            {iconElement &&
+                                                <div className="svg-wrapper" data-aos="fade-up">
+                                                    {iconElement}
+                                                </div>
+                                            }
 
                                         <div className="content">
                                             {item.title &&
@@ -128,7 +154,8 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
                                             }
                                         </div>
                                     </div>
-                                ))}                                
+                                    );
+                                })}                                
                             </div>
                         </div>
 

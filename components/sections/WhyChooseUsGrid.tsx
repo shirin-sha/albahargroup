@@ -17,7 +17,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
         text,
         button,
         image,
-        promotions,
+        items,
         backgroundImage,
     } = data || {};
 
@@ -110,10 +110,10 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                 </div>
 
                 <div className="choose-bottom">
-                    {promotions &&
+                    {items &&
                         <div className="choose-bottom-cards">
                             <div className="grid grid-cols-12 gap-1 justify-center">
-                                {promotions.map((item, index) => {
+                                {items.map((item, index) => {
                                     // Give values card (index 2) more columns to prevent wrapping
                                     const isValuesCard = index === 2;
                                     const colClass = isValuesCard 

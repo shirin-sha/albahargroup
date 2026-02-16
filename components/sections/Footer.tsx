@@ -11,6 +11,11 @@ import FooterStyleGlobal from "../FooterStyleGlobal";
 const Footer = () => {
     const pathname = usePathname();
 
+    // Hide footer on admin routes
+    if (pathname?.startsWith('/admin')) {
+        return null;
+    }
+
     let container: string = 'container-fluid';
     // let showFooterStyle1: boolean = false;
     // let showFooterStyle2: boolean = false;

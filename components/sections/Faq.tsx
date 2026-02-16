@@ -17,9 +17,16 @@ const Faq = ({ data }: { data: SectionProps }) => {
         heading,
         text,
         button,
+        items,
     } = data || {};
 
-    const accordionData = FaqAccordion.slice(0, 5);
+    // Use CMS items if available, otherwise fall back to static data
+    const accordionData = (items && items.length > 0) 
+        ? items.map((item: any) => ({
+            title: item.title || '',
+            text: item.text || ''
+        }))
+        : FaqAccordion.slice(0, 5);
 
     return (
         <div className={`faq ${wrapperCls}`}>

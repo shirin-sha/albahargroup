@@ -1,4 +1,4 @@
-import Link from "next/link";
+import LanguageLink from "./LanguageLink";
 import { MenuType } from "@/types/menu";
 
 interface LinkListProps {
@@ -14,13 +14,13 @@ const LinkList = ({
         <ul className={`${wrapperCls} list-unstyled`}>
             {menus?.map((item, index) => (
                 <li key={`LinkList-${index}`}>
-                    <Link
+                    <LanguageLink
                         href={item.path}
                         className="text text-16 link"
                         aria-label={item.title}
                     >
                         {item.title}
-                    </Link>
+                    </LanguageLink>
                 </li>
             ))}
         </ul>
