@@ -17,7 +17,7 @@ export async function GET(
     
     let post;
     if (ObjectId.isValid(id)) {
-      post = await collection.findOne({ _id: new ObjectId(id) });
+      post = await collection.findOne({ _id: new ObjectId(id) } as any);
     } else {
       // Try to find by slug or legacy id
       post = await collection.findOne({

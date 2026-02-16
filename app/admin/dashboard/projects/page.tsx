@@ -250,7 +250,7 @@ const ProjectsPage = () => {
                 <label>Starting Date</label>
                 <input
                   type="date"
-                  value={formData.starting_date}
+                  value={typeof formData.starting_date === 'string' ? formData.starting_date : (formData.starting_date ? new Date(formData.starting_date).toISOString().split('T')[0] : '')}
                   onChange={(e) => setFormData({ ...formData, starting_date: e.target.value })}
                 />
               </div>
@@ -259,7 +259,7 @@ const ProjectsPage = () => {
                 <label>Ending Date</label>
                 <input
                   type="date"
-                  value={formData.ending_date}
+                  value={typeof formData.ending_date === 'string' ? formData.ending_date : (formData.ending_date ? new Date(formData.ending_date).toISOString().split('T')[0] : '')}
                   onChange={(e) => setFormData({ ...formData, ending_date: e.target.value })}
                 />
               </div>
