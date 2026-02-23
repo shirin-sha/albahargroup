@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 
 interface SectionData {
   sectionId: string;
@@ -12,10 +12,90 @@ interface SectionData {
 
 const NEWS_PAGE_SECTIONS = ['banner'] as const;
 
+// BilingualField component
+interface BilingualFieldProps {
+  label: string;
+  path: string;
+  type?: 'text' | 'textarea';
+  rows?: number;
+  placeholder?: string;
+  enValue: any;
+  arValue: any;
+  onUpdate: (lang: 'en' | 'ar', path: string, value: any) => void;
+}
+
+const BilingualField = memo(({ 
+  label, 
+  path, 
+  type = 'text', 
+  rows = 1,
+  placeholder = '',
+  enValue,
+  arValue,
+  onUpdate
+}: BilingualFieldProps) => {
+  if (type === 'textarea') {
+    return (
+      <div className="form-group-bilingual">
+        <label>{label}</label>
+        <div className="bilingual-inputs">
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">English</span>
+            <textarea
+              value={enValue || ''}
+              onChange={(e) => onUpdate('en', path, e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+            />
+          </div>
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">العربية</span>
+            <textarea
+              value={arValue || ''}
+              onChange={(e) => onUpdate('ar', path, e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+              dir="rtl"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="form-group-bilingual">
+      <label>{label}</label>
+      <div className="bilingual-inputs">
+        <div className="bilingual-input-group">
+          <span className="bilingual-label">English</span>
+          <input
+            type="text"
+            value={enValue || ''}
+            onChange={(e) => onUpdate('en', path, e.target.value)}
+            placeholder={placeholder}
+          />
+        </div>
+        <div className="bilingual-input-group">
+          <span className="bilingual-label">العربية</span>
+          <input
+            type="text"
+            value={arValue || ''}
+            onChange={(e) => onUpdate('ar', path, e.target.value)}
+            placeholder={placeholder}
+            dir="rtl"
+          />
+        </div>
+      </div>
+    </div>
+  );
+});
+
+BilingualField.displayName = 'BilingualField';
+
 const NewsPageCMS = () => {
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'en' | 'ar'>('en');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,23 +138,10 @@ const NewsPageCMS = () => {
   }
 
   return (
-    <div className={`admin-cms-container ${activeTab === 'ar' ? 'rtl' : 'ltr'}`} dir={activeTab === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>News Page CMS</h1>
-        <div className="admin-cms-tabs">
-          <button
-            className={activeTab === 'en' ? 'active' : ''}
-            onClick={() => setActiveTab('en')}
-          >
-            English
-          </button>
-          <button
-            className={activeTab === 'ar' ? 'active' : ''}
-            onClick={() => setActiveTab('ar')}
-          >
-            العربية
-          </button>
-        </div>
+        <p style={{ color: '#6b7280', fontSize: '14px' }}>Edit both English and Arabic content together</p>
       </div>
 
       <div className="admin-cms-sections">
@@ -85,7 +152,6 @@ const NewsPageCMS = () => {
               key={sectionId}
               sectionId={sectionId}
               section={section}
-              lang={activeTab}
               onSave={saveSection}
               isOpen={selectedSection === sectionId}
               onToggle={() =>
@@ -102,7 +168,6 @@ const NewsPageCMS = () => {
 interface SectionEditorProps {
   sectionId: string;
   section?: SectionData;
-  lang: 'en' | 'ar';
   onSave: (sectionId: string, data: Partial<SectionData>) => void;
   isOpen: boolean;
   onToggle: () => void;
@@ -111,74 +176,102 @@ interface SectionEditorProps {
 const SectionEditor = ({
   sectionId,
   section,
-  lang,
   onSave,
   isOpen,
   onToggle,
 }: SectionEditorProps) => {
-  const [formData, setFormData] = useState<any>(section?.[lang] || {});
+  const [formDataEn, setFormDataEn] = useState<any>({});
+  const [formDataAr, setFormDataAr] = useState<any>({});
 
   useEffect(() => {
+    if (!isOpen) return;
+    
     if (section) {
-      setFormData(section[lang] || {});
+      setFormDataEn(section.en || {});
+      setFormDataAr(section.ar || {});
+    } else {
+      setFormDataEn({});
+      setFormDataAr({});
     }
-  }, [section, lang]);
+  }, [section?.sectionId, sectionId, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updateData: Partial<SectionData> = {
       enabled: section?.enabled ?? true,
       order: section?.order ?? 0,
-      [lang]: formData,
+      en: formDataEn,
+      ar: formDataAr,
     };
     onSave(sectionId, updateData);
   };
 
-  const updateField = (path: string, value: any) => {
+  const updateField = useCallback((lang: 'en' | 'ar', path: string, value: any) => {
+    const setData = lang === 'en' ? setFormDataEn : setFormDataAr;
+    
+    setData((prevData: any) => {
+      const newData = JSON.parse(JSON.stringify(prevData));
+      const keys = path.split('.');
+      let current: any = newData;
+      
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (!current[key]) current[key] = {};
+        current = current[key];
+      }
+      
+      current[keys[keys.length - 1]] = value;
+      return newData;
+    });
+  }, []);
+
+  const getNestedValue = useCallback((data: any, path: string) => {
     const keys = path.split('.');
-    const newData = { ...formData };
-    let current: any = newData;
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!current[keys[i]]) current[keys[i]] = {};
-      current = current[keys[i]];
+    let value: any = data || {};
+    
+    try {
+      for (const key of keys) {
+        if (value !== null && value !== undefined) {
+          value = value[key];
+        } else {
+          return undefined;
+        }
+      }
+    } catch {
+      return undefined;
     }
-    current[keys[keys.length - 1]] = value;
-    setFormData(newData);
-  };
+    
+    return value;
+  }, []);
+
+  const renderBilingualField = useCallback((label: string, path: string, type: 'text' | 'textarea' = 'text', rows: number = 1, placeholder: string = '') => {
+    const enValue = getNestedValue(formDataEn, path);
+    const arValue = getNestedValue(formDataAr, path);
+    
+    return (
+      <BilingualField
+        label={label}
+        path={path}
+        type={type}
+        rows={rows}
+        placeholder={placeholder}
+        enValue={enValue}
+        arValue={arValue}
+        onUpdate={updateField}
+      />
+    );
+  }, [formDataEn, formDataAr, updateField, getNestedValue]);
 
   const renderFields = () => {
-    switch (sectionId) {
-      case 'banner':
-        return (
-          <>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateField('title', e.target.value)}
-              />
-            </div>
-          </>
-        );
-      default:
-        return (
-          <>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateField('title', e.target.value)}
-              />
-            </div>
-          </>
-        );
-    }
+    return (
+      <>
+        {renderBilingualField("Title", "title")}
+      </>
+    );
   };
 
   return (
-    <div className={`admin-cms-section-card ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="admin-cms-section-card">
       <div className="admin-cms-section-header" onClick={onToggle}>
         <h3>{sectionId}</h3>
         <span className="admin-cms-toggle">{isOpen ? '−' : '+'}</span>
@@ -188,7 +281,7 @@ const SectionEditor = ({
           {renderFields()}
           <div className="form-actions">
             <button type="submit" className="button button-primary">
-              {lang === 'ar' ? 'حفظ' : `Save ${lang.toUpperCase()}`}
+              Save (Both Languages)
             </button>
           </div>
         </form>

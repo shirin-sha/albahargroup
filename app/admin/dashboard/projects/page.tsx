@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Project } from '@/libs/models/project';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -292,16 +293,14 @@ const ProjectsPage = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Image URL *</label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="/img/project/project-1.jpg"
-                  required
-                />
-              </div>
+              <ImageUpload
+                value={formData.image || ''}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+                placeholder="/img/project/project-1.jpg"
+                folder="project"
+                required
+                label="Image"
+              />
 
               <div className="form-group">
                 <label>

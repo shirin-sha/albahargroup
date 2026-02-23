@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 interface SectionData {
   sectionId: string;
@@ -12,10 +13,90 @@ interface SectionData {
 
 const PARTNERSHIPS_PAGE_SECTIONS = ['banner', 'partnerships'] as const;
 
+// BilingualField component
+interface BilingualFieldProps {
+  label: string;
+  path: string;
+  type?: 'text' | 'textarea';
+  rows?: number;
+  placeholder?: string;
+  enValue: any;
+  arValue: any;
+  onUpdate: (lang: 'en' | 'ar', path: string, value: any) => void;
+}
+
+const BilingualField = memo(({ 
+  label, 
+  path, 
+  type = 'text', 
+  rows = 1,
+  placeholder = '',
+  enValue,
+  arValue,
+  onUpdate
+}: BilingualFieldProps) => {
+  if (type === 'textarea') {
+    return (
+      <div className="form-group-bilingual">
+        <label>{label}</label>
+        <div className="bilingual-inputs">
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">English</span>
+            <textarea
+              value={enValue || ''}
+              onChange={(e) => onUpdate('en', path, e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+            />
+          </div>
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">العربية</span>
+            <textarea
+              value={arValue || ''}
+              onChange={(e) => onUpdate('ar', path, e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+              dir="rtl"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="form-group-bilingual">
+      <label>{label}</label>
+      <div className="bilingual-inputs">
+        <div className="bilingual-input-group">
+          <span className="bilingual-label">English</span>
+          <input
+            type="text"
+            value={enValue || ''}
+            onChange={(e) => onUpdate('en', path, e.target.value)}
+            placeholder={placeholder}
+          />
+        </div>
+        <div className="bilingual-input-group">
+          <span className="bilingual-label">العربية</span>
+          <input
+            type="text"
+            value={arValue || ''}
+            onChange={(e) => onUpdate('ar', path, e.target.value)}
+            placeholder={placeholder}
+            dir="rtl"
+          />
+        </div>
+      </div>
+    </div>
+  );
+});
+
+BilingualField.displayName = 'BilingualField';
+
 const PartnershipsPageCMS = () => {
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'en' | 'ar'>('en');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,23 +139,10 @@ const PartnershipsPageCMS = () => {
   }
 
   return (
-    <div className={`admin-cms-container ${activeTab === 'ar' ? 'rtl' : 'ltr'}`} dir={activeTab === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>Partnerships Page CMS</h1>
-        <div className="admin-cms-tabs">
-          <button
-            className={activeTab === 'en' ? 'active' : ''}
-            onClick={() => setActiveTab('en')}
-          >
-            English
-          </button>
-          <button
-            className={activeTab === 'ar' ? 'active' : ''}
-            onClick={() => setActiveTab('ar')}
-          >
-            العربية
-          </button>
-        </div>
+        <p style={{ color: '#6b7280', fontSize: '14px' }}>Edit both English and Arabic content together</p>
       </div>
 
       <div className="admin-cms-sections">
@@ -85,7 +153,6 @@ const PartnershipsPageCMS = () => {
               key={sectionId}
               sectionId={sectionId}
               section={section}
-              lang={activeTab}
               onSave={saveSection}
               isOpen={selectedSection === sectionId}
               onToggle={() =>
@@ -102,7 +169,6 @@ const PartnershipsPageCMS = () => {
 interface SectionEditorProps {
   sectionId: string;
   section?: SectionData;
-  lang: 'en' | 'ar';
   onSave: (sectionId: string, data: Partial<SectionData>) => void;
   isOpen: boolean;
   onToggle: () => void;
@@ -111,172 +177,208 @@ interface SectionEditorProps {
 const SectionEditor = ({
   sectionId,
   section,
-  lang,
   onSave,
   isOpen,
   onToggle,
 }: SectionEditorProps) => {
-  const [formData, setFormData] = useState<any>(section?.[lang] || {});
+  const [formDataEn, setFormDataEn] = useState<any>({});
+  const [formDataAr, setFormDataAr] = useState<any>({});
 
   useEffect(() => {
+    if (!isOpen) return;
+    
     if (section) {
-      const sectionData = section[lang] || {};
+      const sectionDataEn = section.en || {};
+      const sectionDataAr = section.ar || {};
       if (sectionId === 'partnerships') {
-        setFormData({
-          ...sectionData,
-          imageList: Array.isArray(sectionData.imageList) ? sectionData.imageList : []
+        setFormDataEn({
+          ...sectionDataEn,
+          imageList: Array.isArray(sectionDataEn.imageList) ? sectionDataEn.imageList : []
+        });
+        setFormDataAr({
+          ...sectionDataAr,
+          imageList: Array.isArray(sectionDataAr.imageList) ? sectionDataAr.imageList : []
         });
       } else {
-        setFormData(sectionData);
+        setFormDataEn(sectionDataEn);
+        setFormDataAr(sectionDataAr);
       }
     } else {
       if (sectionId === 'partnerships') {
-        setFormData({ imageList: [] });
+        setFormDataEn({ imageList: [] });
+        setFormDataAr({ imageList: [] });
       } else {
-        setFormData({});
+        setFormDataEn({});
+        setFormDataAr({});
       }
     }
-  }, [section, lang, sectionId]);
+  }, [section?.sectionId, sectionId, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updateData: Partial<SectionData> = {
       enabled: section?.enabled ?? true,
       order: section?.order ?? 0,
-      [lang]: formData,
+      en: formDataEn,
+      ar: formDataAr,
     };
     onSave(sectionId, updateData);
   };
 
-  const updateField = (path: string, value: any) => {
+  const updateField = useCallback((lang: 'en' | 'ar', path: string, value: any) => {
+    const setData = lang === 'en' ? setFormDataEn : setFormDataAr;
+    
+    setData((prevData: any) => {
+      const newData = JSON.parse(JSON.stringify(prevData));
+      const keys = path.split('.');
+      let current: any = newData;
+      
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (!current[key]) current[key] = {};
+        current = current[key];
+      }
+      
+      current[keys[keys.length - 1]] = value;
+      return newData;
+    });
+  }, []);
+
+  const getNestedValue = useCallback((data: any, path: string) => {
     const keys = path.split('.');
-    const newData = { ...formData };
-    let current: any = newData;
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!current[keys[i]]) current[keys[i]] = {};
-      current = current[keys[i]];
+    let value: any = data || {};
+    
+    try {
+      for (const key of keys) {
+        if (value !== null && value !== undefined) {
+          value = value[key];
+        } else {
+          return undefined;
+        }
+      }
+    } catch {
+      return undefined;
     }
-    current[keys[keys.length - 1]] = value;
-    setFormData(newData);
-  };
+    
+    return value;
+  }, []);
+
+  const renderBilingualField = useCallback((label: string, path: string, type: 'text' | 'textarea' = 'text', rows: number = 1, placeholder: string = '') => {
+    const enValue = getNestedValue(formDataEn, path);
+    const arValue = getNestedValue(formDataAr, path);
+    
+    return (
+      <BilingualField
+        label={label}
+        path={path}
+        type={type}
+        rows={rows}
+        placeholder={placeholder}
+        enValue={enValue}
+        arValue={arValue}
+        onUpdate={updateField}
+      />
+    );
+  }, [formDataEn, formDataAr, updateField, getNestedValue]);
 
   const renderFields = () => {
     switch (sectionId) {
       case 'banner':
         return (
           <>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateField('title', e.target.value)}
-              />
-            </div>
+            {renderBilingualField("Title", "title")}
           </>
         );
       case 'partnerships':
-        const imageList = formData.imageList || [];
+        const imageListEn = formDataEn.imageList || [];
+        const imageListAr = formDataAr.imageList || [];
+        const maxItems = Math.max(imageListEn.length, imageListAr.length);
+        
         return (
           <>
+            {renderBilingualField("Subheading", "subheading")}
+            {renderBilingualField("Heading", "heading")}
+            {renderBilingualField("Text", "text", "textarea", 4)}
             <div className="form-group">
-              <label>Subheading</label>
-              <input
-                type="text"
-                value={formData.subheading || ''}
-                onChange={(e) => updateField('subheading', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Heading</label>
-              <input
-                type="text"
-                value={formData.heading || ''}
-                onChange={(e) => updateField('heading', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Text</label>
-              <textarea
-                value={formData.text || ''}
-                onChange={(e) => updateField('text', e.target.value)}
-                rows={4}
-              />
-            </div>
-            <div className="form-group">
-              <label>Partner Logos</label>
+              <label>Partner Logos (shared)</label>
               <div className="hero-slides-container">
-                {imageList.map((partner: any, index: number) => (
-                  <div key={index} className="hero-slide-card">
-                    <div className="hero-slide-header">
-                      <h4>Partner {index + 1}</h4>
-                      {imageList.length > 1 && (
-                        <button
-                          type="button"
-                          className="hero-slide-remove"
-                          onClick={() => {
-                            const newList = imageList.filter((_: any, i: number) => i !== index);
-                            setFormData({ ...formData, imageList: newList });
-                          }}
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                    <div className="hero-slide-fields">
-                      <div className="form-group">
-                        <label>Image URL</label>
-                        <input
-                          type="text"
-                          value={partner.src || ''}
-                          onChange={(e) => {
-                            const newList = [...imageList];
-                            newList[index] = { ...partner, src: e.target.value };
-                            setFormData({ ...formData, imageList: newList });
+                {Array.from({ length: maxItems }).map((_, index) => {
+                  const partnerEn = imageListEn[index] || { src: '', width: 200, height: 120, alt: '', loading: 'lazy' };
+                  const partnerAr = imageListAr[index] || { src: '', width: 200, height: 120, alt: '', loading: 'lazy' };
+                  
+                  return (
+                    <div key={index} className="hero-slide-card">
+                      <div className="hero-slide-header">
+                        <h4>Partner {index + 1}</h4>
+                        {maxItems > 1 && (
+                          <button
+                            type="button"
+                            className="hero-slide-remove"
+                            onClick={() => {
+                              setFormDataEn({ ...formDataEn, imageList: imageListEn.filter((_: any, i: number) => i !== index) });
+                              setFormDataAr({ ...formDataAr, imageList: imageListAr.filter((_: any, i: number) => i !== index) });
+                            }}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                      <div className="hero-slide-fields">
+                        <ImageUpload
+                          value={partnerEn.src || partnerAr.src || ''}
+                          onChange={(url) => {
+                            const newEn = [...imageListEn];
+                            const newAr = [...imageListAr];
+                            if (!newEn[index]) newEn[index] = { ...partnerEn };
+                            if (!newAr[index]) newAr[index] = { ...partnerAr };
+                            newEn[index].src = url;
+                            newAr[index].src = url;
+                            setFormDataEn({ ...formDataEn, imageList: newEn });
+                            setFormDataAr({ ...formDataAr, imageList: newAr });
                           }}
                           placeholder="/img/brand/partner.png"
+                          folder="brand"
+                          label="Image (shared)"
                         />
-                      </div>
-                      <div className="form-group">
-                        <label>Width</label>
-                        <input
-                          type="number"
-                          value={partner.width || 200}
-                          onChange={(e) => {
-                            const newList = [...imageList];
-                            newList[index] = { ...partner, width: parseInt(e.target.value) || 200 };
-                            setFormData({ ...formData, imageList: newList });
-                          }}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Height</label>
-                        <input
-                          type="number"
-                          value={partner.height || 120}
-                          onChange={(e) => {
-                            const newList = [...imageList];
-                            newList[index] = { ...partner, height: parseInt(e.target.value) || 120 };
-                            setFormData({ ...formData, imageList: newList });
-                          }}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Alt Text</label>
-                        <input
-                          type="text"
-                          value={partner.alt || ''}
-                          onChange={(e) => {
-                            const newList = [...imageList];
-                            newList[index] = { ...partner, alt: e.target.value };
-                            setFormData({ ...formData, imageList: newList });
-                          }}
-                          placeholder="Partner Brand Name"
-                        />
+                        <div className="form-group">
+                          <label>Width (shared)</label>
+                          <input
+                            type="number"
+                            value={partnerEn.width || partnerAr.width || 200}
+                            onChange={(e) => {
+                              const newEn = [...imageListEn];
+                              const newAr = [...imageListAr];
+                              if (!newEn[index]) newEn[index] = { ...partnerEn };
+                              if (!newAr[index]) newAr[index] = { ...partnerAr };
+                              newEn[index].width = parseInt(e.target.value) || 200;
+                              newAr[index].width = parseInt(e.target.value) || 200;
+                              setFormDataEn({ ...formDataEn, imageList: newEn });
+                              setFormDataAr({ ...formDataAr, imageList: newAr });
+                            }}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Height (shared)</label>
+                          <input
+                            type="number"
+                            value={partnerEn.height || partnerAr.height || 120}
+                            onChange={(e) => {
+                              const newEn = [...imageListEn];
+                              const newAr = [...imageListAr];
+                              if (!newEn[index]) newEn[index] = { ...partnerEn };
+                              if (!newAr[index]) newAr[index] = { ...partnerAr };
+                              newEn[index].height = parseInt(e.target.value) || 120;
+                              newAr[index].height = parseInt(e.target.value) || 120;
+                              setFormDataEn({ ...formDataEn, imageList: newEn });
+                              setFormDataAr({ ...formDataAr, imageList: newAr });
+                            }}
+                          />
+                        </div>
+                        {renderBilingualField("Alt Text", `imageList.${index}.alt`)}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 <button
                   type="button"
                   className="hero-add-slide-button"
@@ -288,9 +390,13 @@ const SectionEditor = ({
                       alt: '',
                       loading: 'lazy'
                     };
-                    setFormData({
-                      ...formData,
-                      imageList: [...(formData.imageList || []), newPartner]
+                    setFormDataEn({
+                      ...formDataEn,
+                      imageList: [...imageListEn, newPartner]
+                    });
+                    setFormDataAr({
+                      ...formDataAr,
+                      imageList: [...imageListAr, newPartner]
                     });
                   }}
                 >
@@ -303,21 +409,14 @@ const SectionEditor = ({
       default:
         return (
           <>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateField('title', e.target.value)}
-              />
-            </div>
+            {renderBilingualField("Title", "title")}
           </>
         );
     }
   };
 
   return (
-    <div className={`admin-cms-section-card ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="admin-cms-section-card">
       <div className="admin-cms-section-header" onClick={onToggle}>
         <h3>{sectionId}</h3>
         <span className="admin-cms-toggle">{isOpen ? '−' : '+'}</span>
@@ -327,7 +426,7 @@ const SectionEditor = ({
           {renderFields()}
           <div className="form-actions">
             <button type="submit" className="button button-primary">
-              {lang === 'ar' ? 'حفظ' : `Save ${lang.toUpperCase()}`}
+              Save (Both Languages)
             </button>
           </div>
         </form>

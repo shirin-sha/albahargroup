@@ -1,7 +1,7 @@
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
 
-export async function getHomeCMSData(lang: 'en' | 'ar' = 'en') {
+export async function getHomeCMSData() {
   try {
     const db = await getDb();
     const collection = db.collection<HomePageSection>('homePageSections');
@@ -17,16 +17,17 @@ export async function getHomeCMSData(lang: 'en' | 'ar' = 'en') {
     const faqSection = sections.find(s => s.sectionId === 'faq');
     const blogSection = sections.find(s => s.sectionId === 'blog');
     
+    // Return both languages together
     return {
-      hero: heroSection?.[lang] || null,
-      imageText: imageTextSection?.[lang] || null,
-      services: servicesSection?.[lang] || null,
-      projects: projectsSection?.[lang] || null,
-      whyChooseUs: whyChooseUsSection?.[lang] || null,
-      pricing: pricingSection?.[lang] || null,
-      testimonials: testimonialsSection?.[lang] || null,
-      faq: faqSection?.[lang] || null,
-      blog: blogSection?.[lang] || null,
+      hero: heroSection ? { en: heroSection.en || null, ar: heroSection.ar || null } : null,
+      imageText: imageTextSection ? { en: imageTextSection.en || null, ar: imageTextSection.ar || null } : null,
+      services: servicesSection ? { en: servicesSection.en || null, ar: servicesSection.ar || null } : null,
+      projects: projectsSection ? { en: projectsSection.en || null, ar: projectsSection.ar || null } : null,
+      whyChooseUs: whyChooseUsSection ? { en: whyChooseUsSection.en || null, ar: whyChooseUsSection.ar || null } : null,
+      pricing: pricingSection ? { en: pricingSection.en || null, ar: pricingSection.ar || null } : null,
+      testimonials: testimonialsSection ? { en: testimonialsSection.en || null, ar: testimonialsSection.ar || null } : null,
+      faq: faqSection ? { en: faqSection.en || null, ar: faqSection.ar || null } : null,
+      blog: blogSection ? { en: blogSection.en || null, ar: blogSection.ar || null } : null,
     };
   } catch (error) {
     console.error('Error fetching home CMS data:', error);

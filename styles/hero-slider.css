@@ -93,15 +93,63 @@
   height: 32px;
 }
 
+/* RTL support - flip arrows for Arabic */
+[dir="rtl"] .slider-nav .swiper-button-prev.rtl svg,
+[dir="rtl"] .slider-nav .swiper-button-next.rtl svg {
+  transform: scaleX(-1);
+}
+
+/* Also handle when hero-slider has dir attribute */
+hero-slider[dir="rtl"] .slider-nav .swiper-button-prev.rtl svg,
+hero-slider[dir="rtl"] .slider-nav .swiper-button-next.rtl svg {
+  transform: scaleX(-1);
+}
+
+/* Direct RTL support on slider-nav */
+.slider-nav[dir="rtl"] .swiper-button-prev.rtl svg,
+.slider-nav[dir="rtl"] .swiper-button-next.rtl svg {
+  transform: scaleX(-1);
+}
+
 hero-slider {
   display: flex;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
+  position: relative;
+}
+
+/* Ensure Swiper container is properly sized */
+/* hero-slider .swiper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+} */
+
+/* Fix slides width in RTL */
+hero-slider .swiper-slide {
+  width: 100% !important;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* RTL specific fixes */
+[dir="rtl"] hero-slider .swiper-slide {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
+[dir="rtl"] hero-slider .swiper-wrapper {
+  display: flex;
+  width: 100%;
 }
 
 .slider-card {
   height: 100%;
+  width: 100%;
+  min-width: 100%;
+  flex-shrink: 0;
 }
 
 .slider-animation > * {
@@ -139,7 +187,14 @@ hero-slider {
   width: 100%;
   height: 100%;
   max-width: 100%;
+  min-width: 100%;
   overflow: hidden;
+}
+
+/* RTL support for slider-media */
+[dir="rtl"] .slider-media {
+  left: auto;
+  right: 0;
 }
 
 .slider-content {

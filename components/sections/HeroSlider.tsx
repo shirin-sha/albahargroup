@@ -25,31 +25,86 @@ const HeroSlider = ({
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+    const [isRTL, setIsRTL] = useState(false);
+
+    // Check if page is RTL (Arabic)
+    useEffect(() => {
+        const checkRTL = () => {
+            const dir = document.documentElement.dir || document.documentElement.getAttribute('dir');
+            setIsRTL(dir === 'rtl');
+        };
+        checkRTL();
+        // Watch for changes
+        const observer = new MutationObserver(checkRTL);
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['dir']
+        });
+        return () => observer.disconnect();
+    }, []);
 
     // Attach navigation after both swiper and refs are ready
     useEffect(() => {
         if (
             swiperInstance &&
             prevRef.current &&
-            nextRef.current &&
-            swiperInstance.params.navigation
+            nextRef.current
         ) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            swiperInstance.params.navigation.prevEl = prevRef.current;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            swiperInstance.params.navigation.nextEl = nextRef.current;
-            swiperInstance.navigation.init();
-            swiperInstance.navigation.update();
+            // Check if navigation module is available
+            if (
+                swiperInstance.navigation && 
+                swiperInstance.params && 
+                swiperInstance.params.navigation
+            ) {
+                try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    swiperInstance.params.navigation.prevEl = prevRef.current;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    swiperInstance.params.navigation.nextEl = nextRef.current;
+                    swiperInstance.navigation.init();
+                    swiperInstance.navigation.update();
+                } catch (error) {
+                    console.warn('Error initializing navigation:', error);
+                }
+            }
         }
-    }, [swiperInstance]);
+    }, [swiperInstance, isRTL]);
+
+    // Update swiper when RTL changes - reinitialize to fix RTL issues
+    useEffect(() => {
+        if (swiperInstance && swiperInstance.el) {
+            try {
+                // Update swiper direction and reinitialize
+                // Use setTimeout to ensure DOM is ready
+                const timer = setTimeout(() => {
+                    if (swiperInstance && swiperInstance.el) {
+                        swiperInstance.update();
+                        swiperInstance.updateSize();
+                        // Only call updateSlides if slides exist
+                        if (swiperInstance.slides && swiperInstance.slides.length > 0) {
+                            swiperInstance.updateSlides();
+                            swiperInstance.updateSlidesClasses();
+                        }
+                        swiperInstance.updateAutoHeight();
+                    }
+                }, 0);
+                return () => clearTimeout(timer);
+            } catch (error) {
+                console.warn('Error updating swiper:', error);
+            }
+        }
+    }, [swiperInstance, isRTL]);
+
 
     return (
         <hero-slider className={`hero-slider ${wrapperCls}`}>
             <Swiper
+                key={isRTL ? 'rtl' : 'ltr'}
                 slidesPerView={1}
                 loop={true}
+            
                 modules={[Navigation, Autoplay]}
                 autoplay={{
                     delay: 5000,
@@ -57,7 +112,10 @@ const HeroSlider = ({
                     pauseOnMouseEnter: true,
                 }}
                 speed={1000}
+                dir={isRTL ? 'rtl' : 'ltr'}
                 onSwiper={setSwiperInstance}
+                watchOverflow={true}
+                spaceBetween={0}
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={`slide-${index}`}>
@@ -127,10 +185,10 @@ const HeroSlider = ({
 
             {navigation && 
                 <div className="slider-nav">
-                    <div className="swiper-button-prev" ref={prevRef}>
+                    <div className={`swiper-button-prev ${isRTL ? 'rtl' : ''}`} ref={prevRef}>
                         <Icons.SliderNavPrev />
                     </div>
-                    <div className="swiper-button-next" ref={nextRef}>
+                    <div className={`swiper-button-next ${isRTL ? 'rtl' : ''}`} ref={nextRef}>
                         <Icons.SliderNavNext />
                     </div>
                 </div>

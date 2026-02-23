@@ -223,23 +223,28 @@ const MenuEditor = ({ menu, onSave, onCancel }: MenuEditorProps) => {
           </button>
         </div>
         <form onSubmit={handleSubmit} className="admin-cms-form">
-          <div className="form-group">
-            <label>Title (English) *</label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Title (Arabic)</label>
-            <input
-              type="text"
-              value={formData.titleAr || ''}
-              onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
-            />
+          <div className="form-group-bilingual">
+            <label>Title *</label>
+            <div className="bilingual-inputs">
+              <div className="bilingual-input-group">
+                <span className="bilingual-label">English</span>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="bilingual-input-group">
+                <span className="bilingual-label">العربية</span>
+                <input
+                  type="text"
+                  value={formData.titleAr || ''}
+                  onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
+                  dir="rtl"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="form-group">

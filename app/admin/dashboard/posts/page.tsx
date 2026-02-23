@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Post } from '@/libs/models/post';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 const PostsPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -260,16 +261,14 @@ const PostsPage = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Image URL *</label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="/img/blog/blog-1.jpg"
-                  required
-                />
-              </div>
+              <ImageUpload
+                value={formData.image || ''}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+                placeholder="/img/blog/blog-1.jpg"
+                folder="blog"
+                required
+                label="Image"
+              />
 
               <div className="form-group">
                 <label>Video URL (optional)</label>

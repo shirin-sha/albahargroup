@@ -1453,6 +1453,78 @@ h6,
   color: #6b7280;
 }
 
+/* Bilingual Form Fields */
+.form-group-bilingual {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group-bilingual label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.bilingual-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.bilingual-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bilingual-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bilingual-input-group input,
+.bilingual-input-group textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #111827;
+  transition: border-color 0.15s ease;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+.bilingual-input-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.bilingual-input-group input:focus,
+.bilingual-input-group textarea:focus {
+  outline: none;
+  border-color: #000000;
+}
+
+.bilingual-input-group input[dir="rtl"],
+.bilingual-input-group textarea[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+@media (max-width: 1024px) {
+  .bilingual-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 767px) {
   .admin-shell {
     flex-direction: row;

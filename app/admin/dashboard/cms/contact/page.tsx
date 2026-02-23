@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 
 interface SectionData {
   sectionId: string;
@@ -12,10 +12,90 @@ interface SectionData {
 
 const CONTACT_PAGE_SECTIONS = ['banner', 'contactForm', 'map'] as const;
 
+// BilingualField component
+interface BilingualFieldProps {
+  label: string;
+  path: string;
+  type?: 'text' | 'textarea';
+  rows?: number;
+  placeholder?: string;
+  enValue: any;
+  arValue: any;
+  onUpdate: (lang: 'en' | 'ar', path: string, value: any) => void;
+}
+
+const BilingualField = memo(({ 
+  label, 
+  path, 
+  type = 'text', 
+  rows = 1,
+  placeholder = '',
+  enValue,
+  arValue,
+  onUpdate
+}: BilingualFieldProps) => {
+  if (type === 'textarea') {
+    return (
+      <div className="form-group-bilingual">
+        <label>{label}</label>
+        <div className="bilingual-inputs">
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">English</span>
+            <textarea
+              value={enValue || ''}
+              onChange={(e) => onUpdate('en', path, e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+            />
+          </div>
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">العربية</span>
+            <textarea
+              value={arValue || ''}
+              onChange={(e) => onUpdate('ar', path, e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+              dir="rtl"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="form-group-bilingual">
+      <label>{label}</label>
+      <div className="bilingual-inputs">
+        <div className="bilingual-input-group">
+          <span className="bilingual-label">English</span>
+          <input
+            type="text"
+            value={enValue || ''}
+            onChange={(e) => onUpdate('en', path, e.target.value)}
+            placeholder={placeholder}
+          />
+        </div>
+        <div className="bilingual-input-group">
+          <span className="bilingual-label">العربية</span>
+          <input
+            type="text"
+            value={arValue || ''}
+            onChange={(e) => onUpdate('ar', path, e.target.value)}
+            placeholder={placeholder}
+            dir="rtl"
+          />
+        </div>
+      </div>
+    </div>
+  );
+});
+
+BilingualField.displayName = 'BilingualField';
+
 const ContactPageCMS = () => {
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'en' | 'ar'>('en');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,23 +138,10 @@ const ContactPageCMS = () => {
   }
 
   return (
-    <div className={`admin-cms-container ${activeTab === 'ar' ? 'rtl' : 'ltr'}`} dir={activeTab === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>Contact Us Page CMS</h1>
-        <div className="admin-cms-tabs">
-          <button
-            className={activeTab === 'en' ? 'active' : ''}
-            onClick={() => setActiveTab('en')}
-          >
-            English
-          </button>
-          <button
-            className={activeTab === 'ar' ? 'active' : ''}
-            onClick={() => setActiveTab('ar')}
-          >
-            العربية
-          </button>
-        </div>
+        <p style={{ color: '#6b7280', fontSize: '14px' }}>Edit both English and Arabic content together</p>
       </div>
 
       <div className="admin-cms-sections">
@@ -85,7 +152,6 @@ const ContactPageCMS = () => {
               key={sectionId}
               sectionId={sectionId}
               section={section}
-              lang={activeTab}
               onSave={saveSection}
               isOpen={selectedSection === sectionId}
               onToggle={() =>
@@ -102,7 +168,6 @@ const ContactPageCMS = () => {
 interface SectionEditorProps {
   sectionId: string;
   section?: SectionData;
-  lang: 'en' | 'ar';
   onSave: (sectionId: string, data: Partial<SectionData>) => void;
   isOpen: boolean;
   onToggle: () => void;
@@ -111,158 +176,171 @@ interface SectionEditorProps {
 const SectionEditor = ({
   sectionId,
   section,
-  lang,
   onSave,
   isOpen,
   onToggle,
 }: SectionEditorProps) => {
-  const [formData, setFormData] = useState<any>(section?.[lang] || {});
+  const [formDataEn, setFormDataEn] = useState<any>({});
+  const [formDataAr, setFormDataAr] = useState<any>({});
 
   useEffect(() => {
+    if (!isOpen) return;
+    
     if (section) {
-      const sectionData = section[lang] || {};
+      const sectionDataEn = section.en || {};
+      const sectionDataAr = section.ar || {};
       if (sectionId === 'contactForm') {
-        setFormData({
-          ...sectionData,
-          promotions: Array.isArray(sectionData.promotions) ? sectionData.promotions : []
+        setFormDataEn({
+          ...sectionDataEn,
+          promotions: Array.isArray(sectionDataEn.promotions) ? sectionDataEn.promotions : []
+        });
+        setFormDataAr({
+          ...sectionDataAr,
+          promotions: Array.isArray(sectionDataAr.promotions) ? sectionDataAr.promotions : []
         });
       } else {
-        setFormData(sectionData);
+        setFormDataEn(sectionDataEn);
+        setFormDataAr(sectionDataAr);
       }
     } else {
       if (sectionId === 'contactForm') {
-        setFormData({ promotions: [] });
+        setFormDataEn({ promotions: [] });
+        setFormDataAr({ promotions: [] });
       } else {
-        setFormData({});
+        setFormDataEn({});
+        setFormDataAr({});
       }
     }
-  }, [section, lang, sectionId]);
+  }, [section?.sectionId, sectionId, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updateData: Partial<SectionData> = {
       enabled: section?.enabled ?? true,
       order: section?.order ?? 0,
-      [lang]: formData,
+      en: formDataEn,
+      ar: formDataAr,
     };
     onSave(sectionId, updateData);
   };
 
-  const updateField = (path: string, value: any) => {
+  const updateField = useCallback((lang: 'en' | 'ar', path: string, value: any) => {
+    const setData = lang === 'en' ? setFormDataEn : setFormDataAr;
+    
+    setData((prevData: any) => {
+      const newData = JSON.parse(JSON.stringify(prevData));
+      const keys = path.split('.');
+      let current: any = newData;
+      
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (!current[key]) current[key] = {};
+        current = current[key];
+      }
+      
+      current[keys[keys.length - 1]] = value;
+      return newData;
+    });
+  }, []);
+
+  const getNestedValue = useCallback((data: any, path: string) => {
     const keys = path.split('.');
-    const newData = { ...formData };
-    let current: any = newData;
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!current[keys[i]]) current[keys[i]] = {};
-      current = current[keys[i]];
+    let value: any = data || {};
+    
+    try {
+      for (const key of keys) {
+        if (value !== null && value !== undefined) {
+          value = value[key];
+        } else {
+          return undefined;
+        }
+      }
+    } catch {
+      return undefined;
     }
-    current[keys[keys.length - 1]] = value;
-    setFormData(newData);
-  };
+    
+    return value;
+  }, []);
+
+  const renderBilingualField = useCallback((label: string, path: string, type: 'text' | 'textarea' = 'text', rows: number = 1, placeholder: string = '') => {
+    const enValue = getNestedValue(formDataEn, path);
+    const arValue = getNestedValue(formDataAr, path);
+    
+    return (
+      <BilingualField
+        label={label}
+        path={path}
+        type={type}
+        rows={rows}
+        placeholder={placeholder}
+        enValue={enValue}
+        arValue={arValue}
+        onUpdate={updateField}
+      />
+    );
+  }, [formDataEn, formDataAr, updateField, getNestedValue]);
 
   const renderFields = () => {
     switch (sectionId) {
       case 'banner':
         return (
           <>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateField('title', e.target.value)}
-              />
-            </div>
+            {renderBilingualField("Title", "title")}
           </>
         );
       case 'contactForm':
-        const promotions = formData.promotions || [];
+        const promotionsEn = formDataEn.promotions || [];
+        const promotionsAr = formDataAr.promotions || [];
+        const maxPromos = Math.max(promotionsEn.length, promotionsAr.length);
+        
         return (
           <>
-            <div className="form-group">
-              <label>Subheading</label>
-              <input
-                type="text"
-                value={formData.subheading || ''}
-                onChange={(e) => updateField('subheading', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Heading</label>
-              <input
-                type="text"
-                value={formData.heading || ''}
-                onChange={(e) => updateField('heading', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Text</label>
-              <textarea
-                value={formData.text || ''}
-                onChange={(e) => updateField('text', e.target.value)}
-                rows={4}
-              />
-            </div>
+            {renderBilingualField("Subheading", "subheading")}
+            {renderBilingualField("Heading", "heading")}
+            {renderBilingualField("Text", "text", "textarea", 4)}
             <div className="form-group">
               <label>Promotions (Contact Info Items)</label>
               <div className="hero-slides-container">
-                {promotions.map((promo: any, index: number) => (
-                  <div key={index} className="hero-slide-card">
-                    <div className="hero-slide-header">
-                      <h4>Item {index + 1}</h4>
-                      {promotions.length > 1 && (
-                        <button
-                          type="button"
-                          className="hero-slide-remove"
-                          onClick={() => {
-                            const newPromotions = promotions.filter((_: any, i: number) => i !== index);
-                            setFormData({ ...formData, promotions: newPromotions });
-                          }}
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                    <div className="hero-slide-fields">
-                      <div className="form-group">
-                        <label>Title</label>
-                        <input
-                          type="text"
-                          value={promo.title || ''}
-                          onChange={(e) => {
-                            const newPromotions = [...promotions];
-                            newPromotions[index] = { ...promo, title: e.target.value };
-                            setFormData({ ...formData, promotions: newPromotions });
-                          }}
-                        />
+                {Array.from({ length: maxPromos }).map((_, index) => {
+                  const promoEn = promotionsEn[index] || { title: '', text: '' };
+                  const promoAr = promotionsAr[index] || { title: '', text: '' };
+                  
+                  return (
+                    <div key={index} className="hero-slide-card">
+                      <div className="hero-slide-header">
+                        <h4>Item {index + 1}</h4>
+                        {maxPromos > 1 && (
+                          <button
+                            type="button"
+                            className="hero-slide-remove"
+                            onClick={() => {
+                              setFormDataEn({ ...formDataEn, promotions: promotionsEn.filter((_: any, i: number) => i !== index) });
+                              setFormDataAr({ ...formDataAr, promotions: promotionsAr.filter((_: any, i: number) => i !== index) });
+                            }}
+                          >
+                            Remove
+                          </button>
+                        )}
                       </div>
-                      <div className="form-group">
-                        <label>Text</label>
-                        <textarea
-                          value={promo.text || ''}
-                          onChange={(e) => {
-                            const newPromotions = [...promotions];
-                            newPromotions[index] = { ...promo, text: e.target.value };
-                            setFormData({ ...formData, promotions: newPromotions });
-                          }}
-                          rows={3}
-                          placeholder="You can use &lt;br /&gt; for line breaks"
-                        />
+                      <div className="hero-slide-fields">
+                        {renderBilingualField("Title", `promotions.${index}.title`)}
+                        {renderBilingualField("Text", `promotions.${index}.text`, "textarea", 3, "You can use <br /> for line breaks")}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 <button
                   type="button"
                   className="hero-add-slide-button"
                   onClick={() => {
-                    const newPromo = {
-                      title: '',
-                      text: ''
-                    };
-                    setFormData({
-                      ...formData,
-                      promotions: [...(formData.promotions || []), newPromo]
+                    const newPromo = { title: '', text: '' };
+                    setFormDataEn({
+                      ...formDataEn,
+                      promotions: [...promotionsEn, newPromo]
+                    });
+                    setFormDataAr({
+                      ...formDataAr,
+                      promotions: [...promotionsAr, newPromo]
                     });
                   }}
                 >
@@ -270,32 +348,21 @@ const SectionEditor = ({
                 </button>
               </div>
             </div>
-            <div className="form-group">
-              <label>Form Block Heading</label>
-              <input
-                type="text"
-                value={formData.block?.heading || ''}
-                onChange={(e) => updateField('block.heading', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Form Block Text</label>
-              <textarea
-                value={formData.block?.text || ''}
-                onChange={(e) => updateField('block.text', e.target.value)}
-                rows={3}
-              />
-            </div>
+            {renderBilingualField("Form Block Heading", "block.heading")}
+            {renderBilingualField("Form Block Text", "block.text", "textarea", 3)}
           </>
         );
       case 'map':
         return (
           <>
             <div className="form-group">
-              <label>Map Embed URL/Code</label>
+              <label>Map Embed URL/Code (shared)</label>
               <textarea
-                value={formData.mapEmbed || ''}
-                onChange={(e) => updateField('mapEmbed', e.target.value)}
+                value={formDataEn.mapEmbed || formDataAr.mapEmbed || ''}
+                onChange={(e) => {
+                  updateField('en', 'mapEmbed', e.target.value);
+                  updateField('ar', 'mapEmbed', e.target.value);
+                }}
                 rows={4}
                 placeholder="Google Maps embed code or URL"
               />
@@ -305,21 +372,14 @@ const SectionEditor = ({
       default:
         return (
           <>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateField('title', e.target.value)}
-              />
-            </div>
+            {renderBilingualField("Title", "title")}
           </>
         );
     }
   };
 
   return (
-    <div className={`admin-cms-section-card ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="admin-cms-section-card">
       <div className="admin-cms-section-header" onClick={onToggle}>
         <h3>{sectionId}</h3>
         <span className="admin-cms-toggle">{isOpen ? '−' : '+'}</span>
@@ -329,7 +389,7 @@ const SectionEditor = ({
           {renderFields()}
           <div className="form-actions">
             <button type="submit" className="button button-primary">
-              {lang === 'ar' ? 'حفظ' : `Save ${lang.toUpperCase()}`}
+              Save (Both Languages)
             </button>
           </div>
         </form>

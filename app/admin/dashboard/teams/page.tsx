@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Team } from '@/libs/models/team';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 const TeamsPage = () => {
   const [teams, setTeams] = useState<Team[]>([]);
@@ -260,16 +261,14 @@ const TeamsPage = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Image URL *</label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="/img/team/team1.jpg"
-                  required
-                />
-              </div>
+              <ImageUpload
+                value={formData.image || ''}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+                placeholder="/img/team/team1.jpg"
+                folder="team"
+                required
+                label="Image"
+              />
 
               <div className="form-group">
                 <label>Year of Expertise</label>
