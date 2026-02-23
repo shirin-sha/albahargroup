@@ -21,11 +21,11 @@ const Faq = ({ data }: { data: SectionProps }) => {
     } = data || {};
 
     // Use CMS items if available, otherwise fall back to static data
-    const accordionData = (items && items.length > 0) 
+    const accordionData = (items && Array.isArray(items) && items.length > 0) 
         ? items.map((item: any) => ({
             title: item.title || '',
             text: item.text || ''
-        }))
+        })).filter((item: any) => item.title && item.text) // Filter out empty items
         : FaqAccordion.slice(0, 5);
 
     return (

@@ -18,12 +18,12 @@ import Heritage from '@/components/sections/Heritage';
 import Collaboration from '@/components/sections/Collaboration';
 import Timeline from '@/components/sections/Timeline';
 
-const PAGE_TITLE: string = 'About Us';
+const PAGE_TITLE: string = 'من نحن';
 export const metadata: Metadata = {
     title: PAGE_TITLE,
 }
 
-async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
+async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
   try {
     const db = await getDb();
     const collection = db.collection<HomePageSection>("aboutPageSections");
@@ -61,7 +61,15 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
 }
 
 const About = async () => {
-    const cmsData = await getAboutCMSData('en');
+    const cmsData = await getAboutCMSData('ar');
+    
+    // Helper to get Arabic data from bilingual CMS data
+    const getArabicData = (cmsSection: any, defaultData: any) => {
+        if (!cmsSection || !cmsSection.ar) return defaultData;
+        
+        // Merge Arabic data with defaults
+        return { ...defaultData, ...cmsSection.ar };
+    };
     
     // Merge CMS data with static data as fallback
     const testimonialsData = cmsData.testimonials ? {
@@ -161,4 +169,3 @@ const About = async () => {
 }
 
 export default About;
-

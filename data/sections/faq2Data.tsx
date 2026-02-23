@@ -1,4 +1,5 @@
 import { SectionProps } from "@/types/sectionProps";
+import { FaqAccordion } from "@/data/faqAccordion";
 
 export const Faq2Data: SectionProps = {
     wrapperCls: "mt-100 mb-100",
@@ -10,5 +11,6 @@ export const Faq2Data: SectionProps = {
         label: "Ask Your Question",
         href: "/faq",
         type: "primary"
-    }
+    },
+    items: FaqAccordion.slice(0, 5) // Default FAQ items as fallback
 }

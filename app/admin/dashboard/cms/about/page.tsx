@@ -196,10 +196,33 @@ const SectionEditor = ({
     if (!isOpen) return;
     
     if (section) {
-      setFormDataEn(section.en || {});
-      setFormDataAr(section.ar || {});
+      if (sectionId === 'faq') {
+        setFormDataEn({
+          ...section.en,
+          items: Array.isArray(section.en?.items) ? section.en.items : []
+        });
+        setFormDataAr({
+          ...section.ar,
+          items: Array.isArray(section.ar?.items) ? section.ar.items : []
+        });
+      } else if (sectionId === 'timeline') {
+        setFormDataEn({
+          ...section.en,
+          timelineItems: Array.isArray(section.en?.timelineItems) ? section.en.timelineItems : []
+        });
+        setFormDataAr({
+          ...section.ar,
+          timelineItems: Array.isArray(section.ar?.timelineItems) ? section.ar.timelineItems : []
+        });
+      } else {
+        setFormDataEn(section.en || {});
+        setFormDataAr(section.ar || {});
+      }
     } else {
-      if (sectionId === 'timeline') {
+      if (sectionId === 'faq') {
+        setFormDataEn({ items: [] });
+        setFormDataAr({ items: [] });
+      } else if (sectionId === 'timeline') {
         setFormDataEn({ timelineItems: [] });
         setFormDataAr({ timelineItems: [] });
       } else {
@@ -277,6 +300,156 @@ const SectionEditor = ({
   }, [formDataEn, formDataAr, updateField, getNestedValue]);
 
   const renderFields = () => {
+    if (sectionId === 'faq') {
+      const faqItemsEn = formDataEn.items || [];
+      const faqItemsAr = formDataAr.items || [];
+      const maxFaqItems = Math.max(faqItemsEn.length, faqItemsAr.length, 1);
+      
+      return (
+        <>
+          {renderBilingualField("Subheading", "subheading")}
+          {renderBilingualField("Heading", "heading")}
+          {renderBilingualField("Text", "text", "textarea", 4)}
+          {renderBilingualField("Button Label", "button.label")}
+          <div className="form-group">
+            <label>Button Link (shared)</label>
+            <input
+              type="text"
+              value={formDataEn.button?.href || formDataAr.button?.href || ''}
+              onChange={(e) => {
+                updateField('en', 'button.href', e.target.value);
+                updateField('ar', 'button.href', e.target.value);
+              }}
+            />
+          </div>
+          <div className="form-group">
+            <label>Button Type (shared)</label>
+            <select
+              value={formDataEn.button?.type || formDataAr.button?.type || 'primary'}
+              onChange={(e) => {
+                updateField('en', 'button.type', e.target.value);
+                updateField('ar', 'button.type', e.target.value);
+              }}
+            >
+              <option value="primary">Primary</option>
+              <option value="secondary">Secondary</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <label style={{ margin: 0 }}>FAQ Items (Questions & Answers)</label>
+              <button 
+                type="button" 
+                onClick={() => {
+                  const newItem = { title: '', text: '' };
+                  setFormDataEn({ ...formDataEn, items: [...faqItemsEn, newItem] });
+                  setFormDataAr({ ...formDataAr, items: [...faqItemsAr, newItem] });
+                }} 
+                className="button" 
+                style={{ fontSize: '12px', padding: '6px 12px' }}
+              >
+                + Add FAQ Item
+              </button>
+            </div>
+            
+            {Array.from({ length: maxFaqItems }).map((_, index) => {
+              const itemEn = faqItemsEn[index] || { title: '', text: '' };
+              const itemAr = faqItemsAr[index] || { title: '', text: '' };
+              
+              return (
+                <div key={index} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '15px', marginBottom: '15px', background: '#f9fafb' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <strong>FAQ {index + 1}</strong>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        const newItemsEn = faqItemsEn.filter((_: any, i: number) => i !== index);
+                        const newItemsAr = faqItemsAr.filter((_: any, i: number) => i !== index);
+                        setFormDataEn({ ...formDataEn, items: newItemsEn });
+                        setFormDataAr({ ...formDataAr, items: newItemsAr });
+                      }} 
+                      className="button" 
+                      style={{ fontSize: '12px', padding: '4px 8px', background: '#ef4444', color: 'white' }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <div className="form-group-bilingual" style={{ marginBottom: '10px' }}>
+                    <label>Question</label>
+                    <div className="bilingual-inputs">
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">English</span>
+                        <input
+                          type="text"
+                          value={itemEn.title || ''}
+                          onChange={(e) => {
+                            const newItemsEn = [...faqItemsEn];
+                            if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
+                            newItemsEn[index].title = e.target.value;
+                            setFormDataEn({ ...formDataEn, items: newItemsEn });
+                          }}
+                          placeholder="Question in English"
+                        />
+                      </div>
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">العربية</span>
+                        <input
+                          type="text"
+                          value={itemAr.title || ''}
+                          onChange={(e) => {
+                            const newItemsAr = [...faqItemsAr];
+                            if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
+                            newItemsAr[index].title = e.target.value;
+                            setFormDataAr({ ...formDataAr, items: newItemsAr });
+                          }}
+                          placeholder="السؤال بالعربية"
+                          dir="rtl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="form-group-bilingual">
+                    <label>Answer</label>
+                    <div className="bilingual-inputs">
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">English</span>
+                        <textarea
+                          value={itemEn.text || ''}
+                          onChange={(e) => {
+                            const newItemsEn = [...faqItemsEn];
+                            if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
+                            newItemsEn[index].text = e.target.value;
+                            setFormDataEn({ ...formDataEn, items: newItemsEn });
+                          }}
+                          rows={4}
+                          placeholder="Answer in English"
+                        />
+                      </div>
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">العربية</span>
+                        <textarea
+                          value={itemAr.text || ''}
+                          onChange={(e) => {
+                            const newItemsAr = [...faqItemsAr];
+                            if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
+                            newItemsAr[index].text = e.target.value;
+                            setFormDataAr({ ...formDataAr, items: newItemsAr });
+                          }}
+                          rows={4}
+                          placeholder="الإجابة بالعربية"
+                          dir="rtl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      );
+    }
+    
     if (sectionId === 'timeline') {
       const timelineEn = formDataEn.timelineItems || [];
       const timelineAr = formDataAr.timelineItems || [];
