@@ -138,7 +138,7 @@ const About = async () => {
             {/* Our Team */}
             <TeamSlider
                 data={cmsData.team ? {
-                    wrapperCls: "mt-100",
+            
                     container: "container",
                     subheading: cmsData.team.subheading,
                     heading: cmsData.team.heading,
@@ -148,7 +148,7 @@ const About = async () => {
 
             {/* FAQ */}
             <Faq data={cmsData.faq ? {
-                wrapperCls: "mt-100",
+                wrapperCls: "section-padding",
                 container: "container",
                 subheading: cmsData.faq.subheading || Faq2Data.subheading,
                 heading: cmsData.faq.heading || Faq2Data.heading,
