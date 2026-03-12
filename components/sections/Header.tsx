@@ -1,22 +1,15 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
 import HeaderStyle1 from '../HeaderStyle1';
 import HeaderStyle2 from '../HeaderStyle2';
+import { getHeaderMenuItems } from '@/libs/headerMenu.server';
 
-const Header = () => {
-    const pathname = usePathname();
+const Header = async () => {
+  const menus = await getHeaderMenuItems();
 
-    // Hide header on admin routes
-    if (pathname?.startsWith('/admin')) {
-        return null;
-    }
-
-    return (
-        <>        
-          <HeaderStyle1 />
-        </>
-    )
+  return (
+    <>
+      <HeaderStyle1 menus={menus} />
+    </>
+  );
 }
 
 export default Header;

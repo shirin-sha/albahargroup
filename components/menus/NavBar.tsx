@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Logo from "../Logo";
 import LogoImage from "@/public/img/logo.png";
 import "@/styles/navigation.css";
@@ -18,46 +18,17 @@ import {
   BottomMenuLink 
 } from "./MenuLinks";
 import { MenuItem } from "@/types/menu";
-import { Menu } from '@/libs/models/menu';
 
-const NavBar = () => {
-  const [menus, setMenus] = useState<MenuItem[]>(MenusStatic);
-  const [loading, setLoading] = useState(true);
+type NavBarProps = {
+  initialMenus?: MenuItem[] | null;
+};
 
-  useEffect(() => {
-    const fetchMenus = async () => {
-      try {
-        const res = await fetch('/api/menu');
-        const result = await res.json();
-        if (result.success && result.data.length > 0) {
-          // Transform Menu to MenuItem format
-          const transformedMenus = result.data.map((menu: Menu) => ({
-            title: menu.title,
-            path: menu.path,
-            dropdown: menu.dropdown,
-            megamenu: menu.megamenu,
-            megamenutwocolumn: menu.megamenutwocolumn,
-            bottommenu: menu.bottommenu,
-            text: menu.text,
-            imageUrl: menu.imageUrl,
-            imageUrlMobile: (menu as any).imageUrlMobile,
-          })) as MenuItem[];
-          setMenus(transformedMenus);
-        }
-      } catch (error) {
-        console.error('Error fetching menu:', error);
-        // Fall back to static menu
-        setMenus(MenusStatic);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMenus();
-  }, []);
-
-  if (loading) {
-    return null;
-  }
+const NavBar = ({ initialMenus }: NavBarProps) => {
+  // Best practice: render menus on first paint (SSR passes `initialMenus`).
+  // Fallback to the static menu if server menu isn't available.
+  const [menus] = useState<MenuItem[]>(
+    initialMenus && initialMenus.length > 0 ? initialMenus : MenusStatic
+  );
 
   return (
     <DrawerMenu>

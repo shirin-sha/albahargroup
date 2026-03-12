@@ -5,8 +5,13 @@ import NavBar from "./menus/NavBar";
 import HeaderActions2 from "./HeaderActions2";
 import AdditionalDrawer from "./AdditionalDrawer";
 import StickyHeader from "./StickyHeader";
+import type { MenuItem } from "@/types/menu";
 
-const Header2 = () => {
+type HeaderStyle2Props = {
+  menus?: MenuItem[] | null;
+};
+
+const Header2 = ({ menus }: HeaderStyle2Props) => {
     return (
       <>
         <StickyHeader 
@@ -28,7 +33,7 @@ const Header2 = () => {
             />
 
             {/* Nav Bar */}
-            <NavBar />
+            <NavBar initialMenus={menus} />
 
             {/* Header Actions */}
             <HeaderActions2 />

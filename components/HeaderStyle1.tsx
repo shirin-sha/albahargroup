@@ -4,8 +4,13 @@ import LogoImage from "@/public/img/logo-white.png";
 import NavBar from "./menus/NavBar";
 import HeaderActions from "./HeaderActions";
 import StickyHeader from "./StickyHeader";
+import type { MenuItem } from "@/types/menu";
 
-const Header = () => {
+type HeaderStyle1Props = {
+  menus?: MenuItem[] | null;
+};
+
+const Header = ({ menus }: HeaderStyle1Props) => {
     return (
       <StickyHeader 
         wrapperCls="header-1 header-floating"
@@ -26,7 +31,7 @@ const Header = () => {
           />
           
           {/* Nav Bar */}
-          <NavBar />
+          <NavBar initialMenus={menus} />
 
           {/* Header Actions */}
           <HeaderActions />

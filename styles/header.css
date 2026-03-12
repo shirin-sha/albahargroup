@@ -128,8 +128,19 @@ sticky-header[data-sticky-type="always"] {
   line-height: 1;
   text-align: center;
   position: relative;
-  top: 0;
-  left: 0;
+
+}
+
+/* Language-specific tweaks */
+.header-language.is-en .language-text {
+  /* example: slightly smaller EN, adjust vertical alignment if needed */
+ 
+}
+
+.header-language.is-ar .language-text {
+  font-size: 23px;
+  top: 4px;
+  /* keep Arabic as current default; override here if you want */
 }
 
 .header-search {

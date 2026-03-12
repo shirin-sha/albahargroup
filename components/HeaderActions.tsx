@@ -12,7 +12,7 @@ const HeaderActions = () => {
         <div className="header-actions flex items-center">
             <button
                 onClick={toggleLanguage}
-                className="header-language"
+                className={`header-language ${language === 'en' ? 'is-en' : 'is-ar'}`}
                 aria-label={language === 'en' ? 'Switch to Arabic' : 'Switch to English'}
                 type="button"
             >
