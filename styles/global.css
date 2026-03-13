@@ -1775,6 +1775,7 @@ h6,
 
 .media-bg {
   z-index: -1;
+  background-color: rgba(28, 37, 57, 1);
 }
 
 .iframe-wrapper iframe,

@@ -23,39 +23,27 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
     const [thumbSwiper, setThumbSwiper] = useState<any>(null);
     const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    
+    const testimonialList = TestimonialList as TestimonialProps[];
+    if(testimonialList.length == 0) return null;
+
+    const [activeHeading, setActiveHeading] = useState<string | undefined>(
+        testimonialList[0]?.heading || data?.heading
+    );
+
     const {
         wrapperCls,
         container,
         backgroundImage,
-        items,
+        subheading,
+        heading,
     } = data || {};
 
-    // Use CMS items if available, otherwise fall back to static data
-    const testimonialList: TestimonialProps[] = (items && items.length > 0) 
-        ? items.map((item: any) => ({
-            id: item.id || 0,
-            heading: item.heading,
-            subheading: item.subheading,
-            review: item.description || item.review,
-            image: item.image,
-            icon: item.icon,
-            button: item.button
-        }))
-        : (TestimonialList as TestimonialProps[]);
-    
-    if(testimonialList.length == 0) return null;
-
-    const [activeHeading, setActiveHeading] = useState<string | undefined>(
-        testimonialList[0]?.heading
-    );
-
     const updateHeading = (index: number) => {
-        setActiveHeading(testimonialList[index]?.heading);
+        setActiveHeading(testimonialList[index]?.heading || heading);
         setActiveIndex(index);
     };
 
-    const displayHeading = activeHeading;
+    const displayHeading = activeHeading || heading;
 
     const getIconComponent = (iconName: string | undefined) => {
         if (!iconName) return null;
@@ -79,9 +67,9 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
 
             <div className={`section-padding ${container}`}>
                 <div className="section-headings lg:hidden">
-                    {testimonialList[activeIndex]?.subheading &&
+                    {subheading &&
                         <Subheading 
-                            title={testimonialList[activeIndex]?.subheading || ''}
+                            title={subheading}
                             cls="text-18"
                             aos="fade-up"
                         />
@@ -154,9 +142,9 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                         <div className="lg:col-span-1 col-span-2">
                             <div className="thumb-content-wrapper">
                                 <div className="section-headings hidden lg:block">
-                                    {testimonialList[activeIndex]?.subheading &&
+                                    {subheading &&
                                         <Subheading 
-                                            title={testimonialList[activeIndex]?.subheading || ''}
+                                            title={subheading}
                                             cls="text-18"
                                             aos="fade-up"
                                         />
@@ -183,17 +171,11 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                         allowTouchMove={true}
                                         className="swiper"
                                     >
-                                        {testimonialList.map((item, index) => {
-                                            const itemWithButton = {
-                                                ...item,
-                                                button: (item as any).button
-                                            };
-                                            return (
-                                                <SwiperSlide key={`testimonial-content-${index}`}>
-                                                    <CardTestimonialContent data={itemWithButton} />
-                                                </SwiperSlide>
-                                            );
-                                        })}
+                                        {testimonialList.map((item, index) => (
+                                            <SwiperSlide key={`testimonial-content-${index}`}>
+                                                <CardTestimonialContent data={item} />
+                                            </SwiperSlide>
+                                        ))}
                                     </Swiper>
                                 </div>
                             </div>                            

@@ -138,7 +138,7 @@ const About = async () => {
             {/* Our Team */}
             <TeamSlider
                 data={cmsData.team ? {
-                    wrapperCls: "mt-100 section-padding",
+                    wrapperCls: " section-padding",
                     container: "container",
                     subheading: cmsData.team.subheading,
                     heading: cmsData.team.heading,
