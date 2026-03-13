@@ -103,12 +103,12 @@ export default function AdminDashboardLayout({
                 >
                   Contact Us
                 </Link>
-                <Link
+                {/* <Link
                   href="/admin/dashboard/cms/header"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/header') ? 'active' : ''}`}
                 >
                   Header
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>
