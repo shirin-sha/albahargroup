@@ -281,7 +281,7 @@ const PostsPage = () => {
 
               <div className="form-group">
                 <label>Tags</label>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                <div className="admin-tag-input-row">
                   <input
                     type="text"
                     value={tagInput}
@@ -294,38 +294,13 @@ const PostsPage = () => {
                     }}
                     placeholder="Add tag and press Enter"
                   />
-                  <button type="button" onClick={addTag} className="button">
-                    Add
-                  </button>
+                  <button type="button" onClick={addTag} className="admin-btn admin-btn-edit">Add</button>
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div className="admin-tag-list">
                   {(formData.tags || []).map((tag, index) => (
-                    <span
-                      key={index}
-                      style={{
-                        padding: '4px 12px',
-                        background: '#e5e7eb',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                      }}
-                    >
+                    <span key={index} className="admin-tag">
                       {tag}
-                      <button
-                        type="button"
-                        onClick={() => removeTag(tag)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '18px',
-                          lineHeight: 1,
-                        }}
-                      >
-                        ×
-                      </button>
+                      <button type="button" onClick={() => removeTag(tag)} className="admin-tag-remove">×</button>
                     </span>
                   ))}
                 </div>
@@ -365,72 +340,57 @@ const PostsPage = () => {
         </div>
       )}
 
-      <div className="admin-posts-list">
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="admin-table-wrapper">
+        <table className="admin-table">
           <thead>
-            <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Title</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Category</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Date</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
-              <th style={{ padding: '12px', textAlign: 'right' }}>Actions</th>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {posts.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: '#6b7280' }}>
-                  No posts found. Click "Add New Post" to create one.
+                <td colSpan={5} className="admin-table-empty">
+                  No posts found. Click &ldquo;Add New Post&rdquo; to create one.
                 </td>
               </tr>
             ) : (
               posts.map((post) => (
-                <tr key={post._id || post.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                  <td style={{ padding: '12px' }}>
-                    <strong>{post.title}</strong>
+                <tr key={post._id || post.id}>
+                  <td>
+                    <div className="admin-section-thumb">
+                      {post.image ? (
+                        <img src={post.image} alt={post.title || "Post image"} />
+                      ) : (
+                        <span className="admin-section-thumb-placeholder">
+                          No Image
+                        </span>
+                      )}
+                    </div>
                   </td>
-                  <td style={{ padding: '12px' }}>{post.category}</td>
-                  <td style={{ padding: '12px' }}>
-                    {post.created_at
-                      ? new Date(post.created_at).toLocaleDateString()
-                      : 'N/A'}
-                  </td>
-                  <td style={{ padding: '12px' }}>
-                    <span
-                      style={{
-                        padding: '4px 12px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        background: post.enabled !== false ? '#d1fae5' : '#fee2e2',
-                        color: post.enabled !== false ? '#065f46' : '#991b1b',
-                      }}
-                    >
+                  <td><strong>{post.title}</strong></td>
+                  <td>{post.category}</td>
+                  <td>{post.created_at ? new Date(post.created_at).toLocaleDateString() : 'N/A'}</td>
+                  <td>
+                    <span className={`admin-badge ${post.enabled !== false ? 'published' : 'draft'}`}>
                       {post.enabled !== false ? 'Published' : 'Draft'}
                     </span>
                   </td>
-                  <td style={{ padding: '12px', textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(post)}
-                        className="button"
-                        style={{ fontSize: '12px', padding: '6px 12px' }}
-                      >
-                        Edit
-                      </button>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button type="button" onClick={() => handleEdit(post)} className="admin-btn admin-btn-edit">Edit</button>
                       <button
                         type="button"
                         onClick={() => {
                           const postId = post._id ? String(post._id) : post.id ? String(post.id) : null;
                           if (postId) handleDelete(postId);
                         }}
-                        className="button"
-                        style={{
-                          fontSize: '12px',
-                          padding: '6px 12px',
-                          background: '#ef4444',
-                          color: 'white',
-                        }}
+                        className="admin-btn admin-btn-delete"
                       >
                         Delete
                       </button>

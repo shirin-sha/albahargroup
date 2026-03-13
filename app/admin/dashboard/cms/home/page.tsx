@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, memo } from 'react';
-import { useRouter } from 'next/navigation';
 import { HOME_PAGE_SECTIONS } from '@/libs/models/homePage';
 import ImageUpload from '@/components/admin/ImageUpload';
 
@@ -94,23 +93,36 @@ const BilingualField = memo(({
 
 BilingualField.displayName = 'BilingualField';
 
+const getPreviewImage = (section: SectionData | undefined, sectionId: string): string | null => {
+  const en = section?.en;
+  if (!en) return null;
+  switch (sectionId) {
+    case 'hero':         return en.slides?.[0]?.image || null;
+    case 'imageText':    return en.image?.src || null;
+    case 'whyChooseUs':  return en.image?.src || null;
+    case 'testimonials': return en.items?.[0]?.image || null;
+    default:             return null;
+  }
+};
+
+const getTitle = (section: SectionData | undefined, lang: 'en' | 'ar'): string => {
+  const data = section?.[lang];
+  if (!data) return '—';
+  return data.heading || data.title || data.subheading || data.slides?.[0]?.heading || '—';
+};
+
 const HomePageCMS = () => {
-  const router = useRouter();
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchSections();
-  }, []);
+  useEffect(() => { fetchSections(); }, []);
 
   const fetchSections = async () => {
     try {
       const res = await fetch('/api/cms/home');
       const result = await res.json();
-      if (result.success) {
-        setSections(result.data);
-      }
+      if (result.success) setSections(result.data);
     } catch (error) {
       console.error('Error fetching sections:', error);
     } finally {
@@ -128,66 +140,121 @@ const HomePageCMS = () => {
       const result = await res.json();
       if (result.success) {
         await fetchSections();
-        setSelectedSection(null);
+        setEditingSectionId(null);
       }
     } catch (error) {
       console.error('Error saving section:', error);
     }
   };
 
-  if (loading) {
-    return <div className="admin-loading">Loading...</div>;
-  }
+  if (loading) return <div className="admin-loading">Loading...</div>;
 
   return (
     <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>Home Page CMS</h1>
-        <p style={{ color: '#6b7280', fontSize: '14px' }}>Edit both English and Arabic content together</p>
+        <p className="cms-page-subtitle">Manage all homepage sections</p>
       </div>
 
-      <div className="admin-cms-sections">
-        {HOME_PAGE_SECTIONS.map((sectionId) => {
-          const section = sections.find((s) => s.sectionId === sectionId);
-          return (
-            <SectionEditor
-              key={sectionId}
-              sectionId={sectionId}
-              section={section}
-              onSave={saveSection}
-              isOpen={selectedSection === sectionId}
-              onToggle={() =>
-                setSelectedSection(selectedSection === sectionId ? null : sectionId)
-              }
-            />
-          );
-        })}
+      {editingSectionId && (
+        <div className="admin-edit-panel">
+          <SectionEditor
+            key={editingSectionId}
+            sectionId={editingSectionId}
+            section={sections.find(s => s.sectionId === editingSectionId)}
+            onSave={saveSection}
+            onClose={() => setEditingSectionId(null)}
+          />
+        </div>
+      )}
+
+      <div className="admin-table-wrapper">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Title (EN)</th>
+              <th>Title (AR)</th>
+              <th>Image</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {HOME_PAGE_SECTIONS.map((sectionId) => {
+              const section = sections.find(s => s.sectionId === sectionId);
+              const meta = SECTION_META[sectionId] ?? { label: sectionId, desc: '', icon: '📋' };
+              const previewImage = getPreviewImage(section, sectionId);
+              const titleEn = getTitle(section, 'en');
+              const titleAr = getTitle(section, 'ar');
+              const isEditing = editingSectionId === sectionId;
+              return (
+                <tr key={sectionId} className={isEditing ? 'admin-table-row-active' : ''}>
+                  <td>
+                    <div className="admin-section-name">
+                      <strong>{meta.label}</strong>
+                      <span className="admin-section-id">{sectionId}</span>
+                    </div>
+                  </td>
+                  <td>{titleEn}</td>
+                  <td className="admin-td-ar">{titleAr}</td>
+                  <td>
+                    <div className="admin-section-thumb">
+                      {previewImage
+                        ? <img src={previewImage} alt={meta.label} />
+                        : <span className="admin-section-thumb-placeholder">No Image in this section</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button
+                        type="button"
+                        className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
+                        onClick={() => setEditingSectionId(isEditing ? null : sectionId)}
+                      >
+                        {isEditing ? 'Close' : 'Edit'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
+};
+
+const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
+  hero:         { label: 'Hero Slider',      desc: 'Main banner slides with heading, text & CTA',    icon: '🖼️' },
+  imageText:    { label: 'Image + Text',     desc: 'Side-by-side media and content block',           icon: '📄' },
+  services:     { label: 'Services',         desc: 'Services section heading and link',              icon: '⚙️' },
+  whyChooseUs:  { label: 'Why Choose Us',   desc: 'Key reasons with image and items',               icon: '✅' },
+  pricing:      { label: 'Pricing Plans',    desc: 'Pricing cards with features list',               icon: '💳' },
+  testimonials: { label: 'Testimonials',     desc: 'Testimonial slider items with images',           icon: '💬' },
+  faq:          { label: 'FAQ',              desc: 'Frequently asked questions accordion',           icon: '❓' },
+  blog:         { label: 'Blog Section',     desc: 'Latest posts section heading and link',          icon: '📝' },
+  projects:     { label: 'Projects Section', desc: 'Featured projects section heading',              icon: '🗂️' },
 };
 
 interface SectionEditorProps {
   sectionId: string;
   section?: SectionData;
   onSave: (sectionId: string, data: Partial<SectionData>) => void;
-  isOpen: boolean;
-  onToggle: () => void;
+  onClose: () => void;
 }
 
 const SectionEditor = ({
   sectionId,
   section,
   onSave,
-  isOpen,
-  onToggle,
+  onClose,
 }: SectionEditorProps) => {
   const [formDataEn, setFormDataEn] = useState<any>({});
   const [formDataAr, setFormDataAr] = useState<any>({});
 
   useEffect(() => {
-    // Only initialize when section changes or when opening/closing
-    if (!isOpen) return;
     
     const initializeData = (data: any, sectionId: string) => {
       if (sectionId === 'hero') {
@@ -252,7 +319,7 @@ const SectionEditor = ({
         setFormDataAr({});
       }
     }
-  }, [section?.sectionId, sectionId, isOpen]); // Only depend on section ID, not the whole object
+  }, [section?.sectionId, sectionId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -377,13 +444,13 @@ const SectionEditor = ({
                 const slideEn = slidesEn[index] || { subheading: '', heading: '', text: '', button: { label: '', href: '' }, image: '' };
                 const slideAr = slidesAr[index] || { subheading: '', heading: '', text: '', button: { label: '', href: '' }, image: '' };
                 return (
-                  <div key={index} className="hero-slide-card">
-                    <div className="hero-slide-header">
+                  <div key={index} className="cms-item-card">
+                    <div className="cms-item-header">
                       <h4>Slide {index + 1}</h4>
                       {maxSlides > 1 && (
                         <button
                           type="button"
-                          className="hero-slide-remove"
+                          className="admin-btn admin-btn-delete"
                           onClick={() => {
                             const newSlidesEn = slidesEn.filter((_: any, i: number) => i !== index);
                             const newSlidesAr = slidesAr.filter((_: any, i: number) => i !== index);
@@ -439,7 +506,7 @@ const SectionEditor = ({
               })}
               <button
                 type="button"
-                className="hero-add-slide-button"
+                className="cms-item-add-btn"
                 onClick={() => {
                   const newSlide = {
                     subheading: '',
@@ -491,13 +558,13 @@ const SectionEditor = ({
                   const itemEn = itemsEn[index] || { textheading1: '', textdescr1: '' };
                   const itemAr = itemsAr[index] || { textheading1: '', textdescr1: '' };
                   return (
-                    <div key={index} className="hero-slide-card">
-                      <div className="hero-slide-header">
+                    <div key={index} className="cms-item-card">
+                      <div className="cms-item-header">
                         <h4>Item {index + 1}</h4>
                         {maxItems > 1 && (
                           <button
                             type="button"
-                            className="hero-slide-remove"
+                            className="admin-btn admin-btn-delete"
                             onClick={() => {
                               const newItemsEn = itemsEn.filter((_: any, i: number) => i !== index);
                               const newItemsAr = itemsAr.filter((_: any, i: number) => i !== index);
@@ -518,7 +585,7 @@ const SectionEditor = ({
                 })}
                 <button
                   type="button"
-                  className="hero-add-slide-button"
+                  className="cms-item-add-btn"
                   onClick={() => {
                     const newItem = { textheading1: '', textdescr1: '' };
                     setFormDataEn({
@@ -594,13 +661,13 @@ const SectionEditor = ({
                   const itemEn = whyItemsEn[index] || { title: '', text: '' };
                   const itemAr = whyItemsAr[index] || { title: '', text: '' };
                   return (
-                    <div key={index} className="hero-slide-card">
-                      <div className="hero-slide-header">
+                    <div key={index} className="cms-item-card">
+                      <div className="cms-item-header">
                         <h4>Item {index + 1}</h4>
                         {maxWhyItems > 1 && (
                           <button
                             type="button"
-                            className="hero-slide-remove"
+                            className="admin-btn admin-btn-delete"
                             onClick={() => {
                               const newItemsEn = whyItemsEn.filter((_: any, i: number) => i !== index);
                               const newItemsAr = whyItemsAr.filter((_: any, i: number) => i !== index);
@@ -621,7 +688,7 @@ const SectionEditor = ({
                 })}
                 <button
                   type="button"
-                  className="hero-add-slide-button"
+                  className="cms-item-add-btn"
                   onClick={() => {
                     const newItem = { title: '', text: '' };
                     setFormDataEn({
@@ -659,13 +726,13 @@ const SectionEditor = ({
                     button: { label: '', href: '' }, icon: '' 
                   };
                   return (
-                    <div key={index} className="hero-slide-card">
-                      <div className="hero-slide-header">
+                    <div key={index} className="cms-item-card">
+                      <div className="cms-item-header">
                         <h4>Item {index + 1}</h4>
                         {maxTestimonialItems > 1 && (
                           <button
                             type="button"
-                            className="hero-slide-remove"
+                            className="admin-btn admin-btn-delete"
                             onClick={() => {
                               const newItemsEn = testimonialItemsEn.filter((_: any, i: number) => i !== index);
                               const newItemsAr = testimonialItemsAr.filter((_: any, i: number) => i !== index);
@@ -741,7 +808,7 @@ const SectionEditor = ({
                 })}
                 <button
                   type="button"
-                  className="hero-add-slide-button"
+                  className="cms-item-add-btn"
                   onClick={() => {
                     const newItem = {
                       image: '',
@@ -795,13 +862,13 @@ const SectionEditor = ({
                   const itemEn = faqItemsEn[index] || { title: '', text: '' };
                   const itemAr = faqItemsAr[index] || { title: '', text: '' };
                   return (
-                    <div key={index} className="hero-slide-card">
-                      <div className="hero-slide-header">
+                    <div key={index} className="cms-item-card">
+                      <div className="cms-item-header">
                         <h4>FAQ {index + 1}</h4>
                         {maxFaqItems > 1 && (
                           <button
                             type="button"
-                            className="hero-slide-remove"
+                            className="admin-btn admin-btn-delete"
                             onClick={() => {
                               const newItemsEn = faqItemsEn.filter((_: any, i: number) => i !== index);
                               const newItemsAr = faqItemsAr.filter((_: any, i: number) => i !== index);
@@ -822,7 +889,7 @@ const SectionEditor = ({
                 })}
                 <button
                   type="button"
-                  className="hero-add-slide-button"
+                  className="cms-item-add-btn"
                   onClick={() => {
                     const newItem = { title: '', text: '' };
                     setFormDataEn({
@@ -856,13 +923,13 @@ const SectionEditor = ({
                   const cardEn = cardsEn[index] || { title: '', description: '', features: [], link: '', active: false };
                   const cardAr = cardsAr[index] || { title: '', description: '', features: [], link: '', active: false };
                   return (
-                    <div key={index} className="hero-slide-card">
-                      <div className="hero-slide-header">
+                    <div key={index} className="cms-item-card">
+                      <div className="cms-item-header">
                         <h4>Card {index + 1}</h4>
                         {maxCards > 1 && (
                           <button
                             type="button"
-                            className="hero-slide-remove"
+                            className="admin-btn admin-btn-delete"
                             onClick={() => {
                               const newCardsEn = cardsEn.filter((_: any, i: number) => i !== index);
                               const newCardsAr = cardsAr.filter((_: any, i: number) => i !== index);
@@ -957,7 +1024,7 @@ const SectionEditor = ({
                 })}
                 <button
                   type="button"
-                  className="hero-add-slide-button"
+                  className="cms-item-add-btn"
                   onClick={() => {
                     const newCard = {
                       title: '',
@@ -1007,9 +1074,7 @@ const SectionEditor = ({
             {renderBilingualField("Subheading", "subheading")}
             {renderBilingualField("Heading", "heading")}
             <div className="form-group">
-              <label style={{ fontSize: '12px', color: '#6b7280' }}>
-                Note: Project items are managed separately in Admin → Projects
-              </label>
+              <small>Note: Project items are managed separately in Admin → Projects</small>
             </div>
           </>
         );
@@ -1023,23 +1088,25 @@ const SectionEditor = ({
     }
   };
 
+  const meta = SECTION_META[sectionId] ?? { label: sectionId, desc: '', icon: '📋' };
+
   return (
-    <div className="admin-cms-section-card">
-      <div className="admin-cms-section-header" onClick={onToggle}>
-        <h3>{sectionId}</h3>
-        <span className="admin-cms-toggle">{isOpen ? '−' : '+'}</span>
+    <>
+      <div className="admin-edit-panel-header">
+        <div className="admin-edit-panel-title">
+          <strong>Editing: {meta.label}</strong>
+          <span>{meta.desc}</span>
+        </div>
+        <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>✕ Close</button>
       </div>
-      {isOpen && (
-        <form onSubmit={handleSubmit} className="admin-cms-form">
-          {renderFields()}
-          <div className="form-actions">
-            <button type="submit" className="button button-primary">
-              Save (Both Languages)
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+      <form onSubmit={handleSubmit} className="admin-cms-form">
+        {renderFields()}
+        <div className="form-actions">
+          <button type="submit" className="button button-primary">Save (Both Languages)</button>
+          <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>Cancel</button>
+        </div>
+      </form>
+    </>
   );
 };
 

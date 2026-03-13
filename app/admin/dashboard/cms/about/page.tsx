@@ -11,6 +11,16 @@ interface SectionData {
   ar: any;
 }
 
+const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
+  testimonials: { label: 'Testimonials',      desc: 'Client testimonial slider items',                  icon: '💬' },
+  stickyBanner: { label: 'Sticky Banner',     desc: 'Full-width sticky scrolling banner',               icon: '📌' },
+  heritage:     { label: 'Heritage',          desc: 'Company heritage and history section',             icon: '🏛️' },
+  collaboration:{ label: 'Collaboration',     desc: 'Partnership and collaboration section',            icon: '🤝' },
+  timeline:     { label: 'Timeline',          desc: 'Historical milestones with logos',                 icon: '📅' },
+  team:         { label: 'Team',              desc: 'Leadership team section heading',                  icon: '👥' },
+  faq:          { label: 'FAQ',               desc: 'Frequently asked questions accordion',             icon: '❓' },
+};
+
 const ABOUT_PAGE_SECTIONS = [
   'testimonials',
   'stickyBanner',
@@ -102,22 +112,37 @@ const BilingualField = memo(({
 
 BilingualField.displayName = 'BilingualField';
 
+const getPreviewImage = (section: SectionData | undefined, sectionId: string): string | null => {
+  const en = section?.en;
+  if (!en) return null;
+  switch (sectionId) {
+    case 'testimonials':  return en.items?.[0]?.image || null;
+    case 'stickyBanner':  return en.image || en.backgroundImage || null;
+    case 'heritage':      return en.image?.src || en.image || null;
+    case 'collaboration': return en.image?.src || en.image || null;
+    case 'timeline':      return en.timelineItems?.[0]?.logos?.[0]?.src || null;
+    default:              return null;
+  }
+};
+
+const getTitle = (section: SectionData | undefined, lang: 'en' | 'ar'): string => {
+  const data = section?.[lang];
+  if (!data) return '—';
+  return data.heading || data.title || data.subheading || '—';
+};
+
 const AboutPageCMS = () => {
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchSections();
-  }, []);
+  useEffect(() => { fetchSections(); }, []);
 
   const fetchSections = async () => {
     try {
       const res = await fetch('/api/cms/about');
       const result = await res.json();
-      if (result.success) {
-        setSections(result.data);
-      }
+      if (result.success) setSections(result.data);
     } catch (error) {
       console.error('Error fetching sections:', error);
     } finally {
@@ -135,40 +160,87 @@ const AboutPageCMS = () => {
       const result = await res.json();
       if (result.success) {
         await fetchSections();
-        setSelectedSection(null);
+        setEditingSectionId(null);
       }
     } catch (error) {
       console.error('Error saving section:', error);
     }
   };
 
-  if (loading) {
-    return <div className="admin-loading">Loading...</div>;
-  }
+  if (loading) return <div className="admin-loading">Loading...</div>;
 
   return (
     <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>About Page CMS</h1>
-        <p style={{ color: '#6b7280', fontSize: '14px' }}>Edit both English and Arabic content together</p>
+        <p className="cms-page-subtitle">Manage all About page sections</p>
       </div>
 
-      <div className="admin-cms-sections">
-        {ABOUT_PAGE_SECTIONS.map((sectionId) => {
-          const section = sections.find((s) => s.sectionId === sectionId);
-          return (
-            <SectionEditor
-              key={sectionId}
-              sectionId={sectionId}
-              section={section}
-              onSave={saveSection}
-              isOpen={selectedSection === sectionId}
-              onToggle={() =>
-                setSelectedSection(selectedSection === sectionId ? null : sectionId)
-              }
-            />
-          );
-        })}
+      {editingSectionId && (
+        <div className="admin-edit-panel">
+          <SectionEditor
+            key={editingSectionId}
+            sectionId={editingSectionId}
+            section={sections.find(s => s.sectionId === editingSectionId)}
+            onSave={saveSection}
+            onClose={() => setEditingSectionId(null)}
+          />
+        </div>
+      )}
+
+      <div className="admin-table-wrapper">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Title (EN)</th>
+              <th>Title (AR)</th>
+              <th>Image</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ABOUT_PAGE_SECTIONS.map((sectionId) => {
+              const section = sections.find(s => s.sectionId === sectionId);
+              const meta = SECTION_META[sectionId] ?? { label: sectionId, desc: '', icon: '📋' };
+              const previewImage = getPreviewImage(section, sectionId);
+              const titleEn = getTitle(section, 'en');
+              const titleAr = getTitle(section, 'ar');
+              const isEditing = editingSectionId === sectionId;
+              return (
+                <tr key={sectionId} className={isEditing ? 'admin-table-row-active' : ''}>
+                  <td>
+                    <div className="admin-section-name">
+                      <strong>{meta.label}</strong>
+                      <span className="admin-section-id">{sectionId}</span>
+                    </div>
+                  </td>
+                  <td>{titleEn}</td>
+                  <td className="admin-td-ar">{titleAr}</td>
+                  <td>
+                    <div className="admin-section-thumb">
+                      {previewImage
+                        ? <img src={previewImage} alt={meta.label} />
+                        : <span className="admin-section-thumb-placeholder">No Image in this section</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button
+                        type="button"
+                        className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
+                        onClick={() => setEditingSectionId(isEditing ? null : sectionId)}
+                      >
+                        {isEditing ? 'Close' : 'Edit'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -178,23 +250,19 @@ interface SectionEditorProps {
   sectionId: string;
   section?: SectionData;
   onSave: (sectionId: string, data: Partial<SectionData>) => void;
-  isOpen: boolean;
-  onToggle: () => void;
+  onClose: () => void;
 }
 
 const SectionEditor = ({
   sectionId,
   section,
   onSave,
-  isOpen,
-  onToggle,
+  onClose,
 }: SectionEditorProps) => {
   const [formDataEn, setFormDataEn] = useState<any>({});
   const [formDataAr, setFormDataAr] = useState<any>({});
 
   useEffect(() => {
-    if (!isOpen) return;
-    
     if (section) {
       if (sectionId === 'faq') {
         setFormDataEn({
@@ -230,7 +298,7 @@ const SectionEditor = ({
         setFormDataAr({});
       }
     }
-  }, [section?.sectionId, sectionId, isOpen]);
+  }, [section?.sectionId, sectionId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -345,8 +413,7 @@ const SectionEditor = ({
                   setFormDataEn({ ...formDataEn, items: [...faqItemsEn, newItem] });
                   setFormDataAr({ ...formDataAr, items: [...faqItemsAr, newItem] });
                 }} 
-                className="button" 
-                style={{ fontSize: '12px', padding: '6px 12px' }}
+                className="cms-item-add-btn"
               >
                 + Add FAQ Item
               </button>
@@ -357,9 +424,9 @@ const SectionEditor = ({
               const itemAr = faqItemsAr[index] || { title: '', text: '' };
               
               return (
-                <div key={index} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '15px', marginBottom: '15px', background: '#f9fafb' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <strong>FAQ {index + 1}</strong>
+                <div key={index} className="cms-item-card">
+                  <div className="cms-item-header">
+                    <h4>FAQ {index + 1}</h4>
                     <button 
                       type="button" 
                       onClick={() => {
@@ -368,8 +435,7 @@ const SectionEditor = ({
                         setFormDataEn({ ...formDataEn, items: newItemsEn });
                         setFormDataAr({ ...formDataAr, items: newItemsAr });
                       }} 
-                      className="button" 
-                      style={{ fontSize: '12px', padding: '4px 8px', background: '#ef4444', color: 'white' }}
+                      className="admin-btn admin-btn-delete"
                     >
                       Remove
                     </button>
@@ -470,8 +536,7 @@ const SectionEditor = ({
                   setFormDataEn({ ...formDataEn, timelineItems: [...timelineEn, newItem] });
                   setFormDataAr({ ...formDataAr, timelineItems: [...timelineAr, newItem] });
                 }} 
-                className="button" 
-                style={{ fontSize: '12px', padding: '6px 12px' }}
+                className="cms-item-add-btn"
               >
                 + Add Item
               </button>
@@ -482,17 +547,16 @@ const SectionEditor = ({
               const itemAr = timelineAr[itemIndex] || { year: '', title: '', logos: [], position: 'below' };
               
               return (
-                <div key={itemIndex} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '15px', marginBottom: '15px', background: '#f9fafb' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <strong>Item {itemIndex + 1}</strong>
+                <div key={itemIndex} className="cms-item-card">
+                  <div className="cms-item-header">
+                    <h4>Item {itemIndex + 1}</h4>
                     <button 
                       type="button" 
                       onClick={() => {
                         setFormDataEn({ ...formDataEn, timelineItems: timelineEn.filter((_: any, i: number) => i !== itemIndex) });
                         setFormDataAr({ ...formDataAr, timelineItems: timelineAr.filter((_: any, i: number) => i !== itemIndex) });
                       }} 
-                      className="button" 
-                      style={{ fontSize: '12px', padding: '4px 8px', background: '#ef4444', color: 'white' }}
+                      className="admin-btn admin-btn-delete"
                     >
                       Remove
                     </button>
@@ -542,8 +606,9 @@ const SectionEditor = ({
                   <div className="form-group">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                       <label style={{ margin: 0 }}>Logos (shared)</label>
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
+                        className="cms-item-add-btn"
                         onClick={() => {
                           const newLogo = { src: '', alt: '', width: 100, height: 60 };
                           const newEn = [...timelineEn];
@@ -554,20 +619,19 @@ const SectionEditor = ({
                           newAr[itemIndex].logos = [...(newAr[itemIndex].logos || []), newLogo];
                           setFormDataEn({ ...formDataEn, timelineItems: newEn });
                           setFormDataAr({ ...formDataAr, timelineItems: newAr });
-                        }} 
-                        className="button" 
-                        style={{ fontSize: '12px', padding: '4px 8px' }}
+                        }}
                       >
                         + Add Logo
                       </button>
                     </div>
                     
                     {(itemEn.logos || itemAr.logos || []).map((logo: any, logoIndex: number) => (
-                      <div key={logoIndex} style={{ border: '1px solid #d1d5db', borderRadius: '4px', padding: '10px', marginBottom: '10px', background: 'white' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                          <span style={{ fontSize: '12px', fontWeight: '600' }}>Logo {logoIndex + 1}</span>
+                      <div key={logoIndex} className="cms-item-card" style={{ marginBottom: '10px' }}>
+                        <div className="cms-item-header">
+                          <h4>Logo {logoIndex + 1}</h4>
                           <button 
                             type="button" 
+                            className="admin-btn admin-btn-delete"
                             onClick={() => {
                               const newEn = [...timelineEn];
                               const newAr = [...timelineAr];
@@ -579,8 +643,7 @@ const SectionEditor = ({
                               }
                               setFormDataEn({ ...formDataEn, timelineItems: newEn });
                               setFormDataAr({ ...formDataAr, timelineItems: newAr });
-                            }} 
-                            style={{ fontSize: '12px', padding: '2px 6px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            }}
                           >
                             ×
                           </button>
@@ -690,23 +753,25 @@ const SectionEditor = ({
     );
   };
 
+  const meta = SECTION_META[sectionId] ?? { label: sectionId, desc: '', icon: '📋' };
+
   return (
-    <div className="admin-cms-section-card">
-      <div className="admin-cms-section-header" onClick={onToggle}>
-        <h3>{sectionId}</h3>
-        <span className="admin-cms-toggle">{isOpen ? '−' : '+'}</span>
+    <>
+      <div className="admin-edit-panel-header">
+        <div className="admin-edit-panel-title">
+          <strong>Editing: {meta.label}</strong>
+          <span>{meta.desc}</span>
+        </div>
+        <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>✕ Close</button>
       </div>
-      {isOpen && (
-        <form onSubmit={handleSubmit} className="admin-cms-form">
-          {renderFields()}
-          <div className="form-actions">
-            <button type="submit" className="button button-primary">
-              Save (Both Languages)
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+      <form onSubmit={handleSubmit} className="admin-cms-form">
+        {renderFields()}
+        <div className="form-actions">
+          <button type="submit" className="button button-primary">Save (Both Languages)</button>
+          <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>Cancel</button>
+        </div>
+      </form>
+    </>
   );
 };
 

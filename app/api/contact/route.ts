@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { getDb } from "@/libs/mongodb";
+import type { Enquiry } from "@/libs/models/enquiry";
 
 export async function POST(req: NextRequest) {
   try {
@@ -7,46 +8,34 @@ export async function POST(req: NextRequest) {
 
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
-        { error: "All fields are required" }, 
+        { error: "Name, email, subject and message are required" },
         { status: 400 }
       );
     }
 
-    // Create a transporter
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: Number(process.env.EMAIL_PORT),
-      secure: true, // true for 465, false for 587
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+    // Save enquiry to MongoDB (for admin listing)
+    try {
+      const db = await getDb();
+      const collection = db.collection<Enquiry>("enquiries");
+      const enquiry: Enquiry = {
+        name,
+        email,
+        subject,
+        message,
+        created_at: new Date().toISOString(),
+      };
+      await collection.insertOne(enquiry);
+    } catch (dbError) {
+      console.error("Failed to save enquiry:", dbError);
+      // Don't fail the request if saving to DB fails
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Thanks for contacting us. We'll get back to you as soon as possible.",
     });
-
-    const html = `
-      <h3>New Contact Form Message</h3>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Subject:</strong> ${subject}</p>
-      <p><strong>Message:</strong></p>
-      <p>${message}</p>
-    `
-
-    // Email options
-    const mailOptions = {
-      from: `"${name}" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Receiver
-      subject: `Contact Form: ${subject}`,
-      text: message,
-      html: html,
-    };
-
-    // Send email
-    await transporter.sendMail(mailOptions);
-
-    return NextResponse.json({ success: true, message: "Thanks for contacting us. We'll get back to you as soon as possible." });
   } catch (error: any) {
-    console.error("Email sending failed:", error);
-    return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
+    console.error("Contact form error:", error);
+    return NextResponse.json({ error: "Failed to submit form" }, { status: 500 });
   }
 }

@@ -326,72 +326,57 @@ const ProjectsPage = () => {
         </div>
       )}
 
-      <div className="admin-posts-list">
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="admin-table-wrapper">
+        <table className="admin-table">
           <thead>
-            <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Title</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Category</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Date</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
-              <th style={{ padding: '12px', textAlign: 'right' }}>Actions</th>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {projects.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: '#6b7280' }}>
-                  No projects found. Click "Add New Project" to create one.
+                <td colSpan={5} className="admin-table-empty">
+                  No projects found. Click &ldquo;Add New Project&rdquo; to create one.
                 </td>
               </tr>
             ) : (
               projects.map((project) => (
-                <tr key={project._id || project.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                  <td style={{ padding: '12px' }}>
-                    <strong>{project.title}</strong>
+                <tr key={project._id || project.id}>
+                  <td>
+                    <div className="admin-section-thumb">
+                      {project.image ? (
+                        <img src={project.image} alt={project.title || "Project image"} />
+                      ) : (
+                        <span className="admin-section-thumb-placeholder">
+                          No Image
+                        </span>
+                      )}
+                    </div>
                   </td>
-                  <td style={{ padding: '12px' }}>{project.category}</td>
-                  <td style={{ padding: '12px' }}>
-                    {project.created_at
-                      ? new Date(project.created_at).toLocaleDateString()
-                      : 'N/A'}
-                  </td>
-                  <td style={{ padding: '12px' }}>
-                    <span
-                      style={{
-                        padding: '4px 12px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        background: project.enabled !== false ? '#d1fae5' : '#fee2e2',
-                        color: project.enabled !== false ? '#065f46' : '#991b1b',
-                      }}
-                    >
+                  <td><strong>{project.title}</strong></td>
+                  <td>{project.category}</td>
+                  <td>{project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}</td>
+                  <td>
+                    <span className={`admin-badge ${project.enabled !== false ? 'published' : 'draft'}`}>
                       {project.enabled !== false ? 'Published' : 'Draft'}
                     </span>
                   </td>
-                  <td style={{ padding: '12px', textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(project)}
-                        className="button"
-                        style={{ fontSize: '12px', padding: '6px 12px' }}
-                      >
-                        Edit
-                      </button>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button type="button" onClick={() => handleEdit(project)} className="admin-btn admin-btn-edit">Edit</button>
                       <button
                         type="button"
                         onClick={() => {
                           const projectId = project._id ? String(project._id) : project.id ? String(project.id) : null;
                           if (projectId) handleDelete(projectId);
                         }}
-                        className="button"
-                        style={{
-                          fontSize: '12px',
-                          padding: '6px 12px',
-                          background: '#ef4444',
-                          color: 'white',
-                        }}
+                        className="admin-btn admin-btn-delete"
                       >
                         Delete
                       </button>

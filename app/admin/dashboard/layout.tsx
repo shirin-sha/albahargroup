@@ -1,8 +1,10 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
-
+import LogoImage from "@/public/img/logo.png";
+import Icons from "@/components/Icons";
 export default function AdminDashboardLayout({
   children,
 }: {
@@ -36,16 +38,21 @@ export default function AdminDashboardLayout({
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-brand">
-          <span className="admin-sidebar-logo">AG</span>
-          <span className="admin-sidebar-title">Admin</span>
+         <img src={LogoImage.src} alt="logo" className="admin-sidebar-logo" />
         </div>
         <nav className="admin-sidebar-nav">
-          <a
+        <Link
+            href="/admin/dashboard/enquiries"
+            className={`admin-sidebar-link ${isActive('/admin/dashboard/enquiries') ? 'active' : ''}`}
+          >
+            Enquiries
+          </Link>
+          <Link
             href="/admin/dashboard"
             className={`admin-sidebar-link ${isActive('/admin/dashboard') ? 'active' : ''}`}
           >
             Dashboard
-          </a>
+          </Link>
           
           <div className={`admin-sidebar-group ${isCmsActive() ? 'active' : ''}`}>
             <button
@@ -54,76 +61,80 @@ export default function AdminDashboardLayout({
               onClick={() => setCmsOpen(!cmsOpen)}
             >
               <span>CMS</span>
-              <span className="admin-sidebar-arrow">{cmsOpen ? '▼' : '▶'}</span>
+              <span className="admin-sidebar-arrow">
+                {cmsOpen ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
+              </span>
             </button>
             {cmsOpen && (
               <div className="admin-sidebar-submenu">
-                <a
+                <Link
                   href="/admin/dashboard/cms/home"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/home') ? 'active' : ''}`}
                 >
                   Home
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/admin/dashboard/cms/about"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/about') ? 'active' : ''}`}
                 >
                   About
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/admin/dashboard/cms/news"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/news') ? 'active' : ''}`}
                 >
                   News
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/admin/dashboard/cms/careers"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/careers') ? 'active' : ''}`}
                 >
                   Careers
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/admin/dashboard/cms/partnerships"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/partnerships') ? 'active' : ''}`}
                 >
                   Partnerships
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/admin/dashboard/cms/contact"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/contact') ? 'active' : ''}`}
                 >
                   Contact Us
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/admin/dashboard/cms/header"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/header') ? 'active' : ''}`}
                 >
                   Header
-                </a>
+                </Link>
               </div>
             )}
           </div>
           
-          <a
+          <Link
             href="/admin/dashboard/posts"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/posts') ? 'active' : ''}`}
           >
             Posts
-          </a>
+          </Link>
           
-          <a
+          <Link
             href="/admin/dashboard/projects"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/projects') ? 'active' : ''}`}
           >
             Projects
-          </a>
+          </Link>
           
-          <a
+          <Link
             href="/admin/dashboard/teams"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/teams') ? 'active' : ''}`}
           >
             Teams
-          </a>
+          </Link>
+
+        
           
           {/* Add more nav links here later */}
         </nav>

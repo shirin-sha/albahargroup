@@ -521,66 +521,55 @@ const TeamsPage = () => {
         </div>
       )}
 
-      <div className="admin-posts-list">
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="admin-table-wrapper">
+        <table className="admin-table">
           <thead>
-            <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Name</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Designation</th>
-              <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
-              <th style={{ padding: '12px', textAlign: 'right' }}>Actions</th>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Designation</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {teams.length === 0 ? (
               <tr>
-                <td colSpan={4} style={{ padding: '40px', textAlign: 'center', color: '#6b7280' }}>
-                  No team members found. Click "Add New Team Member" to create one.
+                <td colSpan={4} className="admin-table-empty">
+                  No team members found. Click &ldquo;Add New Team Member&rdquo; to create one.
                 </td>
               </tr>
             ) : (
               teams.map((team) => (
-                <tr key={team._id || team.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                  <td style={{ padding: '12px' }}>
-                    <strong>{team.name}</strong>
+                <tr key={team._id || team.id}>
+                  <td>
+                    <div className="admin-section-thumb">
+                      {team.image ? (
+                        <img src={team.image} alt={team.name || "Team member"} />
+                      ) : (
+                        <span className="admin-section-thumb-placeholder">
+                          No Image
+                        </span>
+                      )}
+                    </div>
                   </td>
-                  <td style={{ padding: '12px' }}>{team.designation}</td>
-                  <td style={{ padding: '12px' }}>
-                    <span
-                      style={{
-                        padding: '4px 12px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        background: team.enabled !== false ? '#d1fae5' : '#fee2e2',
-                        color: team.enabled !== false ? '#065f46' : '#991b1b',
-                      }}
-                    >
+                  <td><strong>{team.name}</strong></td>
+                  <td>{team.designation}</td>
+                  <td>
+                    <span className={`admin-badge ${team.enabled !== false ? 'published' : 'draft'}`}>
                       {team.enabled !== false ? 'Published' : 'Draft'}
                     </span>
                   </td>
-                  <td style={{ padding: '12px', textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(team)}
-                        className="button"
-                        style={{ fontSize: '12px', padding: '6px 12px' }}
-                      >
-                        Edit
-                      </button>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button type="button" onClick={() => handleEdit(team)} className="admin-btn admin-btn-edit">Edit</button>
                       <button
                         type="button"
                         onClick={() => {
                           const teamId = team._id ? String(team._id) : team.id ? String(team.id) : null;
                           if (teamId) handleDelete(teamId);
                         }}
-                        className="button"
-                        style={{
-                          fontSize: '12px',
-                          padding: '6px 12px',
-                          background: '#ef4444',
-                          color: 'white',
-                        }}
+                        className="admin-btn admin-btn-delete"
                       >
                         Delete
                       </button>
