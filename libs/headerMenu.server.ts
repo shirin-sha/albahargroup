@@ -6,6 +6,8 @@ import { cache } from "react";
 function toMenuItem(menu: Menu): MenuItem {
   return {
     title: menu.title,
+    // expose optional Arabic title so the UI can switch based on language
+    titleAr: menu.titleAr,
     path: menu.path,
     dropdown: menu.dropdown?.map(toMenuItem),
     text: menu.text,
