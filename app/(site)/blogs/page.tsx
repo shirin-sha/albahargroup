@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
 import BreadcrumbBannerImageTablet from '@/public/img/banner/page-banner-991.jpg';
 import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg';
-
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import BlogGrid from '@/components/sections/BlogGrid';
 

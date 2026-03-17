@@ -1,6 +1,7 @@
 import Icons from "./Icons";
-import Services from "@/data/services.json";
 import SidebarPhoneImage from "@/public/img/service/secvice-contact.jpg";
+import { getDb } from "@/libs/mongodb";
+import { Service } from "@/libs/models/service";
 
 import SidebarCategories from "./SidebarCategories";
 import SidebarPhone from "./SidebarPhone";
@@ -8,10 +9,16 @@ import SidebarPdfDownload from "./SidebarPdfDownload";
 import DrawerOpener from "./DrawerOpener";
 
 
-const ServiceSidebar = ({ slug }: {slug?: string;}) => {
-    const services = Services;
-    const filteredServices = services.filter(item => item.slug != slug);
-    const categories: string[] = Array.from(new Set(filteredServices.flatMap(service => service.title)));
+const ServiceSidebar = async ({ slug }: {slug?: string;}) => {
+    const db = await getDb();
+    const collection = db.collection<Service>("services");
+    const services = await collection
+        .find({ enabled: { $ne: false } } as any)
+        .sort({ created_at: -1 })
+        .toArray();
+
+    const filteredServices = services.filter((item: any) => item.slug != slug);
+    const categories: string[] = Array.from(new Set(filteredServices.map((service: any) => service.title)));
 
     return (
         <div className="sidebar-filter drawer-service-sidebar">

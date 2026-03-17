@@ -1,11 +1,11 @@
-"use client";
+ "use client";
 
-import { JobListing } from "@/data/sections/careerData";
+import { Job } from "@/libs/models/job";
 import Icons from "./Icons";
 import { useState } from "react";
 
 interface JobCardProps {
-    job: JobListing;
+    job: Job;
 }
 
 const JobCard = ({ job }: JobCardProps) => {

@@ -5,10 +5,10 @@ import { getHeaderMenuItems } from '@/libs/headerMenu.server';
 const Header = async () => {
   const menus = await getHeaderMenuItems();
 
-  return (
-    <>
+    return (
+        <>        
       <HeaderStyle1 menus={menus} />
-    </>
+        </>
   );
 }
 

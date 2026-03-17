@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Project } from '@/libs/models/project';
 import ImageUpload from '@/components/admin/ImageUpload';
+import RichTextEditor from '@/components/admin/RichTextEditor';
+import BilingualField from '@/components/admin/BilingualField';
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<Project>>({
     title: '',
     titleAr: '',
@@ -20,7 +22,6 @@ const ProjectsPage = () => {
     owner: '',
     starting_date: '',
     ending_date: '',
-    website: '',
     content: '',
     contentAr: '',
     image: '',
@@ -64,6 +65,7 @@ const ProjectsPage = () => {
       if (result.success) {
         await fetchProjects();
         resetForm();
+        setIsAdding(false);
       } else {
         alert(result.error || 'Failed to save project');
       }
@@ -86,13 +88,11 @@ const ProjectsPage = () => {
       owner: project.owner || '',
       starting_date: project.starting_date ? (typeof project.starting_date === 'string' ? project.starting_date : new Date(project.starting_date).toISOString().split('T')[0]) : '',
       ending_date: project.ending_date ? (typeof project.ending_date === 'string' ? project.ending_date : new Date(project.ending_date).toISOString().split('T')[0]) : '',
-      website: project.website || '',
       content: project.content || '',
       contentAr: project.contentAr || '',
       image: project.image || '',
       enabled: project.enabled !== undefined ? project.enabled : true,
     });
-    setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -128,14 +128,13 @@ const ProjectsPage = () => {
       owner: '',
       starting_date: '',
       ending_date: '',
-      website: '',
       content: '',
       contentAr: '',
       image: '',
       enabled: true,
     });
     setEditingProject(null);
-    setShowForm(false);
+    setIsAdding(false);
   };
 
   if (loading) {
@@ -151,83 +150,52 @@ const ProjectsPage = () => {
           className="button button-primary"
           onClick={() => {
             resetForm();
-            setShowForm(true);
+            setIsAdding(true);
           }}
         >
           + Add New Project
         </button>
       </div>
 
-      {showForm && (
-        <div className="admin-cms-form-container" style={{ marginBottom: '30px' }}>
-          <div className="admin-cms-section-card">
-            <div className="admin-cms-section-header">
-              <h3>{editingProject ? 'Edit Project' : 'Add New Project'}</h3>
-              <button
-                type="button"
-                className="admin-cms-toggle"
-                onClick={resetForm}
-              >
-                ×
-              </button>
+      {(editingProject || isAdding) && (
+        <div className="admin-edit-panel" style={{ marginBottom: '30px' }}>
+          <div className="admin-edit-panel-header">
+            <div className="admin-edit-panel-title">
+              <strong>{editingProject ? 'Editing Project' : 'Add New Project'}</strong>
+              <span>{editingProject ? `Editing: ${editingProject.title}` : 'Create a new project'}</span>
             </div>
+            <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
+          </div>
             <form onSubmit={handleSubmit} className="admin-cms-form">
-              <div className="form-group">
-                <label>Title (English) *</label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Title (Arabic)</label>
-                <input
-                  type="text"
-                  value={formData.titleAr}
-                  onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
-                />
-              </div>
+              <BilingualField
+                label="Title"
+                enValue={formData.title || ''}
+                arValue={formData.titleAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, title: value })}
+                onArChange={(value) => setFormData({ ...formData, titleAr: value })}
+                type="text"
+                required
+              />
 
-              <div className="form-group">
-                <label>Description (English) *</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  required
-                />
-              </div>
+              <BilingualField
+                label="Description"
+                enValue={formData.description || ''}
+                arValue={formData.descriptionAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, description: value })}
+                onArChange={(value) => setFormData({ ...formData, descriptionAr: value })}
+                type="richtext"
+                required
+              />
 
-              <div className="form-group">
-                <label>Description (Arabic)</label>
-                <textarea
-                  value={formData.descriptionAr}
-                  onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Category (English) *</label>
-                <input
-                  type="text"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Category (Arabic)</label>
-                <input
-                  type="text"
-                  value={formData.categoryAr}
-                  onChange={(e) => setFormData({ ...formData, categoryAr: e.target.value })}
-                />
-              </div>
+              <BilingualField
+                label="Category"
+                enValue={formData.category || ''}
+                arValue={formData.categoryAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, category: value })}
+                onArChange={(value) => setFormData({ ...formData, categoryAr: value })}
+                type="text"
+                required
+              />
 
               <div className="form-group">
                 <label>Client</label>
@@ -265,33 +233,14 @@ const ProjectsPage = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Website</label>
-                <input
-                  type="url"
-                  value={formData.website}
-                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                  placeholder="https://example.com"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Content (English)</label>
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={10}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Content (Arabic)</label>
-                <textarea
-                  value={formData.contentAr}
-                  onChange={(e) => setFormData({ ...formData, contentAr: e.target.value })}
-                  rows={10}
-                />
-              </div>
+              <BilingualField
+                label="Content"
+                enValue={formData.content || ''}
+                arValue={formData.contentAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, content: value })}
+                onArChange={(value) => setFormData({ ...formData, contentAr: value })}
+                type="richtext"
+              />
 
               <ImageUpload
                 value={formData.image || ''}
@@ -317,12 +266,9 @@ const ProjectsPage = () => {
                 <button type="submit" className="button button-primary">
                   {editingProject ? 'Update Project' : 'Create Project'}
                 </button>
-                <button type="button" onClick={resetForm} className="button">
-                  Cancel
-                </button>
+                <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>Cancel</button>
               </div>
             </form>
-          </div>
         </div>
       )}
 
@@ -346,44 +292,57 @@ const ProjectsPage = () => {
                 </td>
               </tr>
             ) : (
-              projects.map((project) => (
-                <tr key={project._id || project.id}>
-                  <td>
-                    <div className="admin-section-thumb">
-                      {project.image ? (
-                        <img src={project.image} alt={project.title || "Project image"} />
-                      ) : (
-                        <span className="admin-section-thumb-placeholder">
-                          No Image
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td><strong>{project.title}</strong></td>
-                  <td>{project.category}</td>
-                  <td>{project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}</td>
-                  <td>
-                    <span className={`admin-badge ${project.enabled !== false ? 'published' : 'draft'}`}>
-                      {project.enabled !== false ? 'Published' : 'Draft'}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="admin-table-actions">
-                      <button type="button" onClick={() => handleEdit(project)} className="admin-btn admin-btn-edit">Edit</button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const projectId = project._id ? String(project._id) : project.id ? String(project.id) : null;
-                          if (projectId) handleDelete(projectId);
-                        }}
-                        className="admin-btn admin-btn-delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              projects.map((project) => {
+                const projectId = project._id ? String(project._id) : project.id ? String(project.id) : null;
+                const editingProjectId = editingProject?._id ? String(editingProject._id) : editingProject?.id ? String(editingProject.id) : null;
+                const isEditing = projectId === editingProjectId;
+                
+                return (
+                  <tr key={project._id || project.id} className={isEditing ? 'admin-table-row-active' : ''}>
+                    <td>
+                      <div className="admin-section-thumb">
+                        {project.image ? (
+                          <img src={project.image} alt={project.title || "Project image"} />
+                        ) : (
+                          <span className="admin-section-thumb-placeholder">
+                            No Image
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td><strong>{project.title}</strong></td>
+                    <td>{project.category}</td>
+                    <td>{project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}</td>
+                    <td>
+                      <span className={`admin-badge ${project.enabled !== false ? 'published' : 'draft'}`}>
+                        {project.enabled !== false ? 'Published' : 'Draft'}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="admin-table-actions">
+                        <button 
+                          type="button" 
+                          onClick={() => isEditing ? resetForm() : handleEdit(project)} 
+                          className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
+                        >
+                          {isEditing ? 'Close' : 'Edit'}
+                        </button>
+                        {!isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (projectId) handleDelete(projectId);
+                            }}
+                            className="admin-btn admin-btn-delete"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

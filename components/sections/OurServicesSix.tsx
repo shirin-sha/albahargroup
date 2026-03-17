@@ -5,12 +5,28 @@ import Subheading from "../Subheading";
 import Heading from "../Heading";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import ServiceList from "@/data/services.json";
 import CardService from "../CardService";
 import { SectionProps } from "@/types/sectionProps";
+import { useEffect, useState } from "react";
 
 const OurServicesSix = ({ data }: { data: SectionProps }) => {
-    const serviceList = ServiceList;
+    const [serviceList, setServiceList] = useState<any[]>([]);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await fetch('/api/services?enabled=true');
+                const result = await res.json();
+                if (result?.success) {
+                    setServiceList(result.data || []);
+                }
+            } catch {
+                setServiceList([]);
+            }
+        };
+        load();
+    }, []);
+
     if(serviceList.length == 0) return null;
 
     const {
@@ -47,9 +63,9 @@ const OurServicesSix = ({ data }: { data: SectionProps }) => {
                             <div 
                                 className="xl:col-span-4 md:col-span-6 col-span-12" 
                                 data-aos="fade-up" 
-                                key={`servicel-card-${service.id}`}
+                                key={`servicel-card-${service._id || service.id}`}
                             >
-                                <CardService data={service} />
+                                <CardService data={{ ...service, id: service._id ? String(service._id) : service.id }} />
                             </div>
                         ))}
                     </div>

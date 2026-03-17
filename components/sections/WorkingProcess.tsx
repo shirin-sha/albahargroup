@@ -4,7 +4,6 @@ import Subheading from "../Subheading";
 import Heading from "../Heading";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import ServiceList from "@/data/services.json";
 import CardTextIcon from "../CardTextIcon";
 import { SectionProps } from "@/types/sectionProps";
 

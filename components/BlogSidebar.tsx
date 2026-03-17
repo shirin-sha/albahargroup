@@ -1,9 +1,11 @@
+'use client';
+
+import { useEffect, useState } from "react";
 import Icons from "./Icons";
 import SidebarSearch from "./SidebarSearch";
 import SidebarCategories from "./SidebarCategories";
 import RecentPost from "./RecentPost";
 import SidebarTags from "./SidebarTags";
-import Posts from "@/data/posts.json";
 import DrawerOpener from "./DrawerOpener";
 
 interface BlogSidebarType {
@@ -11,9 +13,37 @@ interface BlogSidebarType {
 }
 
 const BlogSidebar = ({ slug }: BlogSidebarType) => {
-    const posts = Posts;
-    const tags: string[] = Array.from(new Set(posts.flatMap(post => post.tags)));
-    const categories: string[] = Array.from(new Set(posts.flatMap(post => post.category)));
+    const [categories, setCategories] = useState<string[]>([]);
+    const [tags, setTags] = useState<string[]>([]);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                // Categories
+                const catRes = await fetch('/api/categories?enabled=true');
+                const catJson = await catRes.json();
+                if (catJson?.success && Array.isArray(catJson.data)) {
+                    setCategories(catJson.data.map((c: any) => c.name).filter(Boolean));
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+
+            try {
+                // Tags (from posts)
+                const postRes = await fetch('/api/posts?enabled=true');
+                const postJson = await postRes.json();
+                if (postJson?.success && Array.isArray(postJson.data)) {
+                    const allTags = postJson.data.flatMap((p: any) => p.tags || []);
+                    setTags(Array.from(new Set(allTags)));
+                }
+            } catch (error) {
+                console.error('Error fetching tags:', error);
+            }
+        };
+
+        load();
+    }, []);
 
     return(
         <div className="sidebar-filter drawer-blog-sidebar">
@@ -39,7 +69,7 @@ const BlogSidebar = ({ slug }: BlogSidebarType) => {
                     <SidebarCategories 
                         title="Categories"
                         categories={categories}
-                        rootUrl="/blogs/category"
+                        rootUrl="/news/category"
                     />
                 }
 
@@ -52,7 +82,7 @@ const BlogSidebar = ({ slug }: BlogSidebarType) => {
                     <SidebarTags
                         title="Tags" 
                         tags={tags}
-                        rootUrl="/blogs/tags"
+                        rootUrl="/news/tags"
                     />
                 }
             </aside>

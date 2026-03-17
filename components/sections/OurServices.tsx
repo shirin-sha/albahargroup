@@ -6,13 +6,32 @@ import Subheading from "../Subheading";
 import Heading from "../Heading";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import ServiceList from "@/data/services.json";
 import CardService from "../CardService";
 import { SectionProps } from "@/types/sectionProps";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useEffect, useMemo, useState } from "react";
 
 const OurServices = ({ data }: { data: SectionProps }) => {
-    const serviceList = ServiceList;
-    if(serviceList.length == 0) return null;
+    const { language } = useLanguage();
+    const [serviceList, setServiceList] = useState<any[]>([]);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await fetch('/api/services?enabled=true');
+                const result = await res.json();
+                if (result?.success) {
+                    setServiceList(result.data || []);
+                }
+            } catch {
+                setServiceList([]);
+            }
+        };
+        load();
+    }, []);
+
+    const topServices = useMemo(() => serviceList.slice(0, 3), [serviceList]);
+    if(topServices.length == 0) return null;
 
     const {
         wrapperCls,
@@ -58,13 +77,13 @@ const OurServices = ({ data }: { data: SectionProps }) => {
 
                 <div className="multicolumn-inner">
                     <div className="grid lg:grid-cols-3 lg:gap-1">
-                        {serviceList.slice(0, 3).map((service) => (
+                        {topServices.map((service) => (
                             <div 
                                 className="col-span-1 multi-col" 
                                 data-aos="fade-up" 
-                                key={`servicel-card-${service.id}`}
+                                key={`servicel-card-${service._id || service.id}`}
                             >
-                                <CardService data={service} />
+                                <CardService data={{ ...service, id: service._id ? String(service._id) : service.id }} />
                             </div>
                         ))}
                     </div>

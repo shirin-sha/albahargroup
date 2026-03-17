@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, memo } from 'react';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 
 interface SectionData {
   sectionId: string;
@@ -16,7 +17,7 @@ const NEWS_PAGE_SECTIONS = ['banner'] as const;
 interface BilingualFieldProps {
   label: string;
   path: string;
-  type?: 'text' | 'textarea';
+  type?: 'text' | 'textarea' | 'richtext';
   rows?: number;
   placeholder?: string;
   enValue: any;
@@ -34,6 +35,32 @@ const BilingualField = memo(({
   arValue,
   onUpdate
 }: BilingualFieldProps) => {
+  if (type === 'richtext') {
+    return (
+      <div className="form-group-bilingual">
+        <label>{label}</label>
+        <div className="bilingual-inputs">
+          <div className="bilingual-input-group">
+            <span className="bilingual-label">English</span>
+            <RichTextEditor
+              value={enValue || ''}
+              onChange={(value) => onUpdate('en', path, value)}
+            />
+          </div>
+          <div className="bilingual-input-group" dir="rtl">
+            <span className="bilingual-label">العربية</span>
+            <div dir="rtl">
+              <RichTextEditor
+                value={arValue || ''}
+                onChange={(value) => onUpdate('ar', path, value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (type === 'textarea') {
     return (
       <div className="form-group-bilingual">
@@ -244,7 +271,7 @@ const SectionEditor = ({
     return value;
   }, []);
 
-  const renderBilingualField = useCallback((label: string, path: string, type: 'text' | 'textarea' = 'text', rows: number = 1, placeholder: string = '') => {
+  const renderBilingualField = useCallback((label: string, path: string, type: 'text' | 'textarea' | 'richtext' = 'text', rows: number = 1, placeholder: string = '') => {
     const enValue = getNestedValue(formDataEn, path);
     const arValue = getNestedValue(formDataAr, path);
     

@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import { Team } from '@/libs/models/team';
 import ImageUpload from '@/components/admin/ImageUpload';
+import BilingualField from '@/components/admin/BilingualField';
 
 const TeamsPage = () => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<Team>>({
     name: '',
     nameAr: '',
@@ -81,6 +82,7 @@ const TeamsPage = () => {
       if (result.success) {
         await fetchTeams();
         resetForm();
+        setIsAdding(false);
       } else {
         alert(result.error || 'Failed to save team member');
       }
@@ -126,7 +128,6 @@ const TeamsPage = () => {
       },
       enabled: team.enabled !== undefined ? team.enabled : true,
     });
-    setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -186,7 +187,7 @@ const TeamsPage = () => {
       enabled: true,
     });
     setEditingTeam(null);
-    setShowForm(false);
+    setIsAdding(false);
   };
 
   if (loading) {
@@ -202,64 +203,42 @@ const TeamsPage = () => {
           className="button button-primary"
           onClick={() => {
             resetForm();
-            setShowForm(true);
+            setIsAdding(true);
           }}
         >
           + Add New Team Member
         </button>
       </div>
 
-      {showForm && (
-        <div className="admin-cms-form-container" style={{ marginBottom: '30px' }}>
-          <div className="admin-cms-section-card">
-            <div className="admin-cms-section-header">
-              <h3>{editingTeam ? 'Edit Team Member' : 'Add New Team Member'}</h3>
-              <button
-                type="button"
-                className="admin-cms-toggle"
-                onClick={resetForm}
-              >
-                ×
-              </button>
+      {(editingTeam || isAdding) && (
+        <div className="admin-edit-panel" style={{ marginBottom: '30px' }}>
+          <div className="admin-edit-panel-header">
+            <div className="admin-edit-panel-title">
+              <strong>{editingTeam ? 'Editing Team Member' : 'Add New Team Member'}</strong>
+              <span>{editingTeam ? `Editing: ${editingTeam.name}` : 'Create a new team member'}</span>
             </div>
+            <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
+          </div>
             <form onSubmit={handleSubmit} className="admin-cms-form">
-              <div className="form-group">
-                <label>Name (English) *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Name (Arabic)</label>
-                <input
-                  type="text"
-                  value={formData.nameAr}
-                  onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
-                />
-              </div>
+              <BilingualField
+                label="Name"
+                enValue={formData.name || ''}
+                arValue={formData.nameAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, name: value })}
+                onArChange={(value) => setFormData({ ...formData, nameAr: value })}
+                type="text"
+                required
+              />
 
-              <div className="form-group">
-                <label>Designation (English) *</label>
-                <input
-                  type="text"
-                  value={formData.designation}
-                  onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Designation (Arabic)</label>
-                <input
-                  type="text"
-                  value={formData.designationAr}
-                  onChange={(e) => setFormData({ ...formData, designationAr: e.target.value })}
-                />
-              </div>
+              <BilingualField
+                label="Designation"
+                enValue={formData.designation || ''}
+                arValue={formData.designationAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, designation: value })}
+                onArChange={(value) => setFormData({ ...formData, designationAr: value })}
+                type="text"
+                required
+              />
 
               <ImageUpload
                 value={formData.image || ''}
@@ -280,23 +259,15 @@ const TeamsPage = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Expertise (English)</label>
-                <textarea
-                  value={formData.expertise}
-                  onChange={(e) => setFormData({ ...formData, expertise: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Expertise (Arabic)</label>
-                <textarea
-                  value={formData.expertiseAr}
-                  onChange={(e) => setFormData({ ...formData, expertiseAr: e.target.value })}
-                  rows={3}
-                />
-              </div>
+              <BilingualField
+                label="Expertise"
+                enValue={formData.expertise || ''}
+                arValue={formData.expertiseAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, expertise: value })}
+                onArChange={(value) => setFormData({ ...formData, expertiseAr: value })}
+                type="textarea"
+                rows={3}
+              />
 
               <div className="form-group">
                 <label>Phone</label>
@@ -318,59 +289,35 @@ const TeamsPage = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Biography (English)</label>
-                <textarea
-                  value={formData.biography}
-                  onChange={(e) => setFormData({ ...formData, biography: e.target.value })}
-                  rows={5}
-                />
-              </div>
+              <BilingualField
+                label="Biography"
+                enValue={formData.biography || ''}
+                arValue={formData.biographyAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, biography: value })}
+                onArChange={(value) => setFormData({ ...formData, biographyAr: value })}
+                type="textarea"
+                rows={5}
+              />
 
-              <div className="form-group">
-                <label>Biography (Arabic)</label>
-                <textarea
-                  value={formData.biographyAr}
-                  onChange={(e) => setFormData({ ...formData, biographyAr: e.target.value })}
-                  rows={5}
-                />
-              </div>
+              <BilingualField
+                label="About"
+                enValue={formData.about || ''}
+                arValue={formData.aboutAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, about: value })}
+                onArChange={(value) => setFormData({ ...formData, aboutAr: value })}
+                type="textarea"
+                rows={4}
+              />
 
-              <div className="form-group">
-                <label>About (English)</label>
-                <textarea
-                  value={formData.about}
-                  onChange={(e) => setFormData({ ...formData, about: e.target.value })}
-                  rows={4}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>About (Arabic)</label>
-                <textarea
-                  value={formData.aboutAr}
-                  onChange={(e) => setFormData({ ...formData, aboutAr: e.target.value })}
-                  rows={4}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>About Skills (English)</label>
-                <textarea
-                  value={formData.about_skills}
-                  onChange={(e) => setFormData({ ...formData, about_skills: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>About Skills (Arabic)</label>
-                <textarea
-                  value={formData.about_skillsAr}
-                  onChange={(e) => setFormData({ ...formData, about_skillsAr: e.target.value })}
-                  rows={3}
-                />
-              </div>
+              <BilingualField
+                label="About Skills"
+                enValue={formData.about_skills || ''}
+                arValue={formData.about_skillsAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, about_skills: value })}
+                onArChange={(value) => setFormData({ ...formData, about_skillsAr: value })}
+                type="textarea"
+                rows={3}
+              />
 
               <div className="form-group">
                 <label style={{ marginBottom: '10px', display: 'block' }}>Social Media Links</label>
@@ -512,12 +459,9 @@ const TeamsPage = () => {
                 <button type="submit" className="button button-primary">
                   {editingTeam ? 'Update Team Member' : 'Create Team Member'}
                 </button>
-                <button type="button" onClick={resetForm} className="button">
-                  Cancel
-                </button>
+                <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>Cancel</button>
               </div>
             </form>
-          </div>
         </div>
       )}
 
@@ -540,43 +484,56 @@ const TeamsPage = () => {
                 </td>
               </tr>
             ) : (
-              teams.map((team) => (
-                <tr key={team._id || team.id}>
-                  <td>
-                    <div className="admin-section-thumb">
-                      {team.image ? (
-                        <img src={team.image} alt={team.name || "Team member"} />
-                      ) : (
-                        <span className="admin-section-thumb-placeholder">
-                          No Image
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td><strong>{team.name}</strong></td>
-                  <td>{team.designation}</td>
-                  <td>
-                    <span className={`admin-badge ${team.enabled !== false ? 'published' : 'draft'}`}>
-                      {team.enabled !== false ? 'Published' : 'Draft'}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="admin-table-actions">
-                      <button type="button" onClick={() => handleEdit(team)} className="admin-btn admin-btn-edit">Edit</button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const teamId = team._id ? String(team._id) : team.id ? String(team.id) : null;
-                          if (teamId) handleDelete(teamId);
-                        }}
-                        className="admin-btn admin-btn-delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              teams.map((team) => {
+                const teamId = team._id ? String(team._id) : team.id ? String(team.id) : null;
+                const editingTeamId = editingTeam?._id ? String(editingTeam._id) : editingTeam?.id ? String(editingTeam.id) : null;
+                const isEditing = teamId === editingTeamId;
+                
+                return (
+                  <tr key={team._id || team.id} className={isEditing ? 'admin-table-row-active' : ''}>
+                    <td>
+                      <div className="admin-section-thumb">
+                        {team.image ? (
+                          <img src={team.image} alt={team.name || "Team member"} />
+                        ) : (
+                          <span className="admin-section-thumb-placeholder">
+                            No Image
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td><strong>{team.name}</strong></td>
+                    <td>{team.designation}</td>
+                    <td>
+                      <span className={`admin-badge ${team.enabled !== false ? 'published' : 'draft'}`}>
+                        {team.enabled !== false ? 'Published' : 'Draft'}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="admin-table-actions">
+                        <button 
+                          type="button" 
+                          onClick={() => isEditing ? resetForm() : handleEdit(team)} 
+                          className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
+                        >
+                          {isEditing ? 'Close' : 'Edit'}
+                        </button>
+                        {!isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (teamId) handleDelete(teamId);
+                            }}
+                            className="admin-btn admin-btn-delete"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

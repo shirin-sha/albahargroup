@@ -3,12 +3,16 @@
 import { useState, useEffect } from 'react';
 import { Post } from '@/libs/models/post';
 import ImageUpload from '@/components/admin/ImageUpload';
+import RichTextEditor from '@/components/admin/RichTextEditor';
+import BilingualField from '@/components/admin/BilingualField';
+import Link from 'next/link';
 
 const PostsPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<Post>>({
     title: '',
     titleAr: '',
@@ -28,6 +32,7 @@ const PostsPage = () => {
 
   useEffect(() => {
     fetchPosts();
+    fetchCategories();
   }, []);
 
   const fetchPosts = async () => {
@@ -41,6 +46,18 @@ const PostsPage = () => {
       console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('/api/categories?enabled=true');
+      const result = await res.json();
+      if (result.success) {
+        setCategories(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   };
 
@@ -63,6 +80,7 @@ const PostsPage = () => {
       if (result.success) {
         await fetchPosts();
         resetForm();
+        setIsAdding(false);
       } else {
         alert(result.error || 'Failed to save post');
       }
@@ -89,7 +107,6 @@ const PostsPage = () => {
       authorId: post.authorId || 1,
       enabled: post.enabled !== undefined ? post.enabled : true,
     });
-    setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -130,7 +147,7 @@ const PostsPage = () => {
       enabled: true,
     });
     setEditingPost(null);
-    setShowForm(false);
+    setIsAdding(false);
     setTagInput('');
   };
 
@@ -159,107 +176,105 @@ const PostsPage = () => {
     <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>Posts Management</h1>
-        <button
-          type="button"
-          className="button button-primary"
-          onClick={() => {
-            resetForm();
-            setShowForm(true);
-          }}
-        >
-          + Add New Post
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Link
+            href="/admin/dashboard/categories"
+            className="button"
+            style={{ textDecoration: 'none' }}
+          >
+            Manage Categories
+          </Link>
+          <button
+            type="button"
+            className="button button-primary"
+            onClick={() => {
+              resetForm();
+              setIsAdding(true);
+            }}
+          >
+            + Add New Post
+          </button>
+        </div>
       </div>
 
-      {showForm && (
-        <div className="admin-cms-form-container" style={{ marginBottom: '30px' }}>
-          <div className="admin-cms-section-card">
-            <div className="admin-cms-section-header">
-              <h3>{editingPost ? 'Edit Post' : 'Add New Post'}</h3>
-              <button
-                type="button"
-                className="admin-cms-toggle"
-                onClick={resetForm}
-              >
-                ×
-              </button>
+      {(editingPost || isAdding) && (
+        <div className="admin-edit-panel" style={{ marginBottom: '30px' }}>
+          <div className="admin-edit-panel-header">
+            <div className="admin-edit-panel-title">
+              <strong>{editingPost ? 'Editing Post' : 'Add New Post'}</strong>
+              <span>{editingPost ? `Editing: ${editingPost.title}` : 'Create a new post'}</span>
             </div>
+            <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
+          </div>
             <form onSubmit={handleSubmit} className="admin-cms-form">
-              <div className="form-group">
-                <label>Title (English) *</label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Title (Arabic)</label>
-                <input
-                  type="text"
-                  value={formData.titleAr}
-                  onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
-                />
+              <BilingualField
+                label="Title"
+                enValue={formData.title || ''}
+                arValue={formData.titleAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, title: value })}
+                onArChange={(value) => setFormData({ ...formData, titleAr: value })}
+                type="text"
+                required
+              />
+
+              <div className="form-group-bilingual">
+                <label>Category *</label>
+                <div className="bilingual-inputs">
+                  <div className="bilingual-input-group">
+                    <span className="bilingual-label">English</span>
+                    <select
+                      value={formData.category || ''}
+                      onChange={(e) => {
+                        const selectedCategory = categories.find(cat => cat.name === e.target.value);
+                        setFormData({ 
+                          ...formData, 
+                          category: e.target.value,
+                          categoryAr: selectedCategory?.nameAr || ''
+                        });
+                      }}
+                      required
+                    >
+                      <option value="">Select a category</option>
+                      {categories.map((category) => (
+                        <option key={category._id || category.id} value={category.name}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="bilingual-input-group">
+                    <span className="bilingual-label">العربية</span>
+                    <input
+                      type="text"
+                      value={formData.categoryAr || ''}
+                      onChange={(e) => setFormData({ ...formData, categoryAr: e.target.value })}
+                      placeholder="Arabic category name"
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="form-group">
-                <label>Category (English) *</label>
-                <input
-                  type="text"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  required
-                />
-              </div>
+              <BilingualField
+                label="Excerpt"
+                enValue={formData.excerpt || ''}
+                arValue={formData.excerptAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, excerpt: value })}
+                onArChange={(value) => setFormData({ ...formData, excerptAr: value })}
+                type="textarea"
+                rows={3}
+                required
+              />
 
-              <div className="form-group">
-                <label>Category (Arabic)</label>
-                <input
-                  type="text"
-                  value={formData.categoryAr}
-                  onChange={(e) => setFormData({ ...formData, categoryAr: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Excerpt (English) *</label>
-                <textarea
-                  value={formData.excerpt}
-                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                  rows={3}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Excerpt (Arabic)</label>
-                <textarea
-                  value={formData.excerptAr}
-                  onChange={(e) => setFormData({ ...formData, excerptAr: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Content (English) *</label>
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={10}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Content (Arabic)</label>
-                <textarea
-                  value={formData.contentAr}
-                  onChange={(e) => setFormData({ ...formData, contentAr: e.target.value })}
-                  rows={10}
-                />
-              </div>
+              <BilingualField
+                label="Content"
+                enValue={formData.content || ''}
+                arValue={formData.contentAr || ''}
+                onEnChange={(value) => setFormData({ ...formData, content: value })}
+                onArChange={(value) => setFormData({ ...formData, contentAr: value })}
+                type="richtext"
+                required
+              />
 
               <ImageUpload
                 value={formData.image || ''}
@@ -331,12 +346,9 @@ const PostsPage = () => {
                 <button type="submit" className="button button-primary">
                   {editingPost ? 'Update Post' : 'Create Post'}
                 </button>
-                <button type="button" onClick={resetForm} className="button">
-                  Cancel
-                </button>
+                <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>Cancel</button>
               </div>
             </form>
-          </div>
         </div>
       )}
 
@@ -360,44 +372,57 @@ const PostsPage = () => {
                 </td>
               </tr>
             ) : (
-              posts.map((post) => (
-                <tr key={post._id || post.id}>
-                  <td>
-                    <div className="admin-section-thumb">
-                      {post.image ? (
-                        <img src={post.image} alt={post.title || "Post image"} />
-                      ) : (
-                        <span className="admin-section-thumb-placeholder">
-                          No Image
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td><strong>{post.title}</strong></td>
-                  <td>{post.category}</td>
-                  <td>{post.created_at ? new Date(post.created_at).toLocaleDateString() : 'N/A'}</td>
-                  <td>
-                    <span className={`admin-badge ${post.enabled !== false ? 'published' : 'draft'}`}>
-                      {post.enabled !== false ? 'Published' : 'Draft'}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="admin-table-actions">
-                      <button type="button" onClick={() => handleEdit(post)} className="admin-btn admin-btn-edit">Edit</button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const postId = post._id ? String(post._id) : post.id ? String(post.id) : null;
-                          if (postId) handleDelete(postId);
-                        }}
-                        className="admin-btn admin-btn-delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              posts.map((post) => {
+                const postId = post._id ? String(post._id) : post.id ? String(post.id) : null;
+                const editingPostId = editingPost?._id ? String(editingPost._id) : editingPost?.id ? String(editingPost.id) : null;
+                const isEditing = postId === editingPostId;
+                
+                return (
+                  <tr key={post._id || post.id} className={isEditing ? 'admin-table-row-active' : ''}>
+                    <td>
+                      <div className="admin-section-thumb">
+                        {post.image ? (
+                          <img src={post.image} alt={post.title || "Post image"} />
+                        ) : (
+                          <span className="admin-section-thumb-placeholder">
+                            No Image
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td><strong>{post.title}</strong></td>
+                    <td>{post.category}</td>
+                    <td>{post.created_at ? new Date(post.created_at).toLocaleDateString() : 'N/A'}</td>
+                    <td>
+                      <span className={`admin-badge ${post.enabled !== false ? 'published' : 'draft'}`}>
+                        {post.enabled !== false ? 'Published' : 'Draft'}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="admin-table-actions">
+                        <button 
+                          type="button" 
+                          onClick={() => isEditing ? resetForm() : handleEdit(post)} 
+                          className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
+                        >
+                          {isEditing ? 'Close' : 'Edit'}
+                        </button>
+                        {!isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (postId) handleDelete(postId);
+                            }}
+                            className="admin-btn admin-btn-delete"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

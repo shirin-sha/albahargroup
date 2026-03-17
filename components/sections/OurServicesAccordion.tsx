@@ -6,12 +6,28 @@ import Subheading from "../Subheading";
 import Heading from "../Heading";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import ServiceList from "@/data/services.json";
 import { SectionProps } from "@/types/sectionProps";
 import AccordionHorizontal from "../AccordionHorizontal";
+import { useEffect, useState } from "react";
 
 const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
-    const serviceList = ServiceList;
+    const [serviceList, setServiceList] = useState<any[]>([]);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await fetch('/api/services?enabled=true');
+                const result = await res.json();
+                if (result?.success) {
+                    setServiceList(result.data || []);
+                }
+            } catch {
+                setServiceList([]);
+            }
+        };
+        load();
+    }, []);
+
     if(serviceList.length == 0) return null;
 
     const {

@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import "@/styles/career.css";
 import { SectionProps } from "@/types/sectionProps";
@@ -6,12 +6,12 @@ import Subheading from "../Subheading";
 import Heading from "../Heading";
 import Text from "../Text";
 import JobCard from "../JobCard";
-import { JobListing } from "@/data/sections/careerData";
+import { Job } from "@/libs/models/job";
 import { useState } from "react";
 
 interface CareerSectionProps {
     data: SectionProps;
-    jobListings: JobListing[];
+    jobListings: Job[];
 }
 
 const CareerSection = ({ data, jobListings }: CareerSectionProps) => {

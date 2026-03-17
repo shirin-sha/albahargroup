@@ -126,6 +126,13 @@ export default function AdminDashboardLayout({
           >
             Projects
           </Link>
+
+          <Link
+            href="/admin/dashboard/services"
+            className={`admin-sidebar-link ${isActive('/admin/dashboard/services') ? 'active' : ''}`}
+          >
+            Services
+          </Link>
           
           <Link
             href="/admin/dashboard/teams"
@@ -134,7 +141,13 @@ export default function AdminDashboardLayout({
             Teams
           </Link>
 
-        
+          <Link
+            href="/admin/dashboard/jobs"
+            className={`admin-sidebar-link ${isActive('/admin/dashboard/jobs') ? 'active' : ''}`}
+          >
+            Job Listings
+          </Link>
+  
           
           {/* Add more nav links here later */}
         </nav>
