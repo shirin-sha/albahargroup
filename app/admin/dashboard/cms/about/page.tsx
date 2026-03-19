@@ -117,7 +117,7 @@ const getPreviewImage = (section: SectionData | undefined, sectionId: string): s
   if (!en) return null;
   switch (sectionId) {
     case 'testimonials':  return en.items?.[0]?.image || null;
-    case 'stickyBanner':  return en.image || en.backgroundImage || null;
+    case 'stickyBanner':  return en.blockList?.[0]?.image?.src || en.image || en.backgroundImage || null;
     case 'heritage':      return en.image?.src || en.image || null;
     case 'collaboration': return en.image?.src || en.image || null;
     case 'timeline':      return en.timelineItems?.[0]?.logos?.[0]?.src || null;
@@ -264,7 +264,7 @@ const SectionEditor = ({
 
   useEffect(() => {
     if (section) {
-      if (sectionId === 'faq') {
+      if (sectionId === 'faq' || sectionId === 'testimonials') {
         setFormDataEn({
           ...section.en,
           items: Array.isArray(section.en?.items) ? section.en.items : []
@@ -287,7 +287,7 @@ const SectionEditor = ({
         setFormDataAr(section.ar || {});
       }
     } else {
-      if (sectionId === 'faq') {
+      if (sectionId === 'faq' || sectionId === 'testimonials') {
         setFormDataEn({ items: [] });
         setFormDataAr({ items: [] });
       } else if (sectionId === 'timeline') {
@@ -368,6 +368,370 @@ const SectionEditor = ({
   }, [formDataEn, formDataAr, updateField, getNestedValue]);
 
   const renderFields = () => {
+    if (sectionId === 'collaboration') {
+      const textListEn = formDataEn.textList || [];
+      const textListAr = formDataAr.textList || [];
+      const maxTextItems = Math.max(textListEn.length, textListAr.length, 1);
+
+      return (
+        <>
+          {renderBilingualField("Subheading", "subheading")}
+          {renderBilingualField("Heading", "heading")}
+          {renderBilingualField("Intro Text", "text", "textarea", 6)}
+          {renderBilingualField("Feature Title", "block.heading")}
+          {renderBilingualField("Feature Description", "block.text", "textarea", 5)}
+          {renderBilingualField("Second Card Title", "block.subheading")}
+
+          <div className="form-group">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <label style={{ margin: 0 }}>Second Card Paragraphs</label>
+              <button
+                type="button"
+                onClick={() => {
+                  const newItem = { text: '' };
+                  setFormDataEn({ ...formDataEn, textList: [...textListEn, newItem] });
+                  setFormDataAr({ ...formDataAr, textList: [...textListAr, newItem] });
+                }}
+                className="cms-item-add-btn"
+              >
+                + Add Paragraph
+              </button>
+            </div>
+
+            {Array.from({ length: maxTextItems }).map((_, index) => {
+              const itemEn = textListEn[index] || { text: '' };
+              const itemAr = textListAr[index] || { text: '' };
+
+              return (
+                <div key={index} className="cms-item-card">
+                  <div className="cms-item-header">
+                    <h4>Paragraph {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newItemsEn = textListEn.filter((_: any, i: number) => i !== index);
+                        const newItemsAr = textListAr.filter((_: any, i: number) => i !== index);
+                        setFormDataEn({ ...formDataEn, textList: newItemsEn });
+                        setFormDataAr({ ...formDataAr, textList: newItemsAr });
+                      }}
+                      className="admin-btn admin-btn-delete"
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <div className="form-group-bilingual">
+                    <label>Text</label>
+                    <div className="bilingual-inputs">
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">English</span>
+                        <textarea
+                          value={itemEn.text || ''}
+                          onChange={(e) => {
+                            const newItemsEn = [...textListEn];
+                            if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
+                            newItemsEn[index].text = e.target.value;
+                            setFormDataEn({ ...formDataEn, textList: newItemsEn });
+                          }}
+                          rows={4}
+                          placeholder="Paragraph in English"
+                        />
+                      </div>
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">العربية</span>
+                        <textarea
+                          value={itemAr.text || ''}
+                          onChange={(e) => {
+                            const newItemsAr = [...textListAr];
+                            if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
+                            newItemsAr[index].text = e.target.value;
+                            setFormDataAr({ ...formDataAr, textList: newItemsAr });
+                          }}
+                          rows={4}
+                          placeholder="الفقرة بالعربية"
+                          dir="rtl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      );
+    }
+
+    if (sectionId === 'heritage') {
+      return (
+        <>
+          {renderBilingualField("Subheading", "subheading")}
+          {renderBilingualField("Heading", "heading")}
+          {renderBilingualField("Intro Text", "text", "textarea", 6)}
+
+          <ImageUpload
+            value={formDataEn.image?.src || formDataAr.image?.src || ''}
+            onChange={(url) => {
+              setFormDataEn({
+                ...formDataEn,
+                image: { width: 600, height: 800, loading: 'lazy', alt: formDataEn.image?.alt || '', ...(formDataEn.image || {}), src: url }
+              });
+              setFormDataAr({
+                ...formDataAr,
+                image: { width: 600, height: 800, loading: 'lazy', alt: formDataAr.image?.alt || '', ...(formDataAr.image || {}), src: url }
+              });
+            }}
+            placeholder="/img/image-text/img1.png"
+            folder="image-text"
+            label="Founder Image (shared)"
+          />
+
+          <div className="form-group">
+            <label>Image Alt Text (shared)</label>
+            <input
+              type="text"
+              value={formDataEn.image?.alt || formDataAr.image?.alt || ''}
+              onChange={(e) => {
+                const alt = e.target.value;
+                setFormDataEn({ ...formDataEn, image: { width: 600, height: 800, loading: 'lazy', ...(formDataEn.image || {}), alt } });
+                setFormDataAr({ ...formDataAr, image: { width: 600, height: 800, loading: 'lazy', ...(formDataAr.image || {}), alt } });
+              }}
+              placeholder="Mr. Mohamed Al-Bahar - Founder"
+            />
+          </div>
+
+          {renderBilingualField("Founder Name / Block Heading", "block.heading")}
+          {renderBilingualField("Founder Description / Block Text", "block.text", "textarea", 8)}
+        </>
+      );
+    }
+
+    if (sectionId === 'stickyBanner') {
+      const blockListEn = formDataEn.blockList || [];
+      const blockListAr = formDataAr.blockList || [];
+      const maxBlocks = Math.max(blockListEn.length, blockListAr.length, 1);
+
+      return (
+        <>
+          {renderBilingualField("Heading", "heading")}
+          {renderBilingualField("Text", "text", "textarea", 4)}
+
+          <div className="form-group">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <label style={{ margin: 0 }}>Sticky Banner Cards</label>
+              <button
+                type="button"
+                onClick={() => {
+                  const newItem = {
+                    subheading: '',
+                    heading: '',
+                    text: '',
+                    image: { src: '', width: 1000, height: 707, loading: 'lazy', alt: '' }
+                  };
+                  setFormDataEn({ ...formDataEn, blockList: [...blockListEn, newItem] });
+                  setFormDataAr({ ...formDataAr, blockList: [...blockListAr, newItem] });
+                }}
+                className="cms-item-add-btn"
+              >
+                + Add Card
+              </button>
+            </div>
+
+            {Array.from({ length: maxBlocks }).map((_, index) => {
+              const itemEn = blockListEn[index] || {
+                subheading: '',
+                heading: '',
+                text: '',
+                image: { src: '', width: 1000, height: 707, loading: 'lazy', alt: '' }
+              };
+              const itemAr = blockListAr[index] || {
+                subheading: '',
+                heading: '',
+                text: '',
+                image: { src: '', width: 1000, height: 707, loading: 'lazy', alt: '' }
+              };
+
+              return (
+                <div key={index} className="cms-item-card">
+                  <div className="cms-item-header">
+                    <h4>Card {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newBlocksEn = blockListEn.filter((_: any, i: number) => i !== index);
+                        const newBlocksAr = blockListAr.filter((_: any, i: number) => i !== index);
+                        setFormDataEn({ ...formDataEn, blockList: newBlocksEn });
+                        setFormDataAr({ ...formDataAr, blockList: newBlocksAr });
+                      }}
+                      className="admin-btn admin-btn-delete"
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <div style={{ marginBottom: '12px' }}>
+                    <ImageUpload
+                      value={itemEn.image?.src || itemAr.image?.src || ''}
+                      onChange={(url) => {
+                        const newBlocksEn = [...blockListEn];
+                        const newBlocksAr = [...blockListAr];
+                        if (!newBlocksEn[index]) newBlocksEn[index] = { ...itemEn, image: { ...(itemEn.image || {}) } };
+                        if (!newBlocksAr[index]) newBlocksAr[index] = { ...itemAr, image: { ...(itemAr.image || {}) } };
+                        newBlocksEn[index].image = {
+                          width: 1000,
+                          height: 707,
+                          loading: 'lazy',
+                          alt: newBlocksEn[index].image?.alt || '',
+                          ...newBlocksEn[index].image,
+                          src: url,
+                        };
+                        newBlocksAr[index].image = {
+                          width: 1000,
+                          height: 707,
+                          loading: 'lazy',
+                          alt: newBlocksAr[index].image?.alt || '',
+                          ...newBlocksAr[index].image,
+                          src: url,
+                        };
+                        setFormDataEn({ ...formDataEn, blockList: newBlocksEn });
+                        setFormDataAr({ ...formDataAr, blockList: newBlocksAr });
+                      }}
+                      placeholder="/img/project/1.jpg"
+                      folder="project"
+                      label="Card Image"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Image Alt Text (shared)</label>
+                    <input
+                      type="text"
+                      value={itemEn.image?.alt || itemAr.image?.alt || ''}
+                      onChange={(e) => {
+                        const newBlocksEn = [...blockListEn];
+                        const newBlocksAr = [...blockListAr];
+                        if (!newBlocksEn[index]) newBlocksEn[index] = { ...itemEn, image: { ...(itemEn.image || {}) } };
+                        if (!newBlocksAr[index]) newBlocksAr[index] = { ...itemAr, image: { ...(itemAr.image || {}) } };
+                        newBlocksEn[index].image = {
+                          width: 1000,
+                          height: 707,
+                          loading: 'lazy',
+                          ...newBlocksEn[index].image,
+                          alt: e.target.value,
+                        };
+                        newBlocksAr[index].image = {
+                          width: 1000,
+                          height: 707,
+                          loading: 'lazy',
+                          ...newBlocksAr[index].image,
+                          alt: e.target.value,
+                        };
+                        setFormDataEn({ ...formDataEn, blockList: newBlocksEn });
+                        setFormDataAr({ ...formDataAr, blockList: newBlocksAr });
+                      }}
+                      placeholder="Vision"
+                    />
+                  </div>
+
+                  {renderBilingualField("Subheading", `blockList.${index}.subheading`)}
+                  {renderBilingualField("Heading", `blockList.${index}.heading`, "textarea", 3)}
+                  {renderBilingualField("Text", `blockList.${index}.text`, "textarea", 5)}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      );
+    }
+
+    if (sectionId === 'testimonials') {
+      const testimonialItemsEn = formDataEn.items || [];
+      const testimonialItemsAr = formDataAr.items || [];
+      const maxTestimonialItems = Math.max(testimonialItemsEn.length, testimonialItemsAr.length, 1);
+
+      return (
+        <>
+          {renderBilingualField("Subheading", "subheading")}
+          {renderBilingualField("Heading", "heading", "textarea", 4)}
+          <div className="form-group">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <label style={{ margin: 0 }}>Cards</label>
+              <button
+                type="button"
+                onClick={() => {
+                  const newItem = { text: '' };
+                  setFormDataEn({ ...formDataEn, items: [...testimonialItemsEn, newItem] });
+                  setFormDataAr({ ...formDataAr, items: [...testimonialItemsAr, newItem] });
+                }}
+                className="cms-item-add-btn"
+              >
+                + Add Card
+              </button>
+            </div>
+
+            {Array.from({ length: maxTestimonialItems }).map((_, index) => {
+              const itemEn = testimonialItemsEn[index] || { text: '' };
+              const itemAr = testimonialItemsAr[index] || { text: '' };
+
+              return (
+                <div key={index} className="cms-item-card">
+                  <div className="cms-item-header">
+                    <h4>Card {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newItemsEn = testimonialItemsEn.filter((_: any, i: number) => i !== index);
+                        const newItemsAr = testimonialItemsAr.filter((_: any, i: number) => i !== index);
+                        setFormDataEn({ ...formDataEn, items: newItemsEn });
+                        setFormDataAr({ ...formDataAr, items: newItemsAr });
+                      }}
+                      className="admin-btn admin-btn-delete"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <div className="form-group-bilingual">
+                    <label>Card Text</label>
+                    <div className="bilingual-inputs">
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">English</span>
+                        <textarea
+                          value={itemEn.text || ''}
+                          onChange={(e) => {
+                            const newItemsEn = [...testimonialItemsEn];
+                            if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
+                            newItemsEn[index].text = e.target.value;
+                            setFormDataEn({ ...formDataEn, items: newItemsEn });
+                          }}
+                          rows={4}
+                          placeholder="Card text in English"
+                        />
+                      </div>
+                      <div className="bilingual-input-group">
+                        <span className="bilingual-label">العربية</span>
+                        <textarea
+                          value={itemAr.text || ''}
+                          onChange={(e) => {
+                            const newItemsAr = [...testimonialItemsAr];
+                            if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
+                            newItemsAr[index].text = e.target.value;
+                            setFormDataAr({ ...formDataAr, items: newItemsAr });
+                          }}
+                          rows={4}
+                          placeholder="نص البطاقة بالعربية"
+                          dir="rtl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      );
+    }
+
     if (sectionId === 'faq') {
       const faqItemsEn = formDataEn.items || [];
       const faqItemsAr = formDataAr.items || [];

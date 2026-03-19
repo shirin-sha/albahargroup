@@ -16,11 +16,33 @@ const defaultSections = [
     order: 1,
     en: {
       subheading: 'About Al-Bahar Group',
-      heading: 'Al-Bahar Group was founded in 1937 by Mr. Mohamed Abdulrahman Al-Bahar as a General Trading Company.'
+      heading: 'Al-Bahar Group was founded in 1937 by Mr. Mohamed Abdulrahman Al-Bahar as a General Trading Company.',
+      items: [
+        {
+          text: "Over the decades, we've grown to become a leading force in regional markets across a variety of industries. Our diverse portfolio spans everything from consumer goods, home appliances, cutting-edge electronics, shipping, office technology, IT solutions, and beyond."
+        },
+        {
+          text: "Partnering with global titans like Unilever, Canon, and GE appliances, we bring Kuwait's shoppers the latest in innovation and best practices. Our ethos thrives on collaboration, fostering enduring relationships that benefit both brands and customers alike."
+        },
+        {
+          text: "More than just commerce, we're committed to community. Through our foundations and corporate social initiatives, we're dedicated to giving back, enriching the lives of those we serve. Join us as we continue our proud tradition of excellence and impact in Kuwait and the region."
+        }
+      ]
     },
     ar: {
       subheading: 'حول مجموعة البahar',
-      heading: 'تأسست مجموعة البahar في عام 1937 من قبل السيد محمد عبدالرحمن البahar كشركة تجارية عامة.'
+      heading: 'تأسست مجموعة البahar في عام 1937 من قبل السيد محمد عبدالرحمن البahar كشركة تجارية عامة.',
+      items: [
+        {
+          text: "Over the decades, we've grown to become a leading force in regional markets across a variety of industries. Our diverse portfolio spans everything from consumer goods, home appliances, cutting-edge electronics, shipping, office technology, IT solutions, and beyond."
+        },
+        {
+          text: "Partnering with global titans like Unilever, Canon, and GE appliances, we bring Kuwait's shoppers the latest in innovation and best practices. Our ethos thrives on collaboration, fostering enduring relationships that benefit both brands and customers alike."
+        },
+        {
+          text: "More than just commerce, we're committed to community. Through our foundations and corporate social initiatives, we're dedicated to giving back, enriching the lives of those we serve. Join us as we continue our proud tradition of excellence and impact in Kuwait and the region."
+        }
+      ]
     }
   },
   {

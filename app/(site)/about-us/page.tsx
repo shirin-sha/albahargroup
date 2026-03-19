@@ -69,6 +69,7 @@ const About = async () => {
         container: "container",
         subheading: cmsData.testimonials.subheading || TestimonialData.subheading,
         heading: cmsData.testimonials.heading || TestimonialData.heading,
+        items: cmsData.testimonials.items,
     } : TestimonialData;
 
     const stickyBannerData = cmsData.stickyBanner ? {

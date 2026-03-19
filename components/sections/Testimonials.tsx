@@ -11,7 +11,7 @@ import TestimonialList from "@/data/abouttestimonial.json";
 
 
 const Testimonials = ({ data }: { data: SectionProps }) => {
-    const testimonialList = TestimonialList;
+    const testimonialList = data?.items?.length ? data.items : TestimonialList;
     if(testimonialList.length == 0) return null;
 
     const {
@@ -48,7 +48,7 @@ const Testimonials = ({ data }: { data: SectionProps }) => {
                         <div className="testimonial-card-inner">
                             {testimonialList.map((item, index) => (
                                  <React.Fragment key={`card-tstimonial-${index}`}>
-                                    <CardTextOnly text={item.text} />
+                                    <CardTextOnly text={item.text || ''} />
                                 </React.Fragment>
                             ))}
                         </div>
