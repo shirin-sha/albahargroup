@@ -1,5 +1,4 @@
 "use client";
-import { TimelineData } from "@/data/sections/timelineData";
 import React, { useRef, useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -33,10 +32,9 @@ export default function Timeline({ data }: TimelineProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  
-  // Use CMS data if provided, otherwise fall back to static data
-  const timelineData = data || TimelineData;
-  const { subheading, heading, timelineItems } = timelineData;
+
+  const { subheading, heading, timelineItems } = data || {};
+  if (!timelineItems || timelineItems.length === 0) return null;
 
   const handleSlideChange = (swiper: SwiperType) => {
     setIsBeginning(swiper.isBeginning);

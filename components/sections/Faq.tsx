@@ -1,6 +1,5 @@
 import { SectionProps } from "@/types/sectionProps";
 import BackgroundImage from "@/public/img/faq/question.png";
-import { FaqAccordion } from "@/data/faqAccordion";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
 import Text from "../Text";
@@ -20,13 +19,14 @@ const Faq = ({ data }: { data: SectionProps }) => {
         items,
     } = data || {};
 
-    // Use CMS items if available, otherwise fall back to static data
     const accordionData = (items && Array.isArray(items) && items.length > 0) 
         ? items.map((item: any) => ({
             title: item.title || '',
             text: item.text || ''
         })).filter((item: any) => item.title && item.text) // Filter out empty items
-        : FaqAccordion.slice(0, 5);
+        : [];
+
+    if (accordionData.length === 0) return null;
 
     return (
         <div className={`faq ${wrapperCls}`}>

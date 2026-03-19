@@ -7,11 +7,10 @@ import { SectionProps } from "@/types/sectionProps";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
 import CardTextOnly from "../CardTextOnly";
-import TestimonialList from "@/data/abouttestimonial.json";
 
 
 const Testimonials = ({ data }: { data: SectionProps }) => {
-    const testimonialList = data?.items?.length ? data.items : TestimonialList;
+    const testimonialList = data?.items || [];
     if(testimonialList.length == 0) return null;
 
     const {

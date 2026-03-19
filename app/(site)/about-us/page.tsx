@@ -1,11 +1,5 @@
 import type { Metadata } from 'next';
 import BreadcrumbBannerImage from '@/public/img/banner/about-page-banner.jpg';
-import { TeamSliderData } from '@/data/sections/teamSliderData';
-import { TestimonialData } from '@/data/sections/testimonialData';
-import { Faq2Data } from '@/data/sections/faq2Data';
-import { StickyBannerData } from "@/data/sections/stickyBannerData";
-import { HeritageData } from '@/data/sections/heritageData';
-import { CollaborationData } from '@/data/sections/collaborationData';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
 
@@ -62,43 +56,6 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
 
 const About = async () => {
     const cmsData = await getAboutCMSData('en');
-    
-    // Merge CMS data with static data as fallback
-    const testimonialsData = cmsData.testimonials ? {
-        wrapperCls: "testimonial section-padding",
-        container: "container",
-        subheading: cmsData.testimonials.subheading || TestimonialData.subheading,
-        heading: cmsData.testimonials.heading || TestimonialData.heading,
-        items: cmsData.testimonials.items,
-    } : TestimonialData;
-
-    const stickyBannerData = cmsData.stickyBanner ? {
-        wrapperCls: "mt-100",
-        container: "container",
-        heading: cmsData.stickyBanner.heading || StickyBannerData.heading,
-        text: cmsData.stickyBanner.text || StickyBannerData.text,
-        blockList: cmsData.stickyBanner.blockList || StickyBannerData.blockList,
-    } : StickyBannerData;
-
-    const heritageData = cmsData.heritage ? {
-        wrapperCls: "mt-100",
-        container: "container",
-        subheading: cmsData.heritage.subheading || HeritageData.subheading,
-        heading: cmsData.heritage.heading || HeritageData.heading,
-        text: cmsData.heritage.text || HeritageData.text,
-        block: cmsData.heritage.block || HeritageData.block,
-        image: cmsData.heritage.image || HeritageData.image,
-    } : HeritageData;
-
-    const collaborationData = cmsData.collaboration ? {
-        wrapperCls: "mt-100 section-padding",
-        container: "container",
-        subheading: cmsData.collaboration.subheading || CollaborationData.subheading,
-        heading: cmsData.collaboration.heading || CollaborationData.heading,
-        text: cmsData.collaboration.text || CollaborationData.text,
-        block: cmsData.collaboration.block || CollaborationData.block,
-        textList: cmsData.collaboration.textList || CollaborationData.textList,
-    } : CollaborationData;
 
     return (
         <>
@@ -118,14 +75,50 @@ const About = async () => {
             />
 
             {/* Testimonials */}
-            <Testimonials data={testimonialsData} />
-            <StickyBanner data={stickyBannerData} />
+            {cmsData.testimonials && (
+                <Testimonials data={{
+                    wrapperCls: "testimonial section-padding",
+                    container: "container",
+                    subheading: cmsData.testimonials.subheading,
+                    heading: cmsData.testimonials.heading,
+                    items: cmsData.testimonials.items,
+                }} />
+            )}
+            {cmsData.stickyBanner && (
+                <StickyBanner data={{
+                    wrapperCls: "mt-100",
+                    container: "container",
+                    heading: cmsData.stickyBanner.heading,
+                    text: cmsData.stickyBanner.text,
+                    blockList: cmsData.stickyBanner.blockList,
+                }} />
+            )}
 
             {/* Heritage Section */}
-            <Heritage data={heritageData} />
+            {cmsData.heritage && (
+                <Heritage data={{
+                    wrapperCls: "mt-100",
+                    container: "container",
+                    subheading: cmsData.heritage.subheading,
+                    heading: cmsData.heritage.heading,
+                    text: cmsData.heritage.text,
+                    block: cmsData.heritage.block,
+                    image: cmsData.heritage.image,
+                }} />
+            )}
 
             {/* Collaboration Section */}
-            <Collaboration data={collaborationData} />
+            {cmsData.collaboration && (
+                <Collaboration data={{
+                    wrapperCls: "mt-100 section-padding",
+                    container: "container",
+                    subheading: cmsData.collaboration.subheading,
+                    heading: cmsData.collaboration.heading,
+                    text: cmsData.collaboration.text,
+                    block: cmsData.collaboration.block,
+                    textList: cmsData.collaboration.textList,
+                }} />
+            )}
 
             {/* Timeline Section */}
             <Timeline data={cmsData.timeline ? {
@@ -137,26 +130,30 @@ const About = async () => {
             } : undefined} />
 
             {/* Our Team */}
-            <TeamSlider
-                data={cmsData.team ? {
+            {cmsData.team && (
+                <TeamSlider
+                data={{
                     wrapperCls: " section-padding",
                     container: "container",
                     subheading: cmsData.team.subheading,
                     heading: cmsData.team.heading,
-                } : TeamSliderData}
+                }}
                 pagination={true}
-            />
+                />
+            )}
 
             {/* FAQ */}
-            <Faq data={cmsData.faq ? {
-                wrapperCls: "section-padding",
-                container: "container",
-                subheading: cmsData.faq.subheading || Faq2Data.subheading,
-                heading: cmsData.faq.heading || Faq2Data.heading,
-                text: cmsData.faq.text || Faq2Data.text,
-                button: cmsData.faq.button || Faq2Data.button,
-                items: cmsData.faq.items || Faq2Data.items,
-            } : Faq2Data} />
+            {cmsData.faq && (
+                <Faq data={{
+                    wrapperCls: "section-padding",
+                    container: "container",
+                    subheading: cmsData.faq.subheading,
+                    heading: cmsData.faq.heading,
+                    text: cmsData.faq.text,
+                    button: cmsData.faq.button,
+                    items: cmsData.faq.items,
+                }} />
+            )}
         </>
     )
 }
