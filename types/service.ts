@@ -4,6 +4,7 @@ export interface ServiceListProps {
 
 export interface ServiceProps {
     id: number;
+    section?: 'businesses' | 'capabilities';
     slug?: string;
     image?: string;
     icon?: string;

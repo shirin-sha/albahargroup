@@ -128,10 +128,17 @@ export default function AdminDashboardLayout({
           </Link>
 
           <Link
-            href="/admin/dashboard/services"
-            className={`admin-sidebar-link ${isActive('/admin/dashboard/services') ? 'active' : ''}`}
+            href="/admin/dashboard/services/businesses"
+            className={`admin-sidebar-link ${isActive('/admin/dashboard/services/businesses') ? 'active' : ''}`}
           >
-            Services
+            Services - Businesses
+          </Link>
+
+          <Link
+            href="/admin/dashboard/services/capabilities"
+            className={`admin-sidebar-link ${isActive('/admin/dashboard/services/capabilities') ? 'active' : ''}`}
+          >
+            Services - Capabilities
           </Link>
           
           <Link

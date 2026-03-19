@@ -23,6 +23,7 @@ const ServiceDetails = ({
         image,
         content,
         slug,
+        section,
     } = data || {};
 
     return (
@@ -37,7 +38,7 @@ const ServiceDetails = ({
                 </DrawerOpener>
                 <div className="grid grid-cols-12 lg:gap-1">
                     <div className="col-span-12 lg:col-span-5">
-                        <ServiceSidebar slug={slug} />
+                        <ServiceSidebar slug={slug} section={section} />
                     </div>
                     <div className="col-span-12 lg:col-span-7">
                         <div className="service-details-content">

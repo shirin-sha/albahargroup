@@ -3,6 +3,20 @@ import { getDb } from '@/libs/mongodb';
 import { Service } from '@/libs/models/service';
 import { ObjectId } from 'mongodb';
 
+const CAPABILITY_SLUGS = new Set([
+  'human-capital',
+  'knowledge-insights',
+  'business-excellence',
+  'logistics',
+  'customer-care',
+]);
+
+const normalizeSection = (section?: string): Service['section'] =>
+  section === 'capabilities' ? 'capabilities' : 'businesses';
+
+const inferSectionFromSlug = (slug?: string): Service['section'] =>
+  slug && CAPABILITY_SLUGS.has(slug) ? 'capabilities' : 'businesses';
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
@@ -58,6 +72,9 @@ export async function PUT(
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
     }
+    body.section = body.section
+      ? normalizeSection(body.section)
+      : inferSectionFromSlug(body.slug);
 
     body.updated_at = new Date().toISOString();
 

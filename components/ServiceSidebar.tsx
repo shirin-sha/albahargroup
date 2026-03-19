@@ -8,12 +8,26 @@ import SidebarPhone from "./SidebarPhone";
 import SidebarPdfDownload from "./SidebarPdfDownload";
 import DrawerOpener from "./DrawerOpener";
 
+const CAPABILITY_SLUGS = new Set([
+    'human-capital',
+    'knowledge-insights',
+    'business-excellence',
+    'logistics',
+    'customer-care',
+]);
 
-const ServiceSidebar = async ({ slug }: {slug?: string;}) => {
+const resolveSection = (section?: string, slug?: string): 'businesses' | 'capabilities' => {
+    if (section === 'capabilities') return 'capabilities';
+    if (section === 'businesses') return 'businesses';
+    return slug && CAPABILITY_SLUGS.has(slug) ? 'capabilities' : 'businesses';
+};
+
+const ServiceSidebar = async ({ slug, section }: { slug?: string; section?: 'businesses' | 'capabilities'; }) => {
     const db = await getDb();
     const collection = db.collection<Service>("services");
+    const currentSection = resolveSection(section, slug);
     const services = await collection
-        .find({ enabled: { $ne: false } } as any)
+        .find({ enabled: { $ne: false }, section: currentSection } as any)
         .sort({ created_at: -1 })
         .toArray();
 

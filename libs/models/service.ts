@@ -1,6 +1,7 @@
 export interface Service {
   _id?: string;
   id?: number;
+  section?: 'businesses' | 'capabilities';
   slug: string;
   title: string;
   detailTitle?: string;
