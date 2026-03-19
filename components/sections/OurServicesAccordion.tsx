@@ -16,7 +16,7 @@ const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
     useEffect(() => {
         const load = async () => {
             try {
-                const res = await fetch('/api/services?enabled=true');
+                const res = await fetch('/api/services?enabled=true&section=capabilities');
                 const result = await res.json();
                 if (result?.success) {
                     setServiceList(result.data || []);

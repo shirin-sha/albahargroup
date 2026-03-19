@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Service } from '@/libs/models/service';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import ImageUpload from '@/components/admin/ImageUpload';
@@ -21,13 +21,32 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
     title: '',
     slug: '',
     detailTitle: '',
+    icon: '',
+    description: '',
     image: '',
     content: '',
     enabled: true,
   });
 
+  const svgInputRef = useRef<HTMLInputElement>(null);
+
   const sectionTitle = section === 'businesses' ? 'Businesses' : 'Capabilities';
   const singular = section === 'businesses' ? 'Business' : 'Capability';
+
+  const handleSvgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'image/svg+xml' && !file.name.endsWith('.svg')) {
+      alert('Please select an SVG file');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData((prev) => ({ ...prev, icon: reader.result as string }));
+    };
+    reader.readAsText(file);
+    if (svgInputRef.current) svgInputRef.current.value = '';
+  };
 
   useEffect(() => {
     fetchServices();
@@ -87,6 +106,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
       title: service.title || '',
       slug: service.slug || '',
       detailTitle: service.detailTitle || '',
+      icon: service.icon || '',
+      description: service.description || '',
       image: service.image || '',
       content: service.content || '',
       enabled: service.enabled !== undefined ? service.enabled : true,
@@ -120,6 +141,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
       title: '',
       slug: '',
       detailTitle: '',
+      icon: '',
+      description: '',
       image: '',
       content: '',
       enabled: true,
@@ -185,6 +208,63 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
                 value={formData.detailTitle || ''}
                 onChange={(e) => setFormData({ ...formData, detailTitle: e.target.value })}
                 placeholder="Displayed on details page"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Icon (SVG)</label>
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '8px' }}>
+                <button
+                  type="button"
+                  className="button"
+                  style={{ whiteSpace: 'nowrap' }}
+                  onClick={() => svgInputRef.current?.click()}
+                >
+                  Upload SVG File
+                </button>
+                {formData.icon && (
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn-delete"
+                    style={{ whiteSpace: 'nowrap' }}
+                    onClick={() => setFormData((prev) => ({ ...prev, icon: '' }))}
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <input
+                ref={svgInputRef}
+                type="file"
+                accept=".svg,image/svg+xml"
+                onChange={handleSvgUpload}
+                style={{ display: 'none' }}
+              />
+              <textarea
+                value={formData.icon || ''}
+                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                placeholder='Or paste SVG code directly, e.g. <svg xmlns="http://www.w3.org/2000/svg" ...>...</svg>'
+                rows={4}
+                style={{ fontFamily: 'monospace', fontSize: '13px' }}
+              />
+              {formData.icon && (
+                <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: '#6b7280' }}>Preview:</span>
+                  <span
+                    style={{ display: 'inline-flex', width: '40px', height: '40px', color: '#374151' }}
+                    dangerouslySetInnerHTML={{ __html: formData.icon }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                value={formData.description || ''}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Short description shown in the services accordion and cards"
+                rows={4}
               />
             </div>
 

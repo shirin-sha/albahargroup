@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ServiceProps } from "@/types/service";
 import parser from "html-react-parser";
 import Link from "next/link";
@@ -9,35 +9,9 @@ import Icons from "./Icons";
 
 const AccordionHorizontal = ({ items }: { items: ServiceProps[] }) => {
   const buttonsRef = useRef<HTMLDivElement[]>([]);
-
-  // Handle horizontal accordion
-  const toggleWidth = useCallback((index: number) => {
-    buttonsRef.current.forEach((btn, i) => {
-      const li = btn.closest('.accordion-li') as HTMLElement;
-      if (!li) return;
-      li.classList.toggle('active', i === index);
-    });
-  }, []);
-
-  // Handle vertical accordion
-  const toggleHeight = useCallback((index: number) => {
-    buttonsRef.current.forEach((btn, i) => {
-      const li = btn.closest('.accordion-li') as HTMLElement;
-      const content = btn.nextElementSibling as HTMLElement | null;
-      if (!li || !content) return;
-      if (i === index) {
-        li.classList.add('active');
-        content.style.maxHeight = `${content.scrollHeight}px`;
-      } else {
-        li.classList.remove('active');
-        content.style.maxHeight = '0';
-      }
-    });
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 992px)');
-
     buttonsRef.current.forEach((btn) => {
       const li = btn.closest('.accordion-li') as HTMLElement;
       if (li) {
@@ -45,42 +19,43 @@ const AccordionHorizontal = ({ items }: { items: ServiceProps[] }) => {
       }
     });
 
-    const firstClick = () => {
-      if (mediaQuery.matches) toggleWidth(0);
-      else toggleHeight(0);
-    };
+    if (items.length > 0) {
+      setActiveIndex(0);
+    }
+  }, [items]);
 
-    firstClick();
+  useEffect(() => {
+    const syncAccordion = () => {
+      const isDesktop = window.matchMedia('(min-width: 992px)').matches;
 
-    // clean up inline maxHeights when resizing
-    const handleResize = () => {
-      buttonsRef.current.forEach((btn) => {
+      buttonsRef.current.forEach((btn, index) => {
         const content = btn.nextElementSibling as HTMLElement | null;
-        if (content) content.style.maxHeight = '';
+        if (!content) return;
+
+        if (isDesktop) {
+          content.style.maxHeight = '';
+        } else {
+          content.style.maxHeight = index === activeIndex ? `${content.scrollHeight}px` : '0';
+        }
       });
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [toggleWidth, toggleHeight]);
-
-  const handleClick = (index: number) => {
-    const isDesktop = window.matchMedia('(min-width: 992px)').matches;
-    if (isDesktop) toggleWidth(index);
-    else toggleHeight(index);
-  };
+    syncAccordion();
+    window.addEventListener('resize', syncAccordion);
+    return () => window.removeEventListener('resize', syncAccordion);
+  }, [activeIndex, items]);
 
   return (
     <div className="accordion-horizontal">
       <ul className="service-list list-unstyled radius18">
         {items.slice(0, 7).map((item, index) => (
-          <li className="accordion-li" key={index}>
+          <li className={`accordion-li ${activeIndex === index ? 'active' : ''}`} key={index}>
             <div
               className="accordion-title"
               ref={(el) => {
                 if (el) buttonsRef.current[index] = el;
               }}
-              onClick={() => handleClick(index)}
+              onClick={() => setActiveIndex(index)}
             >
                 <div className="accordion-title-icon">
                     {item.icon && <span className="icon-main">{parser(item.icon)}</span>}

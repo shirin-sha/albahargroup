@@ -17,10 +17,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
     if (!validTypes.includes(file.type)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid file type. Only images are allowed.' },
+        { success: false, error: 'Invalid file type. Only images (JPG, PNG, GIF, WebP, SVG) are allowed.' },
         { status: 400 }
       );
     }
