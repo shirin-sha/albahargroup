@@ -56,9 +56,9 @@ const ServiceSidebar = async ({ slug, section }: { slug?: string; section?: 'bus
                 }
 
                 <SidebarPhone 
-                    heading="Contact with us <br/> for any advice"
-                    text="Need help? Talk to an expert"
-                    phone="+12345.6789.333"
+                    heading="Contact us for any enquiry"
+                    text="Need assistance? Speak with our team"
+                    phone="+965 XXX XXXX"
                     image={{
                         src: SidebarPhoneImage.src,                      
                         width: 1000,
@@ -69,8 +69,8 @@ const ServiceSidebar = async ({ slug, section }: { slug?: string; section?: 'bus
                 />
                 
                 <SidebarPdfDownload 
-                    heading="Download Our Brochures"
-                    text="Business is a marketing discipline focused on growing visibility organ (non-paid) technic required."
+                    heading="Download Our Profile"
+                    text="Explore Mohamed Abdulrahman Al-Bahar Group’s businesses, capabilities, partnerships and corporate information through our company profile brochure."
                 />
             </aside>
         </div>

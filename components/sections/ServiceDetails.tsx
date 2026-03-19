@@ -62,10 +62,10 @@ const ServiceDetails = ({
 
                             {content && <>{parse(content)}</>}
 
-                            <Accordion 
+                            {/* <Accordion 
                                 cls="service-faq"
                                 data={ServiceAccordionData}
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>
