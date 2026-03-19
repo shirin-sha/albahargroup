@@ -66,7 +66,21 @@ const Home = async () => {
 
       {/* Image Text */}
       {cmsData.imageText ? (() => {
-        const data = getBilingualData(cmsData.imageText, { wrapperCls: "mt-100", container: "container" });
+        const data = getBilingualData(cmsData.imageText, {
+          wrapperCls: "mt-100",
+          container: "container",
+        });
+
+        if (data && Array.isArray(data.imageList)) {
+          data.imageList = data.imageList.map((img: any, index: number) => ({
+            width: index === 0 ? 992 : 195,
+            height: index === 0 ? 863 : 202,
+            alt: "Image",
+            loading: "lazy",
+            ...img,
+          }));
+        }
+
         return data ? <ImageText2 data={data} /> : null;
       })() : null}
 

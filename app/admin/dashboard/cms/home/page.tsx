@@ -98,7 +98,7 @@ const getPreviewImage = (section: SectionData | undefined, sectionId: string): s
   if (!en) return null;
   switch (sectionId) {
     case 'hero':         return en.slides?.[0]?.image || null;
-    case 'imageText':    return en.image?.src || null;
+    case 'imageText':    return en.imageList?.[0]?.src || null;
     case 'whyChooseUs':  return en.image?.src || null;
     case 'testimonials': return en.items?.[0]?.image || null;
     default:             return null;
@@ -551,6 +551,36 @@ const SectionEditor = ({
                 }}
               />
             </div>
+            <ImageUpload
+              value={formDataEn.imageList?.[0]?.src || formDataAr.imageList?.[0]?.src || ''}
+              onChange={(url) => {
+                const mainDefaults = { width: 992, height: 863, alt: 'Image', loading: 'lazy' };
+                const enImageList = Array.isArray(formDataEn.imageList) ? [...formDataEn.imageList] : [];
+                const arImageList = Array.isArray(formDataAr.imageList) ? [...formDataAr.imageList] : [];
+                enImageList[0] = { ...mainDefaults, ...(enImageList[0] || {}), src: url };
+                arImageList[0] = { ...mainDefaults, ...(arImageList[0] || {}), src: url };
+                setFormDataEn({ ...formDataEn, imageList: enImageList });
+                setFormDataAr({ ...formDataAr, imageList: arImageList });
+              }}
+              placeholder="/img/image-text/img4_new.png"
+              folder="image-text"
+              label="Main Image (shared)"
+            />
+            <ImageUpload
+              value={formDataEn.imageList?.[1]?.src || formDataAr.imageList?.[1]?.src || ''}
+              onChange={(url) => {
+                const smallDefaults = { width: 195, height: 202, alt: 'Image', loading: 'lazy' };
+                const enImageList = Array.isArray(formDataEn.imageList) ? [...formDataEn.imageList] : [];
+                const arImageList = Array.isArray(formDataAr.imageList) ? [...formDataAr.imageList] : [];
+                enImageList[1] = { ...smallDefaults, ...(enImageList[1] || {}), src: url };
+                arImageList[1] = { ...smallDefaults, ...(arImageList[1] || {}), src: url };
+                setFormDataEn({ ...formDataEn, imageList: enImageList });
+                setFormDataAr({ ...formDataAr, imageList: arImageList });
+              }}
+              placeholder="/img/image-text/img-small.svg"
+              folder="image-text"
+              label="Small Image (shared)"
+            />
             <div className="form-group">
               <label>Items</label>
               <div className="hero-slides-container">
