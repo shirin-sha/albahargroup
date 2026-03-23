@@ -54,13 +54,15 @@ export async function POST(request: NextRequest) {
     const filepath = join(uploadDir, filename);
     await writeFile(filepath, buffer);
 
-    // Return the public URL path
+    // Return a served URL path that works across environments
     const publicPath = `/img/${folder}/${filename}`;
+    const servedPath = `/api/upload/file/${folder}/${filename}`;
 
     return NextResponse.json({
       success: true,
-      path: publicPath,
-      filename: filename
+      path: servedPath,
+      publicPath,
+      filename
     });
   } catch (error: any) {
     console.error('Upload error:', error);
