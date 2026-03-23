@@ -11,12 +11,12 @@ const FooterBrand = () => {
         >
             <Logo 
                 src={LogoImage.src}
-                width={290}
-                height={50}
+                width={200}
+                height={35}
                 url="/"
                 cls="footer-logo"
-                alt="Consulo logo"
-                ariaLabel="Consulo logo" 
+                alt="albahar logo"
+                ariaLabel="albahar logo" 
                 loading="lazy"
             />
             <p className="text text-16">

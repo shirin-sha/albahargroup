@@ -1,11 +1,9 @@
 import { SectionProps } from "@/types/sectionProps";
-import BackgroundImage from "@/public/img/faq/question.png";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
 import Text from "../Text";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import Image from "next/image";
 import Accordion from "../Accordion";
 
 const Faq = ({ data }: { data: SectionProps }) => {
@@ -32,8 +30,8 @@ const Faq = ({ data }: { data: SectionProps }) => {
         <div className={`faq ${wrapperCls}`}>
             <div className={container}>
                 <div className="grid grid-cols-2 lg:gap-1 faq-row">
-                    <div className="lg:col-span-1 col-span-2">
-                        <div className="section-headings">
+                    <div className="lg:col-span-1 col-span-2 faq-left-column">
+                        <div className="section-headings faq-sticky-panel">
                             {subheading && 
                                 <Subheading 
                                     title={subheading}
@@ -92,7 +90,7 @@ const Faq = ({ data }: { data: SectionProps }) => {
                         </div>
                     </div>
 
-                    <div className="lg:col-span-1 col-span-2">
+                    <div className="lg:col-span-1 col-span-2 faq-right-column">
                         <Accordion data={accordionData} />
                     </div>
                 </div>

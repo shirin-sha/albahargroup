@@ -19,6 +19,21 @@
   align-self: flex-start;
 }
 
+@media (min-width: 992px) {
+  .faq .faq-left-column {
+    align-self: flex-start;
+  }
+
+  .faq .faq-sticky-panel {
+    position: sticky;
+    top: 110px;
+  }
+
+  .faq .faq-right-column {
+    align-self: flex-start;
+  }
+}
+
 .faq-form .button .svg-wrapper.icon-20 svg {
     min-width: 20px;
     height: 20px;
@@ -59,6 +74,11 @@
 }
 
 @media (max-width: 991px) {
+  .faq .faq-sticky-panel {
+    position: static;
+    top: auto;
+  }
+
   .faq .accordion-list {
     margin-block-start: 40px;
   }

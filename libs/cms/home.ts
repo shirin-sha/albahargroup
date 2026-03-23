@@ -30,7 +30,8 @@ export async function getHomeCMSData() {
       blog: blogSection ? { en: blogSection.en || null, ar: blogSection.ar || null } : null,
     };
   } catch (error) {
-    console.error('Error fetching home CMS data:', error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn('Home CMS unavailable, using empty CMS data:', message);
     return {
       hero: null,
       imageText: null,
