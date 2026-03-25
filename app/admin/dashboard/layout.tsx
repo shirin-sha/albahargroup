@@ -45,13 +45,15 @@ export default function AdminDashboardLayout({
             href="/admin/dashboard/enquiries"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/enquiries') ? 'active' : ''}`}
           >
-            Enquiries
+            <Icons.Contact />
+            <span>Enquiries</span>
           </Link>
           <Link
             href="/admin/dashboard"
             className={`admin-sidebar-link ${isActive('/admin/dashboard') ? 'active' : ''}`}
           >
-            Dashboard
+            <Icons.Admin />
+            <span>Dashboard</span>
           </Link>
           
           <div className={`admin-sidebar-group ${isCmsActive() ? 'active' : ''}`}>
@@ -60,7 +62,10 @@ export default function AdminDashboardLayout({
               className={`admin-sidebar-group-toggle ${cmsOpen ? 'open' : ''}`}
               onClick={() => setCmsOpen(!cmsOpen)}
             >
-              <span>CMS</span>
+              <span className="admin-sidebar-link-label">
+                <Icons.Refine />
+                <span>CMS</span>
+              </span>
               <span className="admin-sidebar-arrow">
                 {cmsOpen ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
               </span>
@@ -71,37 +76,43 @@ export default function AdminDashboardLayout({
                   href="/admin/dashboard/cms/home"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/home') ? 'active' : ''}`}
                 >
-                  Home
+                  <Icons.Discover />
+                  <span>Home</span>
                 </Link>
                 <Link
                   href="/admin/dashboard/cms/about"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/about') ? 'active' : ''}`}
                 >
-                  About
+                  <Icons.Purpose />
+                  <span>About</span>
                 </Link>
                 <Link
                   href="/admin/dashboard/cms/news"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/news') ? 'active' : ''}`}
                 >
-                  News
+                  <Icons.Calendar />
+                  <span>News</span>
                 </Link>
                 <Link
                   href="/admin/dashboard/cms/careers"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/careers') ? 'active' : ''}`}
                 >
-                  Careers
+                  <Icons.Launch />
+                  <span>Careers</span>
                 </Link>
                 <Link
                   href="/admin/dashboard/cms/partnerships"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/partnerships') ? 'active' : ''}`}
                 >
-                  Partnerships
+                  <Icons.Handshake />
+                  <span>Partnerships</span>
                 </Link>
                 <Link
                   href="/admin/dashboard/cms/contact"
                   className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/cms/contact') ? 'active' : ''}`}
                 >
-                  Contact Us
+                  <Icons.Phone />
+                  <span>Contact Us</span>
                 </Link>
                 {/* <Link
                   href="/admin/dashboard/cms/header"
@@ -117,42 +128,48 @@ export default function AdminDashboardLayout({
             href="/admin/dashboard/posts"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/posts') ? 'active' : ''}`}
           >
-            Posts
+            <Icons.Comment />
+            <span>Posts</span>
           </Link>
           
           <Link
             href="/admin/dashboard/projects"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/projects') ? 'active' : ''}`}
           >
-            Projects
+            <Icons.Design />
+            <span>Projects</span>
           </Link>
 
           <Link
             href="/admin/dashboard/services/businesses"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/services/businesses') ? 'active' : ''}`}
           >
-            Services - Businesses
+            <Icons.Storefront />
+            <span>Services - Businesses</span>
           </Link>
 
           <Link
             href="/admin/dashboard/services/capabilities"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/services/capabilities') ? 'active' : ''}`}
           >
-            Services - Capabilities
+            <Icons.Plan />
+            <span>Services - Capabilities</span>
           </Link>
           
           <Link
             href="/admin/dashboard/teams"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/teams') ? 'active' : ''}`}
           >
-            Teams
+            <Icons.Handshake />
+            <span>Teams</span>
           </Link>
 
           <Link
             href="/admin/dashboard/jobs"
             className={`admin-sidebar-link ${isActive('/admin/dashboard/jobs') ? 'active' : ''}`}
           >
-            Job Listings
+            <Icons.Launch />
+            <span>Job Listings</span>
           </Link>
   
           

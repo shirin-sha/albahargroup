@@ -994,8 +994,9 @@ h6,
 }
 
 .admin-sidebar {
-  width: 230px;
-  min-width: 230px;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
   background: #ffffff;
   color: #0f172a;
   padding: 20px 18px;
@@ -1009,6 +1010,12 @@ h6,
   flex-shrink: 0;
   border-right: 1px solid rgba(226, 232, 240, 1);
   box-shadow: 0 0 30px rgba(15, 23, 42, 0.04);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-sidebar-brand {
@@ -1028,11 +1035,14 @@ h6,
 }
 
 .admin-sidebar-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 9px 10px;
   border-radius: 10px;
-  font-size: 14px;
-  color: #4b5563;
+  font-size: 16px;
+  font-weight: 400;
+  color: #0f172a;
   text-decoration: none;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
@@ -1042,7 +1052,7 @@ h6,
 }
 
 .admin-sidebar-link.active {
-  color: #1c2539;
+  font-weight: 600;
 }
 
 .admin-sidebar-group {
@@ -1062,13 +1072,28 @@ h6,
   width: 100%;
   padding: 9px 10px;
   border-radius: 10px;
-  font-size: 14px;
-  color: #4b5563;
+  font-size: 16px;
+  color: #0f172a;
+  font-weight: 400;
   background: transparent;
   border: none;
   cursor: pointer;
   text-align: left;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-sidebar-link-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-sidebar-link svg,
+.admin-sidebar-link-label svg {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  color: #111827;
 }
 
 .admin-sidebar-group-toggle:hover {
@@ -1105,7 +1130,7 @@ h6,
 
 .admin-sidebar-sublink {
   padding: 7px 10px;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .admin-main {
