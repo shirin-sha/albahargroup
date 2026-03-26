@@ -207,10 +207,16 @@ interface MenuEditorProps {
 
 const MenuEditor = ({ menu, onSave, onCancel }: MenuEditorProps) => {
   const [formData, setFormData] = useState<Menu>({ ...menu });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    setIsSaving(true);
+    try {
+      await Promise.resolve(onSave(formData));
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -280,8 +286,8 @@ const MenuEditor = ({ menu, onSave, onCancel }: MenuEditorProps) => {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="button button-primary">
-              Save
+            <button type="submit" className="button button-primary" disabled={isSaving}>
+              {isSaving ? 'Saving...' : 'Save'}
             </button>
             <button type="button" onClick={onCancel} className="button">
               Cancel

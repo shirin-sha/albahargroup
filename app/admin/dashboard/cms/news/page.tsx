@@ -209,6 +209,7 @@ const SectionEditor = ({
 }: SectionEditorProps) => {
   const [formDataEn, setFormDataEn] = useState<any>({});
   const [formDataAr, setFormDataAr] = useState<any>({});
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -222,15 +223,20 @@ const SectionEditor = ({
     }
   }, [section?.sectionId, sectionId, isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     const updateData: Partial<SectionData> = {
       enabled: section?.enabled ?? true,
       order: section?.order ?? 0,
       en: formDataEn,
       ar: formDataAr,
     };
-    onSave(sectionId, updateData);
+    try {
+      await Promise.resolve(onSave(sectionId, updateData));
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const updateField = useCallback((lang: 'en' | 'ar', path: string, value: any) => {
@@ -307,8 +313,8 @@ const SectionEditor = ({
         <form onSubmit={handleSubmit} className="admin-cms-form">
           {renderFields()}
           <div className="form-actions">
-            <button type="submit" className="button button-primary">
-              Save (Both Languages)
+            <button type="submit" className="button button-primary" disabled={isSaving}>
+              {isSaving ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>

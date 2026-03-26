@@ -704,6 +704,34 @@ h6,
     var(--color-primary-button-hover-border);
 }
 
+/* Legacy / admin: markup uses .button-primary (single hyphen) */
+.button.button-primary {
+  color: var(--color-primary-button-text);
+  background-color: var(--color-primary-button-background);
+  border: var(--style-border-width-buttons-primary) solid
+    var(--color-primary-button-border);
+  border-radius: var(--style-border-radius-buttons-primary);
+}
+
+.button.button-primary:focus,
+.button.button-primary:hover {
+  outline: none;
+  box-shadow: none;
+  color: var(--color-primary-button-hover-text);
+  background-color: var(--color-primary-button-hover-background);
+  border: var(--style-border-width-buttons-primary) solid
+    var(--color-primary-button-hover-border);
+}
+
+/* Add trailing icon to Save action buttons in admin forms */
+.form-actions button[type="submit"].button.button-primary::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 16px;
+  line-height: 1;
+}
+
 .button--secondary {
   color: var(--color-secondary-button-text);
   background-color: var(--color-secondary-button-background);
@@ -1714,7 +1742,9 @@ h6,
 
 .form-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 12px;
   margin-top: 8px;
 }
 
