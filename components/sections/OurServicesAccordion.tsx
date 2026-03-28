@@ -8,10 +8,14 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import { SectionProps } from "@/types/sectionProps";
 import AccordionHorizontal from "../AccordionHorizontal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { resolveServiceFields } from "@/libs/serviceLocale";
+import type { Service } from "@/libs/models/service";
 
 const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
-    const [serviceList, setServiceList] = useState<any[]>([]);
+    const { language } = useLanguage();
+    const [serviceList, setServiceList] = useState<Service[]>([]);
 
     useEffect(() => {
         const load = async () => {
@@ -28,7 +32,12 @@ const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
         load();
     }, []);
 
-    if(serviceList.length == 0) return null;
+    const localizedList = useMemo(
+        () => serviceList.map((s) => resolveServiceFields(s, language)),
+        [serviceList, language]
+    );
+
+    if(localizedList.length == 0) return null;
 
     const {
         wrapperCls,
@@ -87,7 +96,7 @@ const OurServicesAccordion = ({ data }: { data: SectionProps }) => {
                 </div>
 
                 <div className="section-content" data-aos="fade-up">
-                    <AccordionHorizontal items={serviceList} />
+                    <AccordionHorizontal items={localizedList} />
                 </div>
             </div>
         </div>

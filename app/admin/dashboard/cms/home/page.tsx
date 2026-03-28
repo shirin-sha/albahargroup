@@ -228,14 +228,14 @@ const HomePageCMS = () => {
 
 const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
   hero:         { label: 'Hero Slider',      desc: 'Main banner slides with heading, text & CTA',    icon: '🖼️' },
-  imageText:    { label: 'Image + Text',     desc: 'Side-by-side media and content block',           icon: '📄' },
-  services:     { label: 'Services',         desc: 'Services section heading and link',              icon: '⚙️' },
-  whyChooseUs:  { label: 'Why Choose Us',   desc: 'Key reasons with image and items',               icon: '✅' },
-  pricing:      { label: 'Pricing Plans',    desc: 'Pricing cards with features list',               icon: '💳' },
-  testimonials: { label: 'Testimonials',     desc: 'Testimonial slider items with images',           icon: '💬' },
+  imageText:    { label: 'Our Heritage',     desc: 'Side-by-side media and content block',           icon: '📄' },
+  services:     { label: 'Capabilities',         desc: 'Services section heading and link',              icon: '⚙️' },
+  whyChooseUs:  { label: 'Why Al Bahar Group',   desc: 'Key reasons with image and items',               icon: '✅' },
+  pricing:      { label: 'How We Create Value',    desc: 'Pricing cards with features list',               icon: '💳' },
+  testimonials: { label: 'Serivces',     desc: 'Testimonial slider items with images',           icon: '💬' },
   faq:          { label: 'FAQ',              desc: 'Frequently asked questions accordion',           icon: '❓' },
   blog:         { label: 'Blog Section',     desc: 'Latest posts section heading and link',          icon: '📝' },
-  projects:     { label: 'Projects Section', desc: 'Featured projects section heading',              icon: '🗂️' },
+  projects:     { label: 'Image Archive', desc: 'Featured projects section heading',              icon: '🗂️' },
 };
 
 interface SectionEditorProps {
@@ -657,6 +657,14 @@ const SectionEditor = ({
                 }}
               />
             </div>
+            <div className="form-group">
+              <small>Service capability items are managed from Admin → Services → Capabilities.</small>
+            </div>
+            <div className="form-group">
+              <a href="/admin/dashboard/services/capabilities" className="button button-primary">
+                Open Service Capabilities
+              </a>
+            </div>
           </>
         );
       case 'whyChooseUs':
@@ -744,129 +752,15 @@ const SectionEditor = ({
           </>
         );
       case 'testimonials':
-        const testimonialItemsEn = formDataEn.items || [];
-        const testimonialItemsAr = formDataAr.items || [];
-        const maxTestimonialItems = Math.max(testimonialItemsEn.length, testimonialItemsAr.length);
         return (
           <>
             <div className="form-group">
-              <label>Testimonial Items</label>
-              <div className="hero-slides-container">
-                {Array.from({ length: maxTestimonialItems }).map((_, index) => {
-                  const itemEn = testimonialItemsEn[index] || { 
-                    image: '', subheading: '', heading: '', description: '', 
-                    button: { label: '', href: '' }, icon: '' 
-                  };
-                  const itemAr = testimonialItemsAr[index] || { 
-                    image: '', subheading: '', heading: '', description: '', 
-                    button: { label: '', href: '' }, icon: '' 
-                  };
-                  return (
-                    <div key={index} className="cms-item-card">
-                      <div className="cms-item-header">
-                        <h4>Item {index + 1}</h4>
-                        {maxTestimonialItems > 1 && (
-                          <button
-                            type="button"
-                            className="admin-btn admin-btn-delete"
-                            onClick={() => {
-                              const newItemsEn = testimonialItemsEn.filter((_: any, i: number) => i !== index);
-                              const newItemsAr = testimonialItemsAr.filter((_: any, i: number) => i !== index);
-                              setFormDataEn({ ...formDataEn, items: newItemsEn });
-                              setFormDataAr({ ...formDataAr, items: newItemsAr });
-                            }}
-                          >
-                            Remove
-                          </button>
-                        )}
-                      </div>
-                      <div className="hero-slide-fields">
-                        <ImageUpload
-                          value={itemEn.image || itemAr.image || ''}
-                          onChange={(url) => {
-                            const newItemsEn = [...testimonialItemsEn];
-                            const newItemsAr = [...testimonialItemsAr];
-                            if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
-                            if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
-                            newItemsEn[index].image = url;
-                            newItemsAr[index].image = url;
-                            setFormDataEn({ ...formDataEn, items: newItemsEn });
-                            setFormDataAr({ ...formDataAr, items: newItemsAr });
-                          }}
-                          placeholder="/img/project/techno.jpg"
-                          folder="project"
-                          label="Image (shared)"
-                        />
-                        {renderBilingualField("Subheading (Eye Heading)", `items.${index}.subheading`)}
-                        {renderBilingualField("Heading (Main Heading)", `items.${index}.heading`)}
-                        {renderBilingualField("Description", `items.${index}.description`, "textarea", 4)}
-                        {renderBilingualField("Button Label", `items.${index}.button.label`)}
-                        <div className="form-group">
-                          <label>Button Link (shared)</label>
-                          <input
-                            type="text"
-                            value={itemEn.button?.href || itemAr.button?.href || ''}
-                            onChange={(e) => {
-                              const newItemsEn = [...testimonialItemsEn];
-                              const newItemsAr = [...testimonialItemsAr];
-                              if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
-                              if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
-                              newItemsEn[index].button = { ...newItemsEn[index].button, href: e.target.value };
-                              newItemsAr[index].button = { ...newItemsAr[index].button, href: e.target.value };
-                              setFormDataEn({ ...formDataEn, items: newItemsEn });
-                              setFormDataAr({ ...formDataAr, items: newItemsAr });
-                            }}
-                            placeholder="/testimonials"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label>Icon Name (optional, shared)</label>
-                          <input
-                            type="text"
-                            value={itemEn.icon || itemAr.icon || ''}
-                            onChange={(e) => {
-                              const newItemsEn = [...testimonialItemsEn];
-                              const newItemsAr = [...testimonialItemsAr];
-                              if (!newItemsEn[index]) newItemsEn[index] = { ...itemEn };
-                              if (!newItemsAr[index]) newItemsAr[index] = { ...itemAr };
-                              newItemsEn[index].icon = e.target.value;
-                              newItemsAr[index].icon = e.target.value;
-                              setFormDataEn({ ...formDataEn, items: newItemsEn });
-                              setFormDataAr({ ...formDataAr, items: newItemsAr });
-                            }}
-                            placeholder="Consultingnew"
-                          />
-                          <small>Icon name from Icons component (optional)</small>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-                <button
-                  type="button"
-                  className="cms-item-add-btn"
-                  onClick={() => {
-                    const newItem = {
-                      image: '',
-                      subheading: '',
-                      heading: '',
-                      description: '',
-                      button: { label: '', href: '' },
-                      icon: ''
-                    };
-                    setFormDataEn({
-                      ...formDataEn,
-                      items: [...testimonialItemsEn, newItem]
-                    });
-                    setFormDataAr({
-                      ...formDataAr,
-                      items: [...testimonialItemsAr, newItem]
-                    });
-                  }}
-                >
-                  + Add More
-                </button>
-              </div>
+              <small>Items are managed from Admin → Services → Businesses.</small>
+            </div>
+            <div className="form-group">
+              <a href="/admin/dashboard/services/businesses" className="button button-primary">
+                Services - Business Verticals
+              </a>
             </div>
           </>
         );
@@ -1102,6 +996,14 @@ const SectionEditor = ({
                 }}
               />
             </div>
+            <div className="form-group">
+              <small>Blog items are managed from Admin → Posts.</small>
+            </div>
+            <div className="form-group">
+              <a href="/admin/dashboard/posts" className="button button-primary">
+                Add Post
+              </a>
+            </div>
           </>
         );
       case 'projects':
@@ -1110,7 +1012,12 @@ const SectionEditor = ({
             {renderBilingualField("Subheading", "subheading")}
             {renderBilingualField("Heading", "heading")}
             <div className="form-group">
-              <small>Note: Project items are managed separately in Admin → Projects</small>
+              <small>Items are managed from Admin → Image Archive.</small>
+            </div>
+            <div className="form-group">
+              <a href="/admin/dashboard/projects" className="button button-primary">
+                Open Image Archive
+              </a>
             </div>
           </>
         );
@@ -1132,17 +1039,20 @@ const SectionEditor = ({
         <div className="admin-edit-panel-title">
           <strong>Editing: {meta.label}</strong>
           <span>{meta.desc}</span>
+        
         </div>
         <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>✕ Close</button>
       </div>
       <form onSubmit={handleSubmit} className="admin-cms-form">
         {renderFields()}
-        <div className="form-actions">
-          <button type="submit" className="button button-primary" disabled={isSaving}>
-            {isSaving ? 'Saving...' : 'Save'}
-          </button>
-          <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>Cancel</button>
-        </div>
+        {sectionId !== 'testimonials' && (
+          <div className="form-actions">
+            <button type="submit" className="button button-primary" disabled={isSaving}>
+              {isSaving ? 'Saving...' : 'Save'}
+            </button>
+            <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>Cancel</button>
+          </div>
+        )}
       </form>
     </>
   );

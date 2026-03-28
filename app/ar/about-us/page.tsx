@@ -4,6 +4,7 @@ import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
+import { getAboutPageBannerTitle } from '@/libs/cms/aboutPage';
 import TeamSlider from '@/components/sections/TeamSlider';
 import Testimonials from '@/components/sections/Testimonials';
 import Faq from '@/components/sections/Faq';
@@ -12,9 +13,8 @@ import Heritage from '@/components/sections/Heritage';
 import Collaboration from '@/components/sections/Collaboration';
 import Timeline from '@/components/sections/Timeline';
 
-const PAGE_TITLE: string = 'من نحن';
 export const metadata: Metadata = {
-    title: PAGE_TITLE,
+    title: 'من نحن',
 }
 
 async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
@@ -23,6 +23,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
     const collection = db.collection<HomePageSection>("aboutPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const pageHeaderSection = sections.find(s => s.sectionId === 'pageHeader');
     const testimonialsSection = sections.find(s => s.sectionId === 'testimonials');
     const stickyBannerSection = sections.find(s => s.sectionId === 'stickyBanner');
     const heritageSection = sections.find(s => s.sectionId === 'heritage');
@@ -32,6 +33,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
     const faqSection = sections.find(s => s.sectionId === 'faq');
     
     return {
+      pageHeader: pageHeaderSection?.[lang] || null,
       testimonials: testimonialsSection?.[lang] || null,
       stickyBanner: stickyBannerSection?.[lang] || null,
       heritage: heritageSection?.[lang] || null,
@@ -43,6 +45,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
   } catch (error) {
     console.error('Error fetching about CMS data:', error);
     return {
+      pageHeader: null,
       testimonials: null,
       stickyBanner: null,
       heritage: null,
@@ -56,12 +59,12 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
 
 const About = async () => {
     const cmsData = await getAboutCMSData('ar');
+    const bannerTitle = getAboutPageBannerTitle(cmsData.pageHeader, 'ar');
 
     return (
         <>
-            {/* Breadcrumb Banner */}
             <BreadcrumbBanner
-                title={PAGE_TITLE}
+                title={bannerTitle}
                 image={{
                     src: BreadcrumbBannerImage.src,
                     srcMobile: BreadcrumbBannerImage.src,

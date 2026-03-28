@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Thumbs } from 'swiper/modules';
@@ -11,24 +11,80 @@ import 'swiper/css/thumbs';
 import "@/styles/testimonial.css";
 import { SectionProps } from "@/types/sectionProps";
 import { TestimonialProps } from "@/types/testimonialProps";
+import { Service } from '@/libs/models/service';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { addLanguagePrefix } from '@/libs/language';
+import { resolveServiceFields } from '@/libs/serviceLocale';
 import Subheading from "../Subheading";
 import Heading from "../Heading";
 import CardTestimonialContent from "../CardTestimonialContent";
-import TestimonialList from "@/data/testimonials.json";
 import Image from 'next/image';
 import Icons from "../Icons";
+import parser from 'html-react-parser';
 
 
 const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
+    const { language } = useLanguage();
     const [thumbSwiper, setThumbSwiper] = useState<any>(null);
     const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    const testimonialList = TestimonialList as TestimonialProps[];
-    if(testimonialList.length == 0) return null;
+    const [businessServices, setBusinessServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [activeHeading, setActiveHeading] = useState<string | undefined>(data?.heading);
 
-    const [activeHeading, setActiveHeading] = useState<string | undefined>(
-        testimonialList[0]?.heading || data?.heading
-    );
+    const testimonialList = useMemo(() => {
+        return businessServices.map((item) => {
+            const r = resolveServiceFields(item, language);
+            return {
+                heading: r.detailTitle || r.title,
+                review: r.description || '',
+                image: r.image || '',
+                icon: r.icon || '',
+                button: {
+                    label: language === 'ar' ? 'مزيد من التفاصيل' : 'More Details',
+                    href: r.slug
+                        ? addLanguagePrefix(`/services/${r.slug}`, language)
+                        : addLanguagePrefix('/services', language),
+                },
+            } as TestimonialProps;
+        });
+    }, [businessServices, language]);
+
+    useEffect(() => {
+        const loadBusinessServices = async () => {
+            try {
+                const res = await fetch('/api/services?enabled=true&section=businesses');
+                const result = await res.json();
+                if (result?.success) {
+                    setBusinessServices((result.data || []) as Service[]);
+                } else {
+                    setBusinessServices([]);
+                }
+            } catch {
+                setBusinessServices([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadBusinessServices();
+    }, []);
+
+    useEffect(() => {
+        if (testimonialList.length === 0) {
+            setActiveHeading(data?.heading);
+            return;
+        }
+
+        const nextIndex = activeIndex >= testimonialList.length ? 0 : activeIndex;
+        if (nextIndex !== activeIndex) {
+            setActiveIndex(nextIndex);
+        }
+        setActiveHeading(testimonialList[nextIndex]?.heading || data?.heading);
+    }, [testimonialList, activeIndex, data?.heading]);
+
+    if (loading) return null;
+    if (testimonialList.length === 0) return null;
 
     const {
         wrapperCls,
@@ -45,9 +101,11 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
 
     const displayHeading = activeHeading || heading;
 
-    const getIconComponent = (iconName: string | undefined) => {
-        if (!iconName) return null;
-        const IconComponent = Icons[iconName as keyof typeof Icons];
+    const getIconElement = (iconValue: string | undefined) => {
+        if (!iconValue) return null;
+        const isInlineSvg = iconValue.includes('<');
+        if (isInlineSvg) return parser(iconValue);
+        const IconComponent = Icons[iconValue as keyof typeof Icons];
         return IconComponent ? <IconComponent /> : null;
     };
 
@@ -114,7 +172,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                 </Swiper>
                                 <div className="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal custom-pagination-thumb-img">
                                     {testimonialList.map((item, index) => {
-                                        const IconComponent = getIconComponent(item.icon);
+                                        const iconElement = getIconElement(item.icon);
                                         return (
                                             <div
                                                 key={`pagination-${index}`}
@@ -131,7 +189,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                                 role="button"
                                                 aria-label={`Go to slide ${index + 1}`}
                                             >
-                                                {IconComponent}
+                                                {iconElement}
                                             </div>
                                         );
                                     })}

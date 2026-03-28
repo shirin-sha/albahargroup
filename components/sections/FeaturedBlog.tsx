@@ -1,13 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import "@/styles/blog.css";
 import "@/styles/featured-blog.css";
 import { SectionProps } from "@/types/sectionProps";
-import { AuthorType } from '@/types/author';
-
-import Posts from "@/data/posts.json";
-import Authors from '@/data/author.json';
 import CardBlog from "../CardBlog";
+import { Post } from '@/libs/models/post';
 
 import Subheading from "../Subheading";
 import Heading from "../Heading";
@@ -16,7 +14,30 @@ import SecondaryButton from "../buttons/SecondaryButton";
 
 
 const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
-    const posts = Posts;
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const res = await fetch('/api/posts?enabled=true');
+                const result = await res.json();
+                if (result?.success) {
+                    setPosts(result.data || []);
+                } else {
+                    setPosts([]);
+                }
+            } catch {
+                setPosts([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
+    if (loading) return null;
     if(posts.length == 0) return null;
 
     const {
@@ -49,21 +70,33 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
 
                 <div className="section-content">
                     <div className="grid grid-cols-12 md:gap-1 product-grid justify-center">
-                        {posts.slice(0, 3).map((article) => {
-                            const author: AuthorType | undefined = Authors.find((author: AuthorType) => author.id === article.authorId);
+                        {posts.slice(0, 3).map((post) => {
+                            const article = {
+                                id: post.id || parseInt(post._id?.substring(0, 8) || '0', 16) || 0,
+                                title: post.title,
+                                slug: post.slug,
+                                content: post.content,
+                                excerpt: post.excerpt,
+                                category: post.category,
+                                image: post.image,
+                                video: post.video,
+                                tags: post.tags || [],
+                                comments: post.comments || 0,
+                                authorId: post.authorId,
+                                created_at: typeof post.created_at === 'string' ? post.created_at : post.created_at?.toISOString(),
+                            };
 
                             return (
                             <div 
                                 className="col-span-12 md:col-span-6 lg:col-span-4" 
                                 data-aos="fade-up" 
-                                key={`article-${article.id}`}
+                                key={`article-${post._id || post.id}`}
                             >
                                 <CardBlog 
                                     article={article}
                                     width={1000}
                                     height={707}
                                     alt="Article image"
-                                    author={author}
                                     showDate={true}
                                 />
                             </div>

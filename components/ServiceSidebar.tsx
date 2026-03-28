@@ -2,6 +2,9 @@ import Icons from "./Icons";
 import SidebarPhoneImage from "@/public/img/service/secvice-contact.jpg";
 import { getDb } from "@/libs/mongodb";
 import { Service } from "@/libs/models/service";
+import type { Language } from "@/libs/language";
+import { addLanguagePrefix } from "@/libs/language";
+import { serviceDisplayTitle } from "@/libs/serviceLocale";
 
 import SidebarCategories from "./SidebarCategories";
 import SidebarPhone from "./SidebarPhone";
@@ -22,7 +25,15 @@ const resolveSection = (section?: string, slug?: string): 'businesses' | 'capabi
     return slug && CAPABILITY_SLUGS.has(slug) ? 'capabilities' : 'businesses';
 };
 
-const ServiceSidebar = async ({ slug, section }: { slug?: string; section?: 'businesses' | 'capabilities'; }) => {
+const ServiceSidebar = async ({
+    slug,
+    section,
+    locale = 'en',
+}: {
+    slug?: string;
+    section?: 'businesses' | 'capabilities';
+    locale?: Language;
+}) => {
     const db = await getDb();
     const collection = db.collection<Service>("services");
     const currentSection = resolveSection(section, slug);
@@ -32,7 +43,11 @@ const ServiceSidebar = async ({ slug, section }: { slug?: string; section?: 'bus
         .toArray();
 
     const filteredServices = services.filter((item: any) => item.slug != slug);
-    const categories: string[] = Array.from(new Set(filteredServices.map((service: any) => service.title)));
+    const servicesRoot = addLanguagePrefix('/services', locale);
+    const categories = filteredServices.map((service: Service) => ({
+        label: serviceDisplayTitle(service, locale),
+        slug: service.slug,
+    }));
 
     return (
         <div className="sidebar-filter drawer-service-sidebar">
@@ -51,7 +66,7 @@ const ServiceSidebar = async ({ slug, section }: { slug?: string; section?: 'bus
                     <SidebarCategories 
                         title="Services List"
                         categories={categories}
-                        rootUrl="/services"
+                        rootUrl={servicesRoot}
                     />
                 }
 

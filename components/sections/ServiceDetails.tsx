@@ -6,17 +6,18 @@ import parse from 'html-react-parser';
 
 import ServiceSidebar from "../ServiceSidebar";
 import { ServiceProps } from "@/types/service";
-import Accordion from "../Accordion";
-import { ServiceAccordionData } from "@/data/serviceAccordionData";
 import DrawerOpener from "../DrawerOpener";
+import type { Language } from "@/libs/language";
 
 
 const ServiceDetails = ({
     container,
-    data
+    data,
+    locale = 'en',
 }: {
     container: string;
     data: ServiceProps;
+    locale?: Language;
 }) => {
     const {
         title,
@@ -38,7 +39,7 @@ const ServiceDetails = ({
                 </DrawerOpener>
                 <div className="grid grid-cols-12 lg:gap-1">
                     <div className="col-span-12 lg:col-span-5">
-                        <ServiceSidebar slug={slug} section={section} />
+                        <ServiceSidebar slug={slug} section={section} locale={locale} />
                     </div>
                     <div className="col-span-12 lg:col-span-7">
                         <div className="service-details-content">

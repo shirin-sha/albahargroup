@@ -6,27 +6,29 @@ import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import BilingualField from '@/components/admin/BilingualField';
 
+const EMPTY_PROJECT_FORM: Partial<Project> = {
+  title: '',
+  titleAr: '',
+  description: '',
+  descriptionAr: '',
+  category: '',
+  categoryAr: '',
+  client: '',
+  owner: '',
+  starting_date: '',
+  ending_date: '',
+  content: '',
+  contentAr: '',
+  image: '',
+  enabled: true,
+};
+
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState<Partial<Project>>({
-    title: '',
-    titleAr: '',
-    description: '',
-    descriptionAr: '',
-    category: '',
-    categoryAr: '',
-    client: '',
-    owner: '',
-    starting_date: '',
-    ending_date: '',
-    content: '',
-    contentAr: '',
-    image: '',
-    enabled: true,
-  });
+  const [formData, setFormData] = useState<Partial<Project>>({ ...EMPTY_PROJECT_FORM });
 
   useEffect(() => {
     fetchProjects();
@@ -76,6 +78,7 @@ const ProjectsPage = () => {
   };
 
   const handleEdit = (project: Project) => {
+    setIsAdding(false);
     setEditingProject(project);
     setFormData({
       title: project.title || '',
@@ -117,24 +120,23 @@ const ProjectsPage = () => {
   };
 
   const resetForm = () => {
-    setFormData({
-      title: '',
-      titleAr: '',
-      description: '',
-      descriptionAr: '',
-      category: '',
-      categoryAr: '',
-      client: '',
-      owner: '',
-      starting_date: '',
-      ending_date: '',
-      content: '',
-      contentAr: '',
-      image: '',
-      enabled: true,
-    });
+    setFormData({ ...EMPTY_PROJECT_FORM });
     setEditingProject(null);
     setIsAdding(false);
+  };
+
+  const handleAddNew = () => {
+    setEditingProject(null);
+    setFormData({ ...EMPTY_PROJECT_FORM });
+    setIsAdding(true);
+
+    // Ensure the opened panel is brought into view.
+    setTimeout(() => {
+      const panel = document.querySelector('.admin-edit-panel');
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 0);
   };
 
   if (loading) {
@@ -144,16 +146,13 @@ const ProjectsPage = () => {
   return (
     <div className="admin-cms-container">
       <div className="admin-cms-header">
-        <h1>Projects Management</h1>
+        <h1>Image Archive Management</h1>
         <button
           type="button"
           className="button button-primary"
-          onClick={() => {
-            resetForm();
-            setIsAdding(true);
-          }}
+          onClick={handleAddNew}
         >
-          + Add New Project
+          + Add New Image
         </button>
       </div>
 
@@ -166,7 +165,11 @@ const ProjectsPage = () => {
             </div>
             <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
           </div>
-            <form onSubmit={handleSubmit} className="admin-cms-form">
+            <form
+              key={editingProject ? `edit-${editingProject._id || editingProject.id}` : 'add-new'}
+              onSubmit={handleSubmit}
+              className="admin-cms-form"
+            >
               <BilingualField
                 label="Title"
                 enValue={formData.title || ''}

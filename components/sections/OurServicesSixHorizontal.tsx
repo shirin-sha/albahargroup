@@ -8,10 +8,14 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import CardService from "../CardService";
 import { SectionProps } from "@/types/sectionProps";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { resolveServiceFields } from "@/libs/serviceLocale";
+import type { Service } from "@/libs/models/service";
 
 const OurServicesSixHorizontal = ({ data }: { data: SectionProps }) => {
-    const [serviceList, setServiceList] = useState<any[]>([]);
+    const { language } = useLanguage();
+    const [serviceList, setServiceList] = useState<Service[]>([]);
 
     useEffect(() => {
         const load = async () => {
@@ -28,7 +32,12 @@ const OurServicesSixHorizontal = ({ data }: { data: SectionProps }) => {
         load();
     }, []);
 
-    if(serviceList.length == 0) return null;
+    const localized = useMemo(
+        () => serviceList.map((s) => resolveServiceFields(s, language)),
+        [serviceList, language]
+    );
+
+    if(localized.length == 0) return null;
 
     const {
         subheading,
@@ -87,7 +96,7 @@ const OurServicesSixHorizontal = ({ data }: { data: SectionProps }) => {
 
                 <div className="section-content multicolumn">
                     <div className="grid grid-cols-12 gap-1 product-grid">
-                        {serviceList.slice(0, 1).map((service) => (
+                        {localized.slice(0, 1).map((service) => (
                             <div 
                                 className="col-span-12 xl:col-span-6" 
                                 data-aos="fade-up" 
@@ -96,7 +105,7 @@ const OurServicesSixHorizontal = ({ data }: { data: SectionProps }) => {
                                 <CardService data={{ ...service, id: service._id ? String(service._id) : service.id }} />
                             </div>
                         ))}
-                        {serviceList.slice(1, 5).map((service) => (
+                        {localized.slice(1, 5).map((service) => (
                             <div 
                                 className="col-span-12 md:col-span-6 xl:col-span-3" 
                                 data-aos="fade-up" 
@@ -105,7 +114,7 @@ const OurServicesSixHorizontal = ({ data }: { data: SectionProps }) => {
                                 <CardService data={{ ...service, id: service._id ? String(service._id) : service.id }} />
                             </div>
                         ))}
-                        {serviceList.slice(5, 6).map((service) => (
+                        {localized.slice(5, 6).map((service) => (
                             <div 
                                 className="col-span-12 xl:col-span-6" 
                                 data-aos="fade-up" 

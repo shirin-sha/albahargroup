@@ -7,7 +7,6 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import { SectionProps } from "@/types/sectionProps";
 import ScrollingTextGradient from "../sections/ScrollingTextGradient";
-import { ScrollingTextGradientData } from "@/data/sections/scrollingTextGradientData";
 import Icons from "../Icons";
 
 const ImageText2 = ({ data }: { data: SectionProps }) => {
@@ -20,7 +19,8 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
         text,
         textList,
         items,
-        button
+        button,
+        rotatingLogo,
     } = data || {};
 
     const image1 = imageList ? imageList[0] : null;
@@ -64,13 +64,17 @@ const ImageText2 = ({ data }: { data: SectionProps }) => {
                             }
                         </div>
                         
-                        {/* Logo Slider */}
-                        <div className="w-full">
-                            <ScrollingTextGradient data={{
-                                ...ScrollingTextGradientData,
-                                container: "w-full"
-                            }} />
-                        </div>
+                        {/* Logo slider from CMS only (no static fallback) */}
+                        {rotatingLogo?.logo?.imageList?.length > 0 && (
+                            <div className="w-full">
+                                <ScrollingTextGradient
+                                    data={{
+                                        ...((rotatingLogo?.logo as any) || {}),
+                                        container: "w-full",
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="lg:col-span-1 col-span-2">

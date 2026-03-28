@@ -10,10 +10,12 @@ import CardService from "../CardService";
 import { SectionProps } from "@/types/sectionProps";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useMemo, useState } from "react";
+import { resolveServiceFields } from "@/libs/serviceLocale";
+import type { Service } from "@/libs/models/service";
 
 const OurServices = ({ data }: { data: SectionProps }) => {
     const { language } = useLanguage();
-    const [serviceList, setServiceList] = useState<any[]>([]);
+    const [serviceList, setServiceList] = useState<Service[]>([]);
 
     useEffect(() => {
         const load = async () => {
@@ -30,7 +32,10 @@ const OurServices = ({ data }: { data: SectionProps }) => {
         load();
     }, []);
 
-    const topServices = useMemo(() => serviceList.slice(0, 3), [serviceList]);
+    const topServices = useMemo(
+        () => serviceList.slice(0, 3).map((s) => resolveServiceFields(s, language)),
+        [serviceList, language]
+    );
     if(topServices.length == 0) return null;
 
     const {

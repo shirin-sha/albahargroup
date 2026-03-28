@@ -7,10 +7,14 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import CardService from "../CardService";
 import { SectionProps } from "@/types/sectionProps";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { resolveServiceFields } from "@/libs/serviceLocale";
+import type { Service } from "@/libs/models/service";
 
 const OurServicesSix = ({ data }: { data: SectionProps }) => {
-    const [serviceList, setServiceList] = useState<any[]>([]);
+    const { language } = useLanguage();
+    const [serviceList, setServiceList] = useState<Service[]>([]);
 
     useEffect(() => {
         const load = async () => {
@@ -27,7 +31,12 @@ const OurServicesSix = ({ data }: { data: SectionProps }) => {
         load();
     }, []);
 
-    if(serviceList.length == 0) return null;
+    const localized = useMemo(
+        () => serviceList.map((s) => resolveServiceFields(s, language)),
+        [serviceList, language]
+    );
+
+    if(localized.length == 0) return null;
 
     const {
         container,
@@ -59,7 +68,7 @@ const OurServicesSix = ({ data }: { data: SectionProps }) => {
 
                 <div className="multicolumn-inner section-content">
                     <div className="grid grid-cols-12 product-grid md:gap-1">
-                        {serviceList.slice(0, 6).map((service) => (
+                        {localized.slice(0, 6).map((service) => (
                             <div 
                                 className="xl:col-span-4 md:col-span-6 col-span-12" 
                                 data-aos="fade-up" 

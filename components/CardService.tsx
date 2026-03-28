@@ -2,8 +2,11 @@ import Link from "next/link";
 import { ServiceDataType } from "@/types/service";
 import Icons from "./Icons";
 import parser from "html-react-parser";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { addLanguagePrefix } from "@/libs/language";
 
 const CardService = ({ data }: ServiceDataType) => {
+    const { language } = useLanguage();
     const { 
         title,
         description,
@@ -12,10 +15,14 @@ const CardService = ({ data }: ServiceDataType) => {
         icon,
     } = data || {};
 
+    const serviceHref = slug
+        ? addLanguagePrefix(`/services/${slug}`, language)
+        : addLanguagePrefix('/services', language);
+
     return (        
         <Link
             className="multicolumn-card"
-            href={`/services/${slug}`}
+            href={serviceHref}
             aria-label="View Service Details"
         >
             {icon && <div className="card-icon icon-40">{parser(icon)}</div>}

@@ -3,7 +3,6 @@ import "@/styles/pricing-plan.css";
 import { SectionProps } from "@/types/sectionProps";
 import Heading from "../Heading";
 import Subheading from "../Subheading";
-import { PricingTableData } from "@/data/pricingTableData";
 import CardPricing from "../CardPricing";
 import Image from "next/image";
 import { PricingProps } from "@/types/pricing";
@@ -19,8 +18,7 @@ const PricingPlan = ({ data }: { data: SectionProps }) => {
         cards,
     } = data || {};
 
-    // Use CMS cards if available, otherwise fall back to static data
-    const pricingTable: PricingProps[] = (cards && cards.length > 0) ? cards : PricingTableData;
+    const pricingTable: PricingProps[] = (cards && cards.length > 0) ? cards : [];
     if (pricingTable.length == 0) return null;
 
     return (

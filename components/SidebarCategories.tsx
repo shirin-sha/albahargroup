@@ -12,18 +12,23 @@ const SidebarCategories = ({
         <div className="sidebar-widget radius18" data-aos="fade-up">
             {title && <h2 className="sidebar-heading heading text-24">{title}</h2>}
             <ul className="blog-categories list-unstyled">
-                {categories.map((item, index) => (                        
+                {categories.map((item, index) => {
+                    const label = typeof item === 'string' ? item : item.label;
+                    const slug =
+                        typeof item === 'string' ? createHandle(item) : item.slug;
+                    return (
                     <li key={`cate-${index}`}>
                         <Link
                             className="blog-category subheading subheading-bg text-18 fw-400"
-                            href={`${rootUrl}/${createHandle(item)}`}
-                            aria-label={item}
+                            href={`${rootUrl}/${slug}`}
+                            aria-label={label}
                         >
-                            {item}
+                            {label}
                             <Icons.ArrowLong2 />
                         </Link>
                     </li>
-                ))}
+                    );
+                })}
             </ul>
         </div>
     )

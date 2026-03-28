@@ -18,13 +18,15 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<Service>>({
     section,
-    title: '',
     slug: '',
     detailTitle: '',
+    detailTitleAr: '',
     icon: '',
     description: '',
+    descriptionAr: '',
     image: '',
     content: '',
+    contentAr: '',
     enabled: true,
   });
 
@@ -32,6 +34,14 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
 
   const sectionTitle = section === 'businesses' ? 'Businesses' : 'Capabilities';
   const singular = section === 'businesses' ? 'Business' : 'Capability';
+
+  const headingFieldHelp =
+    section === 'capabilities'
+      ? 'Main name for this capability: home page services accordion, capability detail page, and sidebar lists.'
+      : 'Main name for this business: home testimonial slider, business service page, and sidebar lists.';
+
+  const headingPlaceholderEn =
+    section === 'capabilities' ? 'e.g. Human Capital' : 'e.g. Consumer Goods';
 
   const handleSvgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -78,7 +88,15 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
       const url = serviceId ? `/api/services/${serviceId}` : '/api/services';
       const method = serviceId ? 'PUT' : 'POST';
 
-      const payload = { ...formData, section };
+      const dt = (formData.detailTitle || '').trim();
+      const dta = (formData.detailTitleAr || '').trim();
+      const slugPart = (formData.slug || '').trim();
+      const payload = {
+        ...formData,
+        section,
+        title: dt || slugPart.replace(/-/g, ' ') || 'Untitled',
+        titleAr: dta,
+      };
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -103,13 +121,15 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
     setEditingService(service);
     setFormData({
       section,
-      title: service.title || '',
       slug: service.slug || '',
       detailTitle: service.detailTitle || '',
+      detailTitleAr: service.detailTitleAr || '',
       icon: service.icon || '',
       description: service.description || '',
+      descriptionAr: service.descriptionAr || '',
       image: service.image || '',
       content: service.content || '',
+      contentAr: service.contentAr || '',
       enabled: service.enabled !== undefined ? service.enabled : true,
     });
   };
@@ -138,13 +158,15 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
   const resetForm = () => {
     setFormData({
       section,
-      title: '',
       slug: '',
       detailTitle: '',
+      detailTitleAr: '',
       icon: '',
       description: '',
+      descriptionAr: '',
       image: '',
       content: '',
+      contentAr: '',
       enabled: true,
     });
     setEditingService(null);
@@ -176,21 +198,11 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
           <div className="admin-edit-panel-header">
             <div className="admin-edit-panel-title">
               <strong>{editingService ? `Editing ${singular}` : `Add New ${singular}`}</strong>
-              <span>{editingService ? `Editing: ${editingService.title}` : `Create a new ${singular.toLowerCase()}`}</span>
+              <span>{editingService ? `Editing: ${editingService.detailTitle || editingService.title}` : `Create a new ${singular.toLowerCase()}`}</span>
             </div>
             <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
           </div>
           <form onSubmit={handleSubmit} className="admin-cms-form">
-            <div className="form-group">
-              <label>Title *</label>
-              <input
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                required
-              />
-            </div>
-
             <div className="form-group">
               <label>Slug (URL)</label>
               <input
@@ -199,16 +211,36 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 placeholder="e.g. consumer-goods"
               />
+              <small>Shared URL for both languages</small>
             </div>
 
-            <div className="form-group">
-              <label>Detail Title</label>
-              <input
-                type="text"
-                value={formData.detailTitle || ''}
-                onChange={(e) => setFormData({ ...formData, detailTitle: e.target.value })}
-                placeholder="Displayed on details page"
-              />
+            <div className="form-group-bilingual">
+              <label>Heading *</label>
+              <small className="block" style={{ marginBottom: '8px', color: '#6b7280' }}>
+                {headingFieldHelp}
+              </small>
+              <div className="bilingual-inputs">
+                <div className="bilingual-input-group">
+                  <span className="bilingual-label">English</span>
+                  <input
+                    type="text"
+                    value={formData.detailTitle || ''}
+                    onChange={(e) => setFormData({ ...formData, detailTitle: e.target.value })}
+                    placeholder={headingPlaceholderEn}
+                    required
+                  />
+                </div>
+                <div className="bilingual-input-group">
+                  <span className="bilingual-label">العربية</span>
+                  <input
+                    type="text"
+                    value={formData.detailTitleAr || ''}
+                    onChange={(e) => setFormData({ ...formData, detailTitleAr: e.target.value })}
+                    dir="rtl"
+                    placeholder="العنوان التفصيلي"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="form-group">
@@ -258,14 +290,29 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
               )}
             </div>
 
-            <div className="form-group">
+            <div className="form-group-bilingual">
               <label>Description</label>
-              <textarea
-                value={formData.description || ''}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Short description shown in the services accordion and cards"
-                rows={4}
-              />
+              <div className="bilingual-inputs">
+                <div className="bilingual-input-group">
+                  <span className="bilingual-label">English</span>
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Short description shown in the services accordion and cards"
+                    rows={4}
+                  />
+                </div>
+                <div className="bilingual-input-group">
+                  <span className="bilingual-label">العربية</span>
+                  <textarea
+                    value={formData.descriptionAr || ''}
+                    onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
+                    placeholder="وصف قصير"
+                    rows={4}
+                    dir="rtl"
+                  />
+                </div>
+              </div>
             </div>
 
             <ImageUpload
@@ -277,13 +324,26 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
               label="Image"
             />
 
-            <div className="form-group">
+            <div className="form-group-bilingual">
               <label>Detail Content</label>
-              <RichTextEditor
-                value={formData.content || ''}
-                onChange={(value) => setFormData({ ...formData, content: value })}
-                placeholder="Optional rich content for the service detail page"
-              />
+              <div className="bilingual-inputs">
+                <div className="bilingual-input-group">
+                  <span className="bilingual-label">English</span>
+                  <RichTextEditor
+                    value={formData.content || ''}
+                    onChange={(value) => setFormData({ ...formData, content: value })}
+                    placeholder="Optional rich content for the service detail page"
+                  />
+                </div>
+                <div className="bilingual-input-group">
+                  <span className="bilingual-label">العربية</span>
+                  <RichTextEditor
+                    value={formData.contentAr || ''}
+                    onChange={(value) => setFormData({ ...formData, contentAr: value })}
+                    placeholder="محتوى الصفحة بالعربية"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="form-group">
@@ -311,7 +371,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Title</th>
+              <th>Heading (EN)</th>
+              <th>Heading (AR)</th>
               <th>Slug</th>
               <th>Image</th>
               <th>Status</th>
@@ -321,7 +382,7 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
           <tbody>
             {services.length === 0 ? (
               <tr>
-                <td colSpan={5} className="admin-table-empty">
+                <td colSpan={6} className="admin-table-empty">
                   No {sectionTitle.toLowerCase()} found. Click &ldquo;Add New {singular}&rdquo; to create one.
                 </td>
               </tr>
@@ -337,7 +398,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
 
                 return (
                   <tr key={(service as any)._id || service.id} className={isEditing ? 'admin-table-row-active' : ''}>
-                    <td><strong>{service.title}</strong></td>
+                    <td><strong>{service.detailTitle || service.title}</strong></td>
+                    <td dir="rtl" style={{ maxWidth: '220px' }}>{service.detailTitleAr || service.titleAr || '—'}</td>
                     <td>{service.slug}</td>
                     <td>{service.image}</td>
                     <td>

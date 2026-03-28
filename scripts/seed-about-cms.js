@@ -11,6 +11,17 @@ if (!uri) {
 
 const defaultSections = [
   {
+    sectionId: 'pageHeader',
+    enabled: true,
+    order: 0,
+    en: {
+      heading: 'About Us'
+    },
+    ar: {
+      heading: 'من نحن'
+    }
+  },
+  {
     sectionId: 'testimonials',
     enabled: true,
     order: 1,

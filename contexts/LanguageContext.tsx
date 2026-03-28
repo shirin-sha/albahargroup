@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, ReactNode, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Language, getLanguageFromPath, switchLanguage } from '@/libs/language';
 
@@ -15,22 +15,16 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [language, setLanguageState] = useState<Language>('en');
+  /** Must match URL on the first render (no default "en" + useEffect lag), or client components resolve wrong locale before paint. */
+  const language = useMemo(() => getLanguageFromPath(pathname), [pathname]);
 
   useEffect(() => {
-    // Get language from current pathname
-    const lang = getLanguageFromPath(pathname);
-    setLanguageState(lang);
-    // Update HTML attributes
-    if (typeof document !== 'undefined') {
-      document.documentElement.lang = lang === 'ar' ? 'ar' : 'en';
-      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    }
-  }, [pathname]);
+    if (typeof document === 'undefined') return;
+    document.documentElement.lang = language === 'ar' ? 'ar' : 'en';
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  }, [language]);
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
-    // Switch the current path to the new language
     const newPath = switchLanguage(pathname, lang);
     router.push(newPath);
   };

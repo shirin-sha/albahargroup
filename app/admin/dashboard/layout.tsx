@@ -137,7 +137,7 @@ export default function AdminDashboardLayout({
             className={`admin-sidebar-link ${isActive('/admin/dashboard/projects') ? 'active' : ''}`}
           >
             <Icons.Design />
-            <span>Projects</span>
+            <span>Image Archive</span>
           </Link>
 
           <Link

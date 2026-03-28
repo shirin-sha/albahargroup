@@ -21,6 +21,7 @@
 .running-content .content-lists-wrapper {
   overflow: hidden;
   width: 100%;
+  direction: ltr;
 }
 
 .running-content .content-lists {
@@ -29,6 +30,7 @@
   white-space: nowrap;
   gap: 40px;
   width: fit-content;
+  direction: ltr;
 }
 
 .running-content .content-lists:hover {
