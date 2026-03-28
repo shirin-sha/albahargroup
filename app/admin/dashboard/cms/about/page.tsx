@@ -12,7 +12,6 @@ interface SectionData {
 }
 
 const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
-  pageHeader:   { label: 'Page Header',       desc: 'About page title shown in banner',                  icon: '🏷️' },
   testimonials: { label: 'Testimonials',      desc: 'Client testimonial slider items',                  icon: '💬' },
   stickyBanner: { label: 'Sticky Banner',     desc: 'Full-width sticky scrolling banner',               icon: '📌' },
   heritage:     { label: 'Heritage',          desc: 'Company heritage and history section',             icon: '🏛️' },
@@ -23,7 +22,7 @@ const SECTION_META: Record<string, { label: string; desc: string; icon: string }
 };
 
 const ABOUT_PAGE_SECTIONS = [
-  'pageHeader',
+ 
   'testimonials',
   'stickyBanner',
   'heritage',
