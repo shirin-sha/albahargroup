@@ -43,8 +43,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 export function useLanguage() {
   const context = useContext(LanguageContext);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Fallback: when a page doesn't wrap with LanguageProvider (e.g. some routes),
+  // still allow components to resolve `language` safely from the URL.
+  const fallbackLanguage = getLanguageFromPath(pathname);
+
   if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    const setLanguage = (lang: Language) => {
+      const newPath = switchLanguage(pathname, lang);
+      router.push(newPath);
+    };
+
+    const toggleLanguage = () => {
+      const newLang: Language = fallbackLanguage === 'en' ? 'ar' : 'en';
+      setLanguage(newLang);
+    };
+
+    return { language: fallbackLanguage, setLanguage, toggleLanguage };
   }
+
   return context;
 }
