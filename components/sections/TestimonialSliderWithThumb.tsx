@@ -42,9 +42,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                 icon: r.icon || '',
                 button: {
                     label: language === 'ar' ? 'مزيد من التفاصيل' : 'More Details',
-                    href: r.slug
-                        ? addLanguagePrefix(`/services/${r.slug}`, language)
-                        : addLanguagePrefix('/services', language),
+                    href: addLanguagePrefix('/businesses', language),
                 },
             } as TestimonialProps;
         });

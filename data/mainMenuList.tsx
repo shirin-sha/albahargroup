@@ -15,7 +15,7 @@ const Menus: MenuItem[] = [
     {
         title: 'BUSINESSES',
         titleAr: 'الأعمال',
-        path: '#',
+        path: '/businesses',
         megamenutwocolumn: [
             {
                 title: 'OUR BUSINESS VERTICALS',

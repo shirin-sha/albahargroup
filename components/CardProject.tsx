@@ -9,15 +9,12 @@ const CardProject = ({ data }: ProjectDataType) => {
         title,
         description,
         category,
-        image
+        image,
+        href,
     } = data || {};
 
-    return (
-        <div
-            className="card-project radius18"
-            aria-label="project details"
-          
-        >
+    const inner = (
+        <>
             {image &&
                 <Image
                     src={image}
@@ -34,10 +31,29 @@ const CardProject = ({ data }: ProjectDataType) => {
                     {description && <p className="text">{description}</p>}
                 </div>
             </div>
+        </>
+    );
 
-          
+    if (href) {
+        return (
+            <Link
+                href={href}
+                className="card-project radius18 block"
+                aria-label={title ? `View ${title}` : 'View details'}
+            >
+                {inner}
+            </Link>
+        );
+    }
+
+    return (
+        <div
+            className="card-project radius18"
+            aria-label="project details"
+        >
+            {inner}
         </div>
-    )
+    );
 }
 
 export default CardProject;

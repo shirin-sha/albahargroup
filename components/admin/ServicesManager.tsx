@@ -295,21 +295,18 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
               <div className="bilingual-inputs">
                 <div className="bilingual-input-group">
                   <span className="bilingual-label">English</span>
-                  <textarea
+                  <RichTextEditor
                     value={formData.description || ''}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(value) => setFormData({ ...formData, description: value })}
                     placeholder="Short description shown in the services accordion and cards"
-                    rows={4}
                   />
                 </div>
                 <div className="bilingual-input-group">
                   <span className="bilingual-label">العربية</span>
-                  <textarea
+                  <RichTextEditor
                     value={formData.descriptionAr || ''}
-                    onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
+                    onChange={(value) => setFormData({ ...formData, descriptionAr: value })}
                     placeholder="وصف قصير"
-                    rows={4}
-                    dir="rtl"
                   />
                 </div>
               </div>

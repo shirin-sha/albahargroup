@@ -93,7 +93,7 @@ const AccordionHorizontal = ({ items }: { items: ServiceProps[] }) => {
                 </div>
                 <div className="service-button">
                   <Link
-                    href={item.slug ? addLanguagePrefix(`/services/${item.slug}`, language) : addLanguagePrefix('/services', language)}
+                    href={addLanguagePrefix('/capabilities', language)}
                     className="button button--primary"
                   >
                     {language === 'ar' ? 'مزيد من التفاصيل' : 'More Details'}
