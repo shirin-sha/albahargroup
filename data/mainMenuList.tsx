@@ -51,19 +51,13 @@ const Menus: MenuItem[] = [
                 path: '#',
                     },
                     {
-                        title: 'Shipping',
-                        titleAr: 'الشحن',
-                        text: 'Port-to-door shipping, agency services and logistics.',
-                        textAr: 'خدمات شحن من الميناء إلى الباب، وخدمات الوكالات واللوجستيات.',
+                        title: 'Shipping, Travel & Tourism',
+                        titleAr: 'الشحن, السفر والسياحة',
+                        text: 'Integrated shipping, travel and tourism solutions',
+                        textAr: 'خدمات شحن من الميناء إلى الباب، وخدمات الوكالات واللوجستيات، وخدمات السفر والسياحة.',
                 path: '/services/shipping-logistics',
                     },
-                    {
-                        title: 'Travel & Tourism',
-                        titleAr: 'السفر والسياحة',
-                        text: 'Corporate, leisure and group travel across destinations.',
-                        textAr: 'خدمات سفر وسياحة للشركات والأفراد والمجموعات إلى مختلف الوجهات.',
-                path: '/services/travel-tourism',
-                    },
+                  
                 ],
             },
             {
