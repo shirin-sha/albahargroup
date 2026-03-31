@@ -10,9 +10,14 @@ interface SectionData {
   ar: any;
 }
 
-const CONTACT_PAGE_SECTIONS = ['banner', 'contactForm', 'map'] as const;
+const CONTACT_PAGE_SECTIONS = ['metadata', 'banner', 'contactForm', 'map'] as const;
+const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
+  metadata: { label: 'Metadata', desc: 'Contact page SEO title and description', icon: '🔎' },
+  banner: { label: 'Banner', desc: 'Contact page banner title', icon: '🖼️' },
+  contactForm: { label: 'Contact Form', desc: 'Contact section content and info items', icon: '✉️' },
+  map: { label: 'Map', desc: 'Embedded map configuration', icon: '🗺️' },
+};
 
-// BilingualField component
 interface BilingualFieldProps {
   label: string;
   path: string;
@@ -93,13 +98,21 @@ const BilingualField = memo(({
 
 BilingualField.displayName = 'BilingualField';
 
+const getTitle = (section: SectionData | undefined, lang: 'en' | 'ar'): string => {
+  const data = section?.[lang];
+  if (!data) return '—';
+  if (section?.sectionId === 'metadata') return data.metaTitle || '—';
+  return data.heading || data.title || data.subheading || '—';
+};
+
 const ContactPageCMS = () => {
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSections();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchSections = async () => {
@@ -126,7 +139,7 @@ const ContactPageCMS = () => {
       const result = await res.json();
       if (result.success) {
         await fetchSections();
-        setSelectedSection(null);
+        setEditingSectionId(null);
       }
     } catch (error) {
       console.error('Error saving section:', error);
@@ -141,25 +154,67 @@ const ContactPageCMS = () => {
     <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>Contact Us Page CMS</h1>
-        <p style={{ color: '#6b7280', fontSize: '14px' }}>Edit both English and Arabic content together</p>
+        <p className="cms-page-subtitle">Manage both English and Arabic content</p>
       </div>
 
-      <div className="admin-cms-sections">
-        {CONTACT_PAGE_SECTIONS.map((sectionId) => {
-          const section = sections.find((s) => s.sectionId === sectionId);
-          return (
-            <SectionEditor
-              key={sectionId}
-              sectionId={sectionId}
-              section={section}
-              onSave={saveSection}
-              isOpen={selectedSection === sectionId}
-              onToggle={() =>
-                setSelectedSection(selectedSection === sectionId ? null : sectionId)
-              }
-            />
-          );
-        })}
+      {editingSectionId && (
+        <div className="admin-edit-panel">
+          <SectionEditor
+            key={editingSectionId}
+            sectionId={editingSectionId}
+            section={sections.find((s) => s.sectionId === editingSectionId)}
+            onSave={saveSection}
+            onClose={() => setEditingSectionId(null)}
+          />
+        </div>
+      )}
+
+      <div className="admin-table-wrapper">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Title (EN)</th>
+              <th>Title (AR)</th>
+              <th>Metadata (EN)</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {CONTACT_PAGE_SECTIONS.map((sectionId) => {
+              const section = sections.find((s) => s.sectionId === sectionId);
+              const meta = SECTION_META[sectionId] ?? { label: sectionId, desc: '', icon: '📋' };
+              const titleEn = getTitle(section, 'en');
+              const titleAr = getTitle(section, 'ar');
+              const metaTitleEn = sectionId === 'metadata' ? (section?.en?.metaTitle || '—') : '—';
+              const isEditing = editingSectionId === sectionId;
+              return (
+                <tr key={sectionId} className={isEditing ? 'admin-table-row-active' : ''}>
+                  <td>
+                    <div className="admin-section-name">
+                      <strong>{meta.label}</strong>
+                      <span className="admin-section-id">{sectionId}</span>
+                    </div>
+                  </td>
+                  <td>{titleEn}</td>
+                  <td className="admin-td-ar">{titleAr}</td>
+                  <td>{metaTitleEn}</td>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button
+                        type="button"
+                        className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
+                        onClick={() => setEditingSectionId(isEditing ? null : sectionId)}
+                      >
+                        {isEditing ? 'Close' : 'Edit'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -169,24 +224,20 @@ interface SectionEditorProps {
   sectionId: string;
   section?: SectionData;
   onSave: (sectionId: string, data: Partial<SectionData>) => void;
-  isOpen: boolean;
-  onToggle: () => void;
+  onClose: () => void;
 }
 
 const SectionEditor = ({
   sectionId,
   section,
   onSave,
-  isOpen,
-  onToggle,
+  onClose,
 }: SectionEditorProps) => {
   const [formDataEn, setFormDataEn] = useState<any>({});
   const [formDataAr, setFormDataAr] = useState<any>({});
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) return;
-    
     if (section) {
       const sectionDataEn = section.en || {};
       const sectionDataAr = section.ar || {};
@@ -212,7 +263,7 @@ const SectionEditor = ({
         setFormDataAr({});
       }
     }
-  }, [section?.sectionId, sectionId, isOpen]);
+  }, [section?.sectionId, sectionId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -234,7 +285,7 @@ const SectionEditor = ({
     const setData = lang === 'en' ? setFormDataEn : setFormDataAr;
     
     setData((prevData: any) => {
-      const newData = JSON.parse(JSON.stringify(prevData));
+      const newData = JSON.parse(JSON.stringify(prevData || {}));
       const keys = path.split('.');
       let current: any = newData;
       
@@ -288,6 +339,13 @@ const SectionEditor = ({
 
   const renderFields = () => {
     switch (sectionId) {
+      case 'metadata':
+        return (
+          <>
+            {renderBilingualField('Metadata Title', 'metaTitle')}
+            {renderBilingualField('Metadata Description', 'metaDescription', 'textarea', 4)}
+          </>
+        );
       case 'banner':
         return (
           <>
@@ -385,22 +443,24 @@ const SectionEditor = ({
   };
 
   return (
-    <div className="admin-cms-section-card">
-      <div className="admin-cms-section-header" onClick={onToggle}>
-        <h3>{sectionId}</h3>
-        <span className="admin-cms-toggle">{isOpen ? '−' : '+'}</span>
+    <>
+      <div className="admin-edit-panel-header">
+        <div className="admin-edit-panel-title">
+          <strong>{`Editing ${sectionId}`}</strong>
+          <span>{SECTION_META[sectionId]?.desc ?? ''}</span>
+        </div>
+        <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>✕ Close</button>
       </div>
-      {isOpen && (
-        <form onSubmit={handleSubmit} className="admin-cms-form">
-          {renderFields()}
-          <div className="form-actions">
-            <button type="submit" className="button button-primary" disabled={isSaving}>
-              {isSaving ? 'Saving...' : 'Save'}
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+      <form onSubmit={handleSubmit} className="admin-cms-form">
+        {renderFields()}
+        <div className="form-actions">
+          <button type="submit" className="button button-primary" disabled={isSaving}>
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+          <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>Cancel</button>
+        </div>
+      </form>
+    </>
   );
 };
 

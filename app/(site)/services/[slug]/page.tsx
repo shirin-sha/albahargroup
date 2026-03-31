@@ -5,14 +5,35 @@ import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg
 import { notFound } from 'next/navigation';
 import { getDb } from '@/libs/mongodb';
 import { Service } from '@/libs/models/service';
+import { absoluteUrl } from '@/libs/seo';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import ServiceDetails from '@/components/sections/ServiceDetails';
 
 const PAGE_TITLE: string = 'Service Details';
-export const metadata: Metadata = {
-  title: PAGE_TITLE,
-};
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const db = await getDb();
+  const collection = db.collection<Service>('services');
+  const service = await collection.findOne({ slug, enabled: { $ne: false } } as any);
+  const title = service?.detailTitle || service?.title || PAGE_TITLE;
+  const description = service?.description || 'Service details from Al Bahar Group.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl(`/services/${slug}`),
+      languages: {
+        en: absoluteUrl(`/services/${slug}`),
+        ar: absoluteUrl(`/ar/services/${slug}`),
+      },
+    },
+  };
+}
 
 const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;

@@ -12,6 +12,7 @@ interface SectionData {
 }
 
 const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
+  metadata:     { label: 'Metadata',          desc: 'About page SEO title and description',               icon: '🔎' },
   testimonials: { label: 'Testimonials',      desc: 'Client testimonial slider items',                  icon: '💬' },
   stickyBanner: { label: 'Sticky Banner',     desc: 'Full-width sticky scrolling banner',               icon: '📌' },
   heritage:     { label: 'Heritage',          desc: 'Company heritage and history section',             icon: '🏛️' },
@@ -22,7 +23,7 @@ const SECTION_META: Record<string, { label: string; desc: string; icon: string }
 };
 
 const ABOUT_PAGE_SECTIONS = [
- 
+  'metadata',
   'testimonials',
   'stickyBanner',
   'heritage',
@@ -129,6 +130,7 @@ const getPreviewImage = (section: SectionData | undefined, sectionId: string): s
 const getTitle = (section: SectionData | undefined, lang: 'en' | 'ar'): string => {
   const data = section?.[lang];
   if (!data) return '—';
+  if (section?.sectionId === 'metadata') return data.metaTitle || '—';
   return data.heading || data.title || data.subheading || '—';
 };
 
@@ -196,6 +198,7 @@ const AboutPageCMS = () => {
               <th>Section</th>
               <th>Title (EN)</th>
               <th>Title (AR)</th>
+              <th>Metadata (EN)</th>
               <th>Image</th>
               <th>Action</th>
             </tr>
@@ -207,6 +210,7 @@ const AboutPageCMS = () => {
               const previewImage = getPreviewImage(section, sectionId);
               const titleEn = getTitle(section, 'en');
               const titleAr = getTitle(section, 'ar');
+              const metaTitleEn = sectionId === 'metadata' ? (section?.en?.metaTitle || '—') : '—';
               const isEditing = editingSectionId === sectionId;
               return (
                 <tr key={sectionId} className={isEditing ? 'admin-table-row-active' : ''}>
@@ -218,6 +222,7 @@ const AboutPageCMS = () => {
                   </td>
                   <td>{titleEn}</td>
                   <td className="admin-td-ar">{titleAr}</td>
+                  <td>{metaTitleEn}</td>
                   <td>
                     <div className="admin-section-thumb">
                       {previewImage
@@ -375,6 +380,15 @@ const SectionEditor = ({
   }, [formDataEn, formDataAr, updateField, getNestedValue]);
 
   const renderFields = () => {
+    if (sectionId === 'metadata') {
+      return (
+        <>
+          {renderBilingualField("Metadata Title", "metaTitle")}
+          {renderBilingualField("Metadata Description", "metaDescription", "textarea", 4)}
+        </>
+      );
+    }
+
     if (sectionId === 'collaboration') {
       const textListEn = formDataEn.textList || [];
       const textListAr = formDataAr.textList || [];

@@ -22,10 +22,13 @@ const ServiceDetails = ({
     const {
         title,
         image,
+        detailImage,
         content,
         slug,
         section,
     } = data || {};
+
+    const displayImage = detailImage || image;
 
     return (
         <div className="page-service-details mt-100 mb-100">
@@ -42,26 +45,36 @@ const ServiceDetails = ({
                         <ServiceSidebar slug={slug} section={section} locale={locale} />
                     </div>
                     <div className="col-span-12 lg:col-span-7">
-                        <div className="service-details-content">
-                            {image &&
-                                <div className="details-media radius18" data-aos="fade-up">
-                                    <Image
-                                        src={image}
-                                        width={1000}
-                                        height={596}
-                                        loading="lazy"
-                                        alt="image"
-                                    />
-                                </div>
-                            }
-                            
-                            {title &&
-                                <h2 className="heading text-50" data-aos="fade-up">
-                                    {title}
-                                </h2>
-                            }
+                        <div className="service-details-content blog-details">
+                            <div className="card-blog-list" data-aos="fade-up">
+                                {displayImage && (
+                                    <div className="card-blog-list-media radius18">
+                                        <div className="media">
+                                            <Image
+                                                src={displayImage}
+                                                width={1000}
+                                                height={707}
+                                                loading="lazy"
+                                                alt={title || 'Service image'}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
-                            {content && <>{parse(content)}</>}
+                                <div className="card-blog-content">
+                                    {title && (
+                                        <h2 className="card-blog-heading heading text-50">
+                                            {title}
+                                        </h2>
+                                    )}
+
+                                    {content && (
+                                        <div className="blog-description">
+                                            {parse(content)}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
 
                             {/* <Accordion 
                                 cls="service-faq"

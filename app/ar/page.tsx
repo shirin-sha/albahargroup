@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import HeroSlider from '@/components/sections/HeroSlider';
 import ImageText2 from '@/components/sections/ImageText2';
 import OurServicesAccordion from '@/components/sections/OurServicesAccordion';
@@ -17,6 +18,30 @@ import { PricingPlanData } from '@/data/sections/pricingPlanData';
 import { FaqData } from '@/data/sections/faqData';
 import { FeaturedBlogData } from '@/data/sections/featuredBlogData';
 import { TestimonialSliderThumbData } from '@/data/sections/testimonialSliderThumbData';
+import { absoluteUrl } from '@/libs/seo';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getHomeCMSData();
+  const heroHeading = cmsData?.hero?.ar?.slides?.[0]?.heading || 'الرئيسية';
+  const metaTitle = cmsData?.metadata?.ar?.metaTitle || cmsData?.hero?.ar?.seo?.metaTitle || heroHeading;
+  const description =
+    cmsData?.metadata?.ar?.metaDescription ||
+    cmsData?.hero?.ar?.seo?.metaDescription ||
+    cmsData?.imageText?.ar?.text ||
+    cmsData?.services?.ar?.heading ||
+    'الصفحة الرئيسية لمجموعة البهار: الأعمال والقدرات والمشاريع وآخر المستجدات.';
+  return {
+    title: metaTitle,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/ar'),
+      languages: {
+        en: absoluteUrl('/'),
+        ar: absoluteUrl('/ar'),
+      },
+    },
+  };
+}
 
 const Home = async () => {
   const cmsData = await getHomeCMSData();

@@ -4,15 +4,13 @@ import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
 import { PartnershipsData } from '@/data/sections/partnershipsData';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
+import { absoluteUrl } from '@/libs/seo';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import Partnerships from '@/components/sections/Partnerships';
 
 
 const PAGE_TITLE: string = 'شراكاتنا';
-export const metadata: Metadata = {
-  title: PAGE_TITLE,
-}
 
 async function getPartnershipsCMSData(lang: 'en' | 'ar' = 'ar') {
   try {
@@ -20,20 +18,45 @@ async function getPartnershipsCMSData(lang: 'en' | 'ar' = 'ar') {
     const collection = db.collection<HomePageSection>("partnershipsPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const bannerSection = sections.find(s => s.sectionId === 'banner');
     const partnershipsSection = sections.find(s => s.sectionId === 'partnerships');
     
     return {
+      metadata: metadataSection?.[lang] || null,
       banner: bannerSection?.[lang] || { title: PAGE_TITLE },
       partnerships: partnershipsSection?.[lang] || null,
     };
   } catch (error) {
     console.error('Error fetching partnerships CMS data:', error);
     return {
+      metadata: null,
       banner: { title: PAGE_TITLE },
       partnerships: null,
     };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getPartnershipsCMSData('ar');
+  const title = cmsData?.metadata?.metaTitle || cmsData?.banner?.title || PAGE_TITLE;
+  const description =
+    cmsData?.metadata?.metaDescription ||
+    cmsData?.partnerships?.text ||
+    cmsData?.partnerships?.heading ||
+    'استكشف شراكات مجموعة البهار وشبكة التعاون.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/ar/ourpartnerships'),
+      languages: {
+        en: absoluteUrl('/ourpartnerships'),
+        ar: absoluteUrl('/ar/ourpartnerships'),
+      },
+    },
+  };
 }
 
 const PartnershipsPage = async () => {

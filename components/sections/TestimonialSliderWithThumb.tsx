@@ -38,7 +38,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
             return {
                 heading: r.detailTitle || r.title,
                 review: r.description || '',
-                image: r.image || '',
+                image: (r as any).homeImage || r.image || '',
                 icon: r.icon || '',
                 button: {
                     label: language === 'ar' ? 'مزيد من التفاصيل' : 'More Details',

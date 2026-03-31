@@ -14,6 +14,7 @@ export interface HomePageSection {
 }
 
 export const HOME_PAGE_SECTIONS = [
+  'metadata',
   'hero',
   'imageText',
   'services',

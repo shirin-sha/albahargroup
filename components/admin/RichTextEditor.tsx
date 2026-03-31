@@ -13,6 +13,7 @@ interface RichTextEditorProps {
   placeholder?: string;
   label?: string;
   required?: boolean;
+  dir?: 'ltr' | 'rtl' | 'auto';
 }
 
 const RichTextEditor = ({
@@ -21,6 +22,7 @@ const RichTextEditor = ({
   placeholder = '',
   label,
   required = false,
+  dir,
 }: RichTextEditorProps) => {
   const lastValueRef = useRef<string>(value || '');
   const isUpdatingRef = useRef(false);
@@ -75,7 +77,7 @@ const RichTextEditor = ({
   }, [onChange]);
 
   const editorContent = (
-    <div className="rich-text-editor-wrapper">
+    <div className="rich-text-editor-wrapper" dir={dir}>
       <ReactQuill
         theme="snow"
         value={value || ''}

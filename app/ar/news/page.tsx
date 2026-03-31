@@ -2,14 +2,12 @@ import type { Metadata } from 'next';
 import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
+import { absoluteUrl } from '@/libs/seo';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import BlogGrid from '@/components/sections/BlogGrid';
 
 const PAGE_TITLE: string = 'الأخبار';
-export const metadata: Metadata = {
-  title: PAGE_TITLE,
-}
 
 async function getNewsCMSData(lang: 'en' | 'ar' = 'ar') {
   try {
@@ -17,20 +15,45 @@ async function getNewsCMSData(lang: 'en' | 'ar' = 'ar') {
     const collection = db.collection<HomePageSection>("newsPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const bannerSection = sections.find(s => s.sectionId === 'banner');
     const blogGridSection = sections.find(s => s.sectionId === 'blogGrid');
     
     return {
+      metadata: metadataSection?.[lang] || null,
       banner: bannerSection?.[lang] || { title: PAGE_TITLE },
       blogGrid: blogGridSection?.[lang] || null,
     };
   } catch (error) {
     console.error('Error fetching news CMS data:', error);
     return {
+      metadata: null,
       banner: { title: PAGE_TITLE },
       blogGrid: null,
     };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getNewsCMSData('ar');
+  const title = cmsData?.metadata?.metaTitle || cmsData?.banner?.title || PAGE_TITLE;
+  const description =
+    cmsData?.metadata?.metaDescription ||
+    cmsData?.blogGrid?.heading ||
+    cmsData?.blogGrid?.subheading ||
+    'آخر أخبار مجموعة البهار والتحديثات والإعلانات.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/ar/news'),
+      languages: {
+        en: absoluteUrl('/news'),
+        ar: absoluteUrl('/ar/news'),
+      },
+    },
+  };
 }
 
 const Blog = async () => {
@@ -53,6 +76,8 @@ const Blog = async () => {
             />
             <BlogGrid 
                 cls="mt-100 mb-100"
+                subheading={cmsData.blogGrid?.subheading || undefined}
+                heading={cmsData.blogGrid?.heading || undefined}
             />
         </>
     )

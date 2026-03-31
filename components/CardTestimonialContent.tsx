@@ -10,7 +10,7 @@ const CardTestimonialContent = ({ data }: {data: TestimonialProps & { button?: {
 
     return (
         <div className="thumb-card">
-            {review && <p className="text text-18">{parser(review)}</p>}
+            {review && <div className="text text-18">{parser(review)}</div>}
             {button && button.label && button.href ? (
                 <PrimaryButton
                     label={button.label}

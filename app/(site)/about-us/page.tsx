@@ -12,10 +12,7 @@ import StickyBanner from "@/components/sections/StickyBanner";
 import Heritage from '@/components/sections/Heritage';
 import Collaboration from '@/components/sections/Collaboration';
 import Timeline from '@/components/sections/Timeline';
-
-export const metadata: Metadata = {
-    title: 'About Us',
-}
+import { absoluteUrl } from '@/libs/seo';
 
 async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
   try {
@@ -23,6 +20,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
     const collection = db.collection<HomePageSection>("aboutPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const pageHeaderSection = sections.find(s => s.sectionId === 'pageHeader');
     const testimonialsSection = sections.find(s => s.sectionId === 'testimonials');
     const stickyBannerSection = sections.find(s => s.sectionId === 'stickyBanner');
@@ -33,6 +31,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
     const faqSection = sections.find(s => s.sectionId === 'faq');
     
     return {
+      metadata: metadataSection?.[lang] || null,
       pageHeader: pageHeaderSection?.[lang] || null,
       testimonials: testimonialsSection?.[lang] || null,
       stickyBanner: stickyBannerSection?.[lang] || null,
@@ -45,6 +44,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
   } catch (error) {
     console.error('Error fetching about CMS data:', error);
     return {
+      metadata: null,
       pageHeader: null,
       testimonials: null,
       stickyBanner: null,
@@ -55,6 +55,28 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
       faq: null,
     };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getAboutCMSData('en');
+  const title = cmsData?.metadata?.metaTitle || getAboutPageBannerTitle(cmsData.pageHeader, 'en');
+  const description =
+    cmsData?.metadata?.metaDescription ||
+    cmsData?.testimonials?.heading ||
+    cmsData?.heritage?.text ||
+    'Learn about Al Bahar Group history, values, leadership, and corporate journey.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/about-us'),
+      languages: {
+        en: absoluteUrl('/about-us'),
+        ar: absoluteUrl('/ar/about-us'),
+      },
+    },
+  };
 }
 
 const About = async () => {

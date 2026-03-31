@@ -9,11 +9,16 @@ import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import Services from '@/components/sections/Services';
 import PricingPlan from '@/components/sections/PricingPlan';
 import TeamSlider from '@/components/sections/TeamSlider';
+import { absoluteUrl } from '@/libs/seo';
 
 const PAGE_TITLE: string = 'Our Service';
 export const metadata: Metadata = {
   title: PAGE_TITLE,
-}
+  description: 'Browse Al Bahar Group services and solutions across businesses and capabilities.',
+  alternates: {
+    canonical: absoluteUrl('/services'),
+  },
+};
 
 const PageServices = () => {
     return(

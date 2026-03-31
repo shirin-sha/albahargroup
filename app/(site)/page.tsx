@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import HeroSlider from '@/components/sections/HeroSlider';
 import ImageText2 from '@/components/sections/ImageText2';
 import OurServicesAccordion from '@/components/sections/OurServicesAccordion';
@@ -8,6 +9,30 @@ import Faq from '@/components/sections/Faq';
 import FeaturedBlog from '@/components/sections/FeaturedBlog';
 import TestimonialSliderWithThumb from '@/components/sections/TestimonialSliderWithThumb';
 import { getHomeCMSData } from '@/libs/cms/home';
+import { absoluteUrl } from '@/libs/seo';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getHomeCMSData();
+  const heroHeading = cmsData?.hero?.en?.slides?.[0]?.heading || 'Home';
+  const metaTitle = cmsData?.metadata?.en?.metaTitle || cmsData?.hero?.en?.seo?.metaTitle || heroHeading;
+  const description =
+    cmsData?.metadata?.en?.metaDescription ||
+    cmsData?.hero?.en?.seo?.metaDescription ||
+    cmsData?.imageText?.en?.text ||
+    cmsData?.services?.en?.heading ||
+    'Al Bahar Group home: businesses, capabilities, projects, and latest updates.';
+  return {
+    title: metaTitle,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/'),
+      languages: {
+        en: absoluteUrl('/'),
+        ar: absoluteUrl('/ar'),
+      },
+    },
+  };
+}
 
 const Home = async () => {
   const cmsData = await getHomeCMSData();

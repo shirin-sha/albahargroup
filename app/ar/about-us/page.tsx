@@ -12,10 +12,7 @@ import StickyBanner from "@/components/sections/StickyBanner";
 import Heritage from '@/components/sections/Heritage';
 import Collaboration from '@/components/sections/Collaboration';
 import Timeline from '@/components/sections/Timeline';
-
-export const metadata: Metadata = {
-    title: 'من نحن',
-}
+import { absoluteUrl } from '@/libs/seo';
 
 async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
   try {
@@ -23,6 +20,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
     const collection = db.collection<HomePageSection>("aboutPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const pageHeaderSection = sections.find(s => s.sectionId === 'pageHeader');
     const testimonialsSection = sections.find(s => s.sectionId === 'testimonials');
     const stickyBannerSection = sections.find(s => s.sectionId === 'stickyBanner');
@@ -33,6 +31,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
     const faqSection = sections.find(s => s.sectionId === 'faq');
     
     return {
+      metadata: metadataSection?.[lang] || null,
       pageHeader: pageHeaderSection?.[lang] || null,
       testimonials: testimonialsSection?.[lang] || null,
       stickyBanner: stickyBannerSection?.[lang] || null,
@@ -45,6 +44,7 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
   } catch (error) {
     console.error('Error fetching about CMS data:', error);
     return {
+      metadata: null,
       pageHeader: null,
       testimonials: null,
       stickyBanner: null,
@@ -55,6 +55,28 @@ async function getAboutCMSData(lang: 'en' | 'ar' = 'ar') {
       faq: null,
     };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getAboutCMSData('ar');
+  const title = cmsData?.metadata?.metaTitle || getAboutPageBannerTitle(cmsData.pageHeader, 'ar');
+  const description =
+    cmsData?.metadata?.metaDescription ||
+    cmsData?.testimonials?.heading ||
+    cmsData?.heritage?.text ||
+    'تعرف على تاريخ مجموعة البهار وقيمها وقيادتها ومسيرتها المؤسسية.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/ar/about-us'),
+      languages: {
+        en: absoluteUrl('/about-us'),
+        ar: absoluteUrl('/ar/about-us'),
+      },
+    },
+  };
 }
 
 const About = async () => {

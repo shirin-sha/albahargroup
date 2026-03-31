@@ -7,6 +7,7 @@ export async function getHomeCMSData() {
     const collection = db.collection<HomePageSection>('homePageSections');
     const sections = await collection.find({ enabled: { $ne: false } }).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const heroSection = sections.find(s => s.sectionId === 'hero');
     const imageTextSection = sections.find(s => s.sectionId === 'imageText');
     const servicesSection = sections.find(s => s.sectionId === 'services');
@@ -19,6 +20,7 @@ export async function getHomeCMSData() {
     
     // Return both languages together
     return {
+      metadata: metadataSection ? { en: metadataSection.en || null, ar: metadataSection.ar || null } : null,
       hero: heroSection ? { en: heroSection.en || null, ar: heroSection.ar || null } : null,
       imageText: imageTextSection ? { en: imageTextSection.en || null, ar: imageTextSection.ar || null } : null,
       services: servicesSection ? { en: servicesSection.en || null, ar: servicesSection.ar || null } : null,
@@ -33,6 +35,7 @@ export async function getHomeCMSData() {
     const message = error instanceof Error ? error.message : String(error);
     console.warn('Home CMS unavailable, using empty CMS data:', message);
     return {
+      metadata: null,
       hero: null,
       imageText: null,
       services: null,

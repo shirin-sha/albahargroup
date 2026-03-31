@@ -16,6 +16,7 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
   const [loading, setLoading] = useState(true);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [svgFileName, setSvgFileName] = useState<string>('');
   const [formData, setFormData] = useState<Partial<Service>>({
     section,
     slug: '',
@@ -25,20 +26,20 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
     description: '',
     descriptionAr: '',
     image: '',
+    homeImage: '',
+    detailImage: '',
     content: '',
     contentAr: '',
     enabled: true,
   });
+
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   const svgInputRef = useRef<HTMLInputElement>(null);
 
   const sectionTitle = section === 'businesses' ? 'Businesses' : 'Capabilities';
   const singular = section === 'businesses' ? 'Business' : 'Capability';
 
-  const headingFieldHelp =
-    section === 'capabilities'
-      ? 'Main name for this capability: home page services accordion, capability detail page, and sidebar lists.'
-      : 'Main name for this business: home testimonial slider, business service page, and sidebar lists.';
 
   const headingPlaceholderEn =
     section === 'capabilities' ? 'e.g. Human Capital' : 'e.g. Consumer Goods';
@@ -50,6 +51,7 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
       alert('Please select an SVG file');
       return;
     }
+    setSvgFileName(file.name);
     const reader = new FileReader();
     reader.onload = () => {
       setFormData((prev) => ({ ...prev, icon: reader.result as string }));
@@ -119,6 +121,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
 
   const handleEdit = (service: Service) => {
     setEditingService(service);
+    setIsSlugManuallyEdited(true);
+    setSvgFileName('');
     setFormData({
       section,
       slug: service.slug || '',
@@ -128,6 +132,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
       description: service.description || '',
       descriptionAr: service.descriptionAr || '',
       image: service.image || '',
+      homeImage: (service as any).homeImage || '',
+      detailImage: (service as any).detailImage || '',
       content: service.content || '',
       contentAr: service.contentAr || '',
       enabled: service.enabled !== undefined ? service.enabled : true,
@@ -165,13 +171,25 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
       description: '',
       descriptionAr: '',
       image: '',
+      homeImage: '',
+      detailImage: '',
       content: '',
       contentAr: '',
       enabled: true,
     });
+    setIsSlugManuallyEdited(false);
     setEditingService(null);
     setIsAdding(false);
+    setSvgFileName('');
   };
+
+  const toSlug = (value: string) =>
+    value
+      .toLowerCase()
+      .trim()
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
 
   if (loading) {
     return <div className="admin-loading">Loading...</div>;
@@ -203,34 +221,31 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
             <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
           </div>
           <form onSubmit={handleSubmit} className="admin-cms-form">
-            <div className="form-group">
-              <label>Slug (URL)</label>
-              <input
-                type="text"
-                value={formData.slug || ''}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                placeholder="e.g. consumer-goods"
-              />
-              <small>Shared URL for both languages</small>
-            </div>
-
             <div className="form-group-bilingual">
               <label>Heading *</label>
-              <small className="block" style={{ marginBottom: '8px', color: '#6b7280' }}>
-                {headingFieldHelp}
-              </small>
+             
               <div className="bilingual-inputs">
                 <div className="bilingual-input-group">
                   <span className="bilingual-label">English</span>
                   <input
                     type="text"
                     value={formData.detailTitle || ''}
-                    onChange={(e) => setFormData({ ...formData, detailTitle: e.target.value })}
+                    onChange={(e) => {
+                      const nextTitle = e.target.value;
+                      setFormData((prev) => {
+                        const next: Partial<Service> = { ...prev, detailTitle: nextTitle };
+                        if (!isSlugManuallyEdited) {
+                          const auto = toSlug(nextTitle);
+                          if (auto) next.slug = auto;
+                        }
+                        return next;
+                      });
+                    }}
                     placeholder={headingPlaceholderEn}
                     required
                   />
                 </div>
-                <div className="bilingual-input-group">
+                <div className="bilingual-input-group" dir="rtl" lang="ar">
                   <span className="bilingual-label">العربية</span>
                   <input
                     type="text"
@@ -244,41 +259,64 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
             </div>
 
             <div className="form-group">
-              <label>Icon (SVG)</label>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '8px' }}>
-                <button
-                  type="button"
-                  className="button"
-                  style={{ whiteSpace: 'nowrap' }}
-                  onClick={() => svgInputRef.current?.click()}
-                >
-                  Upload SVG File
-                </button>
-                {formData.icon && (
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn-delete"
-                    style={{ whiteSpace: 'nowrap' }}
-                    onClick={() => setFormData((prev) => ({ ...prev, icon: '' }))}
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
+              <label>Slug (URL)</label>
               <input
-                ref={svgInputRef}
-                type="file"
-                accept=".svg,image/svg+xml"
-                onChange={handleSvgUpload}
-                style={{ display: 'none' }}
+                type="text"
+                value={formData.slug || ''}
+                onChange={(e) => {
+                  setIsSlugManuallyEdited(true);
+                  setFormData({ ...formData, slug: e.target.value });
+                }}
+                placeholder="e.g. consumer-goods"
               />
-              <textarea
-                value={formData.icon || ''}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder='Or paste SVG code directly, e.g. <svg xmlns="http://www.w3.org/2000/svg" ...>...</svg>'
-                rows={4}
-                style={{ fontFamily: 'monospace', fontSize: '13px' }}
-              />
+              <small>Auto-generated from heading. You can edit it.</small>
+            </div>
+
+            <div className="form-group">
+              <label>Icon (SVG)</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                <label
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '10px 14px',
+                    border: '1px solid #111',
+                    borderRadius: '6px',
+                    background: '#fff',
+                    color: '#111',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Choose file
+                  <input
+                    ref={svgInputRef}
+                    type="file"
+                    accept=".svg,image/svg+xml"
+                    onChange={handleSvgUpload}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+
+                <span
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    fontSize: '12px',
+                    color: svgFileName ? '#111827' : '#6b7280',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  title={svgFileName || undefined}
+                >
+                  {svgFileName || 'No file chosen'}
+                </span>
+              </div>
+          
               {formData.icon && (
                 <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '12px', color: '#6b7280' }}>Preview:</span>
@@ -286,39 +324,74 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
                     style={{ display: 'inline-flex', width: '40px', height: '40px', color: '#374151' }}
                     dangerouslySetInnerHTML={{ __html: formData.icon }}
                   />
+                  <button
+                    type="button"
+                    aria-label="Remove selected SVG"
+                    title="Remove"
+                    onClick={() => {
+                      setFormData((prev) => ({ ...prev, icon: '' }));
+                      setSvgFileName('');
+                      if (svgInputRef.current) svgInputRef.current.value = '';
+                    }}
+                    style={{
+                      marginLeft: '4px',
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '999px',
+                      border: '1px solid #d1d5db',
+                      background: '#fff',
+                      color: '#111827',
+                      cursor: 'pointer',
+                      lineHeight: 1,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '16px',
+                    }}
+                  >
+                    ×
+                  </button>
                 </div>
               )}
             </div>
 
             <div className="form-group-bilingual">
-              <label>Description</label>
+              <label>Short Description</label>
               <div className="bilingual-inputs">
                 <div className="bilingual-input-group">
                   <span className="bilingual-label">English</span>
                   <RichTextEditor
                     value={formData.description || ''}
                     onChange={(value) => setFormData({ ...formData, description: value })}
-                    placeholder="Short description shown in the services accordion and cards"
+                    placeholder="Short description shown in the home/listing cards"
                   />
                 </div>
-                <div className="bilingual-input-group">
+                <div className="bilingual-input-group" dir="rtl" lang="ar">
                   <span className="bilingual-label">العربية</span>
                   <RichTextEditor
                     value={formData.descriptionAr || ''}
                     onChange={(value) => setFormData({ ...formData, descriptionAr: value })}
                     placeholder="وصف قصير"
+                    dir="rtl"
                   />
                 </div>
               </div>
             </div>
 
             <ImageUpload
-              value={formData.image || ''}
-              onChange={(url) => setFormData({ ...formData, image: url })}
+              value={formData.homeImage || ''}
+              onChange={(url) => setFormData({ ...formData, homeImage: url })}
               placeholder="/img/service/s1.jpg"
               folder="service"
-              required
-              label="Image"
+              label="Home Image"
+            />
+
+            <ImageUpload
+              value={formData.detailImage || ''}
+              onChange={(url) => setFormData({ ...formData, detailImage: url })}
+              placeholder="/img/service/s1.jpg"
+              folder="service"
+              label="Detail Image"
             />
 
             <div className="form-group-bilingual">
@@ -332,12 +405,13 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
                     placeholder="Optional rich content for the service detail page"
                   />
                 </div>
-                <div className="bilingual-input-group">
+                <div className="bilingual-input-group" dir="rtl" lang="ar">
                   <span className="bilingual-label">العربية</span>
                   <RichTextEditor
                     value={formData.contentAr || ''}
                     onChange={(value) => setFormData({ ...formData, contentAr: value })}
                     placeholder="محتوى الصفحة بالعربية"
+                    dir="rtl"
                   />
                 </div>
               </div>
@@ -371,7 +445,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
               <th>Heading (EN)</th>
               <th>Heading (AR)</th>
               <th>Slug</th>
-              <th>Image</th>
+              <th>Home Image</th>
+              <th>Detail Image</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -379,7 +454,7 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
           <tbody>
             {services.length === 0 ? (
               <tr>
-                <td colSpan={6} className="admin-table-empty">
+                <td colSpan={7} className="admin-table-empty">
                   No {sectionTitle.toLowerCase()} found. Click &ldquo;Add New {singular}&rdquo; to create one.
                 </td>
               </tr>
@@ -398,7 +473,8 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
                     <td><strong>{service.detailTitle || service.title}</strong></td>
                     <td dir="rtl" style={{ maxWidth: '220px' }}>{service.detailTitleAr || service.titleAr || '—'}</td>
                     <td>{service.slug}</td>
-                    <td>{service.image}</td>
+                    <td>{(service as any).homeImage || '—'}</td>
+                    <td>{(service as any).detailImage || '—'}</td>
                     <td>
                       <span className={`admin-badge ${service.enabled !== false ? 'published' : 'draft'}`}>
                         {service.enabled !== false ? 'Published' : 'Draft'}

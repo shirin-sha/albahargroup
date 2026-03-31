@@ -5,11 +5,20 @@ import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg
 
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ServicesSectionListing from '@/components/sections/ServicesSectionListing';
+import { absoluteUrl } from '@/libs/seo';
 
 const PAGE_TITLE = 'أعمالنا';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
+  description: 'استكشف أعمال مجموعة البهار مع نبذة مختصرة عن كل قطاع.',
+  alternates: {
+    canonical: absoluteUrl('/ar/businesses'),
+    languages: {
+      en: absoluteUrl('/businesses'),
+      ar: absoluteUrl('/ar/businesses'),
+    },
+  },
 };
 
 const Page = () => {

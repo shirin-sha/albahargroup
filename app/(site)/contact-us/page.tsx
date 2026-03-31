@@ -3,15 +3,13 @@ import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
 import { ContactData } from '@/data/sections/contactData';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
+import { absoluteUrl } from '@/libs/seo';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import ContactSection from '@/components/sections/Contact';
 import MapSection from '@/components/sections/Map';
 
 const PAGE_TITLE: string = 'Contact Us';
-export const metadata: Metadata = {
-  title: PAGE_TITLE,
-}
 
 async function getContactCMSData(lang: 'en' | 'ar' = 'en') {
   try {
@@ -19,20 +17,45 @@ async function getContactCMSData(lang: 'en' | 'ar' = 'en') {
     const collection = db.collection<HomePageSection>("contactPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const bannerSection = sections.find(s => s.sectionId === 'banner');
     const contactFormSection = sections.find(s => s.sectionId === 'contactForm');
     
     return {
+      metadata: metadataSection?.[lang] || null,
       banner: bannerSection?.[lang] || { title: PAGE_TITLE },
       contactForm: contactFormSection?.[lang] || null,
     };
   } catch (error) {
     console.error('Error fetching contact CMS data:', error);
     return {
+      metadata: null,
       banner: { title: PAGE_TITLE },
       contactForm: null,
     };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getContactCMSData('en');
+  const title = cmsData?.metadata?.metaTitle || cmsData?.banner?.title || PAGE_TITLE;
+  const description =
+    cmsData?.metadata?.metaDescription ||
+    cmsData?.contactForm?.text ||
+    cmsData?.contactForm?.heading ||
+    'Contact Al Bahar Group for enquiries, partnerships, and support.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/contact-us'),
+      languages: {
+        en: absoluteUrl('/contact-us'),
+        ar: absoluteUrl('/ar/contact-us'),
+      },
+    },
+  };
 }
 
 const Contact = async () => {

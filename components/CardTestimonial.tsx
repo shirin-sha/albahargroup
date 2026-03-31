@@ -28,7 +28,7 @@ const CardTestimonial = ({ data }: {data: TestimonialProps}) => {
                 </ul>
             }
 
-            {review && <p className="text text-24">{parser(review)}</p>}
+            {review && <div className="text text-24">{parser(review)}</div>}
 
             <div className="user-info-wrap">
                 <div className="user-info">

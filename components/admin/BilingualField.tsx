@@ -37,6 +37,7 @@ const BilingualField = memo(({
               value={enValue || ''}
               onChange={onEnChange}
               placeholder={placeholder}
+              dir="ltr"
             />
           </div>
           <div className="bilingual-input-group" dir="rtl">
@@ -46,6 +47,7 @@ const BilingualField = memo(({
                 value={arValue || ''}
                 onChange={onArChange}
                 placeholder={placeholder}
+                dir="rtl"
               />
             </div>
           </div>

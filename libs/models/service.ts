@@ -9,7 +9,12 @@ export interface Service {
   detailTitle?: string;
   detailTitleAr?: string;
   icon?: string;
+  /** Legacy single image field (used as fallback). */
   image: string;
+  /** Image used on home/listing cards (optional; falls back to `image`). */
+  homeImage?: string;
+  /** Image used on detail page (optional; falls back to `image`). */
+  detailImage?: string;
   description?: string;
   descriptionAr?: string;
   content?: string;

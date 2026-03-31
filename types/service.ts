@@ -8,6 +8,8 @@ export interface ServiceProps {
     section?: 'businesses' | 'capabilities';
     slug?: string;
     image?: string;
+    homeImage?: string;
+    detailImage?: string;
     icon?: string;
     title?: string;
     titleAr?: string;

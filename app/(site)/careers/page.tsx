@@ -4,14 +4,12 @@ import { CareerData } from '@/data/sections/careerData';
 import { Job } from '@/libs/models/job';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
+import { absoluteUrl } from '@/libs/seo';
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import CareerSection from '@/components/sections/Career';
 
 
 const PAGE_TITLE: string = 'Careers';
-export const metadata: Metadata = {
-  title: PAGE_TITLE,
-}
 
 async function getCareersCMSData(lang: 'en' | 'ar' = 'en') {
   try {
@@ -19,20 +17,45 @@ async function getCareersCMSData(lang: 'en' | 'ar' = 'en') {
     const collection = db.collection<HomePageSection>("careersPageSections");
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
     
+    const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const bannerSection = sections.find(s => s.sectionId === 'banner');
     const careerSection = sections.find(s => s.sectionId === 'careerSection');
     
     return {
+      metadata: metadataSection?.[lang] || null,
       banner: bannerSection?.[lang] || { title: PAGE_TITLE },
       careerSection: careerSection?.[lang] || null,
     };
   } catch (error) {
     console.error('Error fetching careers CMS data:', error);
     return {
+      metadata: null,
       banner: { title: PAGE_TITLE },
       careerSection: null,
     };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cmsData = await getCareersCMSData('en');
+  const title = cmsData?.metadata?.metaTitle || cmsData?.banner?.title || PAGE_TITLE;
+  const description =
+    cmsData?.metadata?.metaDescription ||
+    cmsData?.careerSection?.text ||
+    cmsData?.careerSection?.heading ||
+    'Explore open roles and career opportunities at Al Bahar Group.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: absoluteUrl('/careers'),
+      languages: {
+        en: absoluteUrl('/careers'),
+        ar: absoluteUrl('/ar/careers'),
+      },
+    },
+  };
 }
 
 async function getJobs(): Promise<Job[]> {

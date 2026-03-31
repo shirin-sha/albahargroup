@@ -72,7 +72,7 @@ const ServicesSectionListing = ({
         slug,
         title: name,
         description: desc,
-        image: r.image,
+        image: (r as any).homeImage || r.image,
         href,
       };
     });

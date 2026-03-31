@@ -108,6 +108,7 @@ const getPreviewImage = (section: SectionData | undefined, sectionId: string): s
 const getTitle = (section: SectionData | undefined, lang: 'en' | 'ar'): string => {
   const data = section?.[lang];
   if (!data) return '—';
+  if (section?.sectionId === 'metadata') return data.metaTitle || '—';
   return data.heading || data.title || data.subheading || data.slides?.[0]?.heading || '—';
 };
 
@@ -175,6 +176,7 @@ const HomePageCMS = () => {
               <th>Section</th>
               <th>Title (EN)</th>
               <th>Title (AR)</th>
+              <th>Metadata (EN)</th>
               <th>Image</th>
               <th>Action</th>
             </tr>
@@ -186,6 +188,9 @@ const HomePageCMS = () => {
               const previewImage = getPreviewImage(section, sectionId);
               const titleEn = getTitle(section, 'en');
               const titleAr = getTitle(section, 'ar');
+              const metaTitleEn = sectionId === 'metadata'
+                ? (section?.en?.metaTitle || '—')
+                : '—';
               const isEditing = editingSectionId === sectionId;
               return (
                 <tr key={sectionId} className={isEditing ? 'admin-table-row-active' : ''}>
@@ -197,6 +202,7 @@ const HomePageCMS = () => {
                   </td>
                   <td>{titleEn}</td>
                   <td className="admin-td-ar">{titleAr}</td>
+                  <td>{metaTitleEn}</td>
                   <td>
                     <div className="admin-section-thumb">
                       {previewImage
@@ -227,6 +233,7 @@ const HomePageCMS = () => {
 };
 
 const SECTION_META: Record<string, { label: string; desc: string; icon: string }> = {
+  metadata:     { label: 'Metadata',         desc: 'Homepage SEO title and description',              icon: '🔎' },
   hero:         { label: 'Hero Slider',      desc: 'Main banner slides with heading, text & CTA',    icon: '🖼️' },
   imageText:    { label: 'Our Heritage',     desc: 'Side-by-side media and content block',           icon: '📄' },
   services:     { label: 'Capabilities',         desc: 'Services section heading and link',              icon: '⚙️' },
@@ -260,6 +267,7 @@ const SectionEditor = ({
     const initializeData = (data: any, sectionId: string) => {
       if (sectionId === 'hero') {
         return {
+          ...data,
           slides: Array.isArray(data?.slides) ? data.slides : 
                  (data?.subheading ? [data] : [])
         };
@@ -439,6 +447,8 @@ const SectionEditor = ({
 
   const renderFields = () => {
     switch (sectionId) {
+      case 'metadata':
+        return null;
       case 'hero':
         const slidesEn = formDataEn.slides || [];
         const slidesAr = formDataAr.slides || [];
@@ -1044,6 +1054,17 @@ const SectionEditor = ({
         <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>✕ Close</button>
       </div>
       <form onSubmit={handleSubmit} className="admin-cms-form">
+        {sectionId === 'metadata' && (
+          <div className="cms-item-card" style={{ marginBottom: '16px' }}>
+            <div className="cms-item-header">
+              <h4>SEO Metadata</h4>
+            </div>
+            <div className="hero-slide-fields">
+              {renderBilingualField("Metadata Title", "metaTitle")}
+              {renderBilingualField("Metadata Description", "metaDescription", "textarea", 3)}
+            </div>
+          </div>
+        )}
         {renderFields()}
         {sectionId !== 'testimonials' && (
           <div className="form-actions">

@@ -5,11 +5,20 @@ import BreadcrumbBannerImageMobile from '@/public/img/banner/page-banner-575.jpg
 
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ServicesSectionListing from '@/components/sections/ServicesSectionListing';
+import { absoluteUrl } from '@/libs/seo';
 
 const PAGE_TITLE = 'Our Businesses';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
+  description: 'Explore Al Bahar Group businesses with a quick overview of each vertical.',
+  alternates: {
+    canonical: absoluteUrl('/businesses'),
+    languages: {
+      en: absoluteUrl('/businesses'),
+      ar: absoluteUrl('/ar/businesses'),
+    },
+  },
 };
 
 const Page = () => {
