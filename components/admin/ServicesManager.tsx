@@ -473,8 +473,40 @@ const ServicesManager = ({ section }: ServicesManagerProps) => {
                     <td><strong>{service.detailTitle || service.title}</strong></td>
                     <td dir="rtl" style={{ maxWidth: '220px' }}>{service.detailTitleAr || service.titleAr || '—'}</td>
                     <td>{service.slug}</td>
-                    <td>{(service as any).homeImage || '—'}</td>
-                    <td>{(service as any).detailImage || '—'}</td>
+                    <td>
+                      {((service as any).homeImage) ? (
+                        <img
+                          src={(service as any).homeImage}
+                          alt="Home"
+                          title={(service as any).homeImage}
+                          style={{
+                            width: '56px',
+                            height: '40px',
+                            objectFit: 'cover',
+                            borderRadius: '6px',
+                            border: '1px solid #e5e7eb',
+                            background: '#fff',
+                          }}
+                        />
+                      ) : '—'}
+                    </td>
+                    <td>
+                      {((service as any).detailImage) ? (
+                        <img
+                          src={(service as any).detailImage}
+                          alt="Detail"
+                          title={(service as any).detailImage}
+                          style={{
+                            width: '56px',
+                            height: '40px',
+                            objectFit: 'cover',
+                            borderRadius: '6px',
+                            border: '1px solid #e5e7eb',
+                            background: '#fff',
+                          }}
+                        />
+                      ) : '—'}
+                    </td>
                     <td>
                       <span className={`admin-badge ${service.enabled !== false ? 'published' : 'draft'}`}>
                         {service.enabled !== false ? 'Published' : 'Draft'}
