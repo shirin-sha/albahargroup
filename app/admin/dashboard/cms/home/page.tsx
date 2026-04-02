@@ -272,9 +272,19 @@ const SectionEditor = ({
                  (data?.subheading ? [data] : [])
         };
       } else if (sectionId === 'imageText') {
+        const logoList = Array.isArray(data?.rotatingLogo?.logo?.imageList)
+          ? data.rotatingLogo.logo.imageList
+          : [];
         return {
           ...data,
-          items: Array.isArray(data?.items) ? data.items : []
+          items: Array.isArray(data?.items) ? data.items : [],
+          rotatingLogo: {
+            logo: {
+              wrapperCls: data?.rotatingLogo?.logo?.wrapperCls || 'running-content-bg my-1',
+              container: data?.rotatingLogo?.logo?.container || 'container-fluid',
+              imageList: logoList,
+            },
+          },
         };
       } else if (sectionId === 'whyChooseUs') {
         return {
@@ -309,8 +319,17 @@ const SectionEditor = ({
         setFormDataEn({ slides: [] });
         setFormDataAr({ slides: [] });
       } else if (sectionId === 'imageText') {
-        setFormDataEn({ items: [] });
-        setFormDataAr({ items: [] });
+        const emptyScroll = {
+          rotatingLogo: {
+            logo: {
+              wrapperCls: 'running-content-bg my-1',
+              container: 'container-fluid',
+              imageList: [] as any[],
+            },
+          },
+        };
+        setFormDataEn({ items: [], ...emptyScroll });
+        setFormDataAr({ items: [], ...emptyScroll });
       } else if (sectionId === 'whyChooseUs') {
         setFormDataEn({ items: [] });
         setFormDataAr({ items: [] });
@@ -546,10 +565,33 @@ const SectionEditor = ({
             </div>
           </>
         );
-      case 'imageText':
+      case 'imageText': {
         const itemsEn = formDataEn.items || [];
         const itemsAr = formDataAr.items || [];
         const maxItems = Math.max(itemsEn.length, itemsAr.length);
+        const scrollList =
+          formDataEn.rotatingLogo?.logo?.imageList ||
+          formDataAr.rotatingLogo?.logo?.imageList ||
+          [];
+        const scrollWrapper =
+          formDataEn.rotatingLogo?.logo?.wrapperCls ||
+          formDataAr.rotatingLogo?.logo?.wrapperCls ||
+          'running-content-bg my-1';
+        const scrollContainer =
+          formDataEn.rotatingLogo?.logo?.container ||
+          formDataAr.rotatingLogo?.logo?.container ||
+          'container-fluid';
+
+        const setScrollingLogos = (imageList: any[]) => {
+          const block = {
+            wrapperCls: scrollWrapper,
+            container: scrollContainer,
+            imageList,
+          };
+          setFormDataEn({ ...formDataEn, rotatingLogo: { logo: block } });
+          setFormDataAr({ ...formDataAr, rotatingLogo: { logo: { ...block } } });
+        };
+
         return (
           <>
             {renderBilingualField("Subheading", "subheading")}
@@ -597,6 +639,107 @@ const SectionEditor = ({
               folder="image-text"
               label="Small Image (shared)"
             />
+            <div className="form-group">
+              <label>Scrolling brand strip (under images)</label>
+              <small style={{ display: 'block', marginBottom: '10px', color: '#6b7280' }}>
+                Same logos for EN and AR. Uses <code>ScrollingTextGradient</code> on the live site.
+              </small>
+              <div className="hero-slides-container">
+                {Array.from({ length: Math.max(scrollList.length, 1) }).map((_, index) => {
+                  const row = scrollList[index] || {
+                    src: '',
+                    width: 160,
+                    height: 55,
+                    alt: '',
+                    loading: 'lazy',
+                    href: '',
+                  };
+                  return (
+                    <div key={index} className="cms-item-card">
+                      <div className="cms-item-header">
+                        <h4>Brand {index + 1}</h4>
+                        {scrollList.length > 0 && (
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn-delete"
+                            onClick={() => {
+                              const next = scrollList.filter((_: any, i: number) => i !== index);
+                              setScrollingLogos(next);
+                            }}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                      <div className="hero-slide-fields">
+                        <ImageUpload
+                          value={row.src || ''}
+                          onChange={(url) => {
+                            const next = [...scrollList];
+                            while (next.length <= index) {
+                              next.push({
+                                src: '',
+                                width: 160,
+                                height: 55,
+                                alt: '',
+                                loading: 'lazy',
+                                href: '',
+                              });
+                            }
+                            next[index] = { ...next[index], src: url };
+                            setScrollingLogos(next);
+                          }}
+                          folder="brand"
+                          label="Logo (shared)"
+                        />
+                        <div className="form-group">
+                          <label>Link (optional)</label>
+                          <input
+                            type="text"
+                            value={row.href || ''}
+                            onChange={(e) => {
+                              const next = [...scrollList];
+                              while (next.length <= index) {
+                                next.push({
+                                  src: '',
+                                  width: 160,
+                                  height: 55,
+                                  alt: '',
+                                  loading: 'lazy',
+                                  href: '',
+                                });
+                              }
+                              next[index] = { ...next[index], href: e.target.value };
+                              setScrollingLogos(next);
+                            }}
+                            placeholder="/ourpartnerships"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                <button
+                  type="button"
+                  className="cms-item-add-btn"
+                  onClick={() => {
+                    setScrollingLogos([
+                      ...scrollList,
+                      {
+                        src: '',
+                        width: 160,
+                        height: 55,
+                        alt: '',
+                        loading: 'lazy',
+                        href: '',
+                      },
+                    ]);
+                  }}
+                >
+                  + Add brand logo
+                </button>
+              </div>
+            </div>
             <div className="form-group">
               <label>Items</label>
               <div className="hero-slides-container">
@@ -650,6 +793,7 @@ const SectionEditor = ({
             </div>
           </>
         );
+      }
       case 'services':
         return (
           <>

@@ -10,7 +10,7 @@ const BreadcrumbBanner = ({
 }: BreadcrumbType) => {
     return (
         <div className="page-banner overlay">            
-            <Picture image={image} />
+            {image ? <Picture image={image} /> : null}
             
             <div className="page-banner-content">
                 <div className="container text-center">

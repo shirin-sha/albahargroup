@@ -21,9 +21,12 @@ export default function AdminDashboardLayout({
     }
   }, [pathname]);
 
-  const handleLogout = () => {
-    // TODO: clear auth token/session when real auth is added
-    router.push('/admin');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } finally {
+      router.push('/admin');
+    }
   };
 
   const isActive = (path: string) => {

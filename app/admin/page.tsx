@@ -10,22 +10,31 @@ const AdminLoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
-    // TODO: Replace this with real authentication logic
-    setTimeout(() => {
-      const isValidDemoUser = username === 'admin' && password === 'admin123';
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const result = await res.json().catch(() => null);
 
-      if (isValidDemoUser) {
+      if (res.ok && result?.success) {
         router.push('/admin/dashboard');
-      } else {
-        setError('Invalid username or password');
-        setIsSubmitting(false);
+        return;
       }
-    }, 600);
+
+      setError(result?.error || 'Invalid username or password');
+      setIsSubmitting(false);
+    } catch (err) {
+      console.error(err);
+      setError('Login failed. Please try again.');
+      setIsSubmitting(false);
+    }
   };
 
   return (

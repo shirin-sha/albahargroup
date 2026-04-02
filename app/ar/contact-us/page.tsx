@@ -1,44 +1,52 @@
 import type { Metadata } from 'next';
-import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
-import { ContactData } from '@/data/sections/contactData';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
 import { absoluteUrl } from '@/libs/seo';
+import {
+  buildContactBannerPicture,
+  contactFormToSectionProps,
+} from '@/libs/cms/contactPage';
 
-import BreadcrumbBanner from "@/components/BreadcrumbBanner";
+import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ContactSection from '@/components/sections/Contact';
 import MapSection from '@/components/sections/Map';
 
-const PAGE_TITLE: string = 'اتصل بنا';
+const PAGE_TITLE = 'اتصل بنا';
 
-async function getContactCMSData(lang: 'en' | 'ar' = 'ar') {
+async function getContactCMSData(lang: 'en' | 'ar') {
   try {
     const db = await getDb();
-    const collection = db.collection<HomePageSection>("contactPageSections");
+    const collection = db.collection<HomePageSection>('contactPageSections');
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
-    
-    const metadataSection = sections.find(s => s.sectionId === 'metadata');
-    const bannerSection = sections.find(s => s.sectionId === 'banner');
-    const contactFormSection = sections.find(s => s.sectionId === 'contactForm');
-    
+
+    const metadataSection = sections.find((s) => s.sectionId === 'metadata');
+    const bannerSection = sections.find((s) => s.sectionId === 'banner');
+    const contactFormSection = sections.find((s) => s.sectionId === 'contactForm');
+    const mapSection = sections.find((s) => s.sectionId === 'map');
+
     return {
       metadata: metadataSection?.[lang] || null,
-      banner: bannerSection?.[lang] || { title: PAGE_TITLE },
+      banner: bannerSection?.[lang] || null,
       contactForm: contactFormSection?.[lang] || null,
+      mapEmbed: mapSection?.en?.mapEmbed || mapSection?.ar?.mapEmbed || '',
     };
   } catch (error) {
     console.error('Error fetching contact CMS data:', error);
     return {
       metadata: null,
-      banner: { title: PAGE_TITLE },
+      banner: null,
       contactForm: null,
+      mapEmbed: '',
     };
   }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const cmsData = await getContactCMSData('ar');
-  const title = cmsData?.metadata?.metaTitle || cmsData?.banner?.title || PAGE_TITLE;
+  const title =
+    cmsData?.metadata?.metaTitle ||
+    cmsData?.banner?.title ||
+    PAGE_TITLE;
   const description =
     cmsData?.metadata?.metaDescription ||
     cmsData?.contactForm?.text ||
@@ -59,60 +67,25 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Contact = async () => {
-    const cmsData = await getContactCMSData('ar');
-    
-    // Merge CMS data with static data as fallback
-    const contactFormData = cmsData.contactForm ? {
-        wrapperCls: "section-padding",
-        container: "container",
-        subheading: cmsData.contactForm.subheading || ContactData.subheading,
-        heading: cmsData.contactForm.heading || ContactData.heading,
-        text: cmsData.contactForm.text || ContactData.text,
-        promotions: cmsData.contactForm.promotions?.map((promo: any, index: number) => {
-            // Determine icon type based on title
-            let iconType = 'location';
-            const titleLower = promo.title?.toLowerCase() || '';
-            if (titleLower.includes('call') || titleLower.includes('phone') || titleLower.includes('اتصل')) {
-                iconType = 'phone';
-            } else if (titleLower.includes('email') || titleLower.includes('mail') || titleLower.includes('بريد')) {
-                iconType = 'email';
-            } else if (titleLower.includes('address') || titleLower.includes('عنوان') || index === 0) {
-                iconType = 'location';
-            }
-            
-            return {
-                iconType,
-                title: promo.title,
-                text: promo.text,
-            };
-        }) || ContactData.promotions,
-        block: cmsData.contactForm.block || ContactData.block,
-    } : ContactData;
+  const cmsData = await getContactCMSData('ar');
 
-    return(
-        <>
-            {/* Breadcrumb Banner */}
-            <BreadcrumbBanner 
-                title={cmsData.banner.title || PAGE_TITLE}
-                image={{
-                    src: BreadcrumbBannerImage.src,
-                    srcMobile: BreadcrumbBannerImage.src,
-                    srcTablet: BreadcrumbBannerImage.src,
-                    width: 1920,
-                    height: 520,
-                    cls: "media media-bg",
-                    alt: "Banner Image",
-                    loading: "eager"
-                }}
-            />
+  const bannerTitle = cmsData.banner?.title || PAGE_TITLE;
+  const bannerImage = buildContactBannerPicture(
+    cmsData.banner?.imageSrc as string | undefined
+  );
+  const contactFormData = contactFormToSectionProps(
+    cmsData.contactForm as Record<string, unknown> | null
+  );
 
-            {/* Contact Form */}
-            <ContactSection data={contactFormData} />
+  return (
+    <>
+      <BreadcrumbBanner title={bannerTitle} image={bannerImage} />
 
-            {/* Google Map */}
-            <MapSection />
-        </>
-    )
-}
+      <ContactSection data={contactFormData} />
+
+      <MapSection mapEmbed={cmsData.mapEmbed} />
+    </>
+  );
+};
 
 export default Contact;

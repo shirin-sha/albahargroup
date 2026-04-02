@@ -1,37 +1,35 @@
 import type { Metadata } from 'next';
-import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
-
-import { PartnershipsData } from '@/data/sections/partnershipsData';
 import { getDb } from '@/libs/mongodb';
 import { HomePageSection } from '@/libs/models/homePage';
 import { absoluteUrl } from '@/libs/seo';
+import { buildContactBannerPicture } from '@/libs/cms/contactPage';
+import { partnershipsSectionToSectionProps } from '@/libs/cms/partnershipsPage';
 
-import BreadcrumbBanner from "@/components/BreadcrumbBanner";
+import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import Partnerships from '@/components/sections/Partnerships';
 
+const PAGE_TITLE = 'شراكاتنا';
 
-const PAGE_TITLE: string = 'شراكاتنا';
-
-async function getPartnershipsCMSData(lang: 'en' | 'ar' = 'ar') {
+async function getPartnershipsCMSData(lang: 'en' | 'ar') {
   try {
     const db = await getDb();
-    const collection = db.collection<HomePageSection>("partnershipsPageSections");
+    const collection = db.collection<HomePageSection>('partnershipsPageSections');
     const sections = await collection.find({}).sort({ order: 1 }).toArray();
-    
-    const metadataSection = sections.find(s => s.sectionId === 'metadata');
-    const bannerSection = sections.find(s => s.sectionId === 'banner');
-    const partnershipsSection = sections.find(s => s.sectionId === 'partnerships');
-    
+
+    const metadataSection = sections.find((s) => s.sectionId === 'metadata');
+    const bannerSection = sections.find((s) => s.sectionId === 'banner');
+    const partnershipsSection = sections.find((s) => s.sectionId === 'partnerships');
+
     return {
       metadata: metadataSection?.[lang] || null,
-      banner: bannerSection?.[lang] || { title: PAGE_TITLE },
+      banner: bannerSection?.[lang] || null,
       partnerships: partnershipsSection?.[lang] || null,
     };
   } catch (error) {
     console.error('Error fetching partnerships CMS data:', error);
     return {
       metadata: null,
-      banner: { title: PAGE_TITLE },
+      banner: null,
       partnerships: null,
     };
   }
@@ -39,7 +37,10 @@ async function getPartnershipsCMSData(lang: 'en' | 'ar' = 'ar') {
 
 export async function generateMetadata(): Promise<Metadata> {
   const cmsData = await getPartnershipsCMSData('ar');
-  const title = cmsData?.metadata?.metaTitle || cmsData?.banner?.title || PAGE_TITLE;
+  const title =
+    cmsData?.metadata?.metaTitle ||
+    cmsData?.banner?.title ||
+    PAGE_TITLE;
   const description =
     cmsData?.metadata?.metaDescription ||
     cmsData?.partnerships?.text ||
@@ -60,41 +61,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const PartnershipsPage = async () => {
-    const cmsData = await getPartnershipsCMSData('ar');
-    
-    // Merge CMS data with static data as fallback
-    const partnershipsData = cmsData.partnerships ? {
-        wrapperCls: "section-padding",
-        container: "container",
-        subheading: cmsData.partnerships.subheading || PartnershipsData.subheading,
-        heading: cmsData.partnerships.heading || PartnershipsData.heading,
-        text: cmsData.partnerships.text || PartnershipsData.text,
-        imageList: cmsData.partnerships.imageList && cmsData.partnerships.imageList.length > 0 
-            ? cmsData.partnerships.imageList 
-            : PartnershipsData.imageList,
-    } : PartnershipsData;
+  const cmsData = await getPartnershipsCMSData('ar');
 
-    return(
-        <>
-            {/* Breadcrumb Banner */}
-            <BreadcrumbBanner 
-                title={cmsData.banner.title || PAGE_TITLE}
-                image={{
-                    src: BreadcrumbBannerImage.src,
-                    srcMobile: BreadcrumbBannerImage.src,
-                    srcTablet: BreadcrumbBannerImage.src,
-                    width: 1920,
-                    height: 520,
-                    cls: "media media-bg",
-                    alt: "Banner Image",
-                    loading: "eager"
-                }}
-            />
+  const bannerTitle =
+    typeof cmsData.banner?.title === 'string' ? cmsData.banner.title : '';
+  const bannerImage = buildContactBannerPicture(
+    cmsData.banner?.imageSrc as string | undefined
+  );
+  const partnershipsData = partnershipsSectionToSectionProps(
+    cmsData.partnerships as Record<string, unknown> | null
+  );
 
-            {/* Partnerships Section */}
-            <Partnerships data={partnershipsData} />
-        </>
-    )
-}
+  return (
+    <>
+      <BreadcrumbBanner title={bannerTitle} image={bannerImage} />
+      <Partnerships data={partnershipsData} />
+    </>
+  );
+};
 
 export default PartnershipsPage;

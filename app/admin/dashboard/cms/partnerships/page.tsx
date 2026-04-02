@@ -350,6 +350,15 @@ const SectionEditor = ({
         return (
           <>
             {renderBilingualField("Title", "title")}
+            <ImageUpload
+              value={formDataEn.imageSrc || formDataAr.imageSrc || ''}
+              onChange={(url) => {
+                setFormDataEn((prev: any) => ({ ...prev, imageSrc: url }));
+                setFormDataAr((prev: any) => ({ ...prev, imageSrc: url }));
+              }}
+              folder="banner"
+              label="Banner image (shared)"
+            />
           </>
         );
       case 'partnerships':

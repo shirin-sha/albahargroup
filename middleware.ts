@@ -1,13 +1,28 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { ADMIN_COOKIE_NAME, verifyAdminToken } from '@/libs/adminAuth';
 
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Skip middleware for API routes, admin routes, static files, and Next.js internals
+  // Protect admin dashboard routes
+  if (pathname === '/admin/dashboard' || pathname.startsWith('/admin/dashboard/')) {
+    const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
+    const secret = process.env.ADMIN_AUTH_SECRET || '';
+    if (!token || !secret) {
+      return NextResponse.redirect(new URL('/admin', request.url));
+    }
+    const valid = await verifyAdminToken({ token, secret });
+    if (!valid.ok) {
+      return NextResponse.redirect(new URL('/admin', request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // Skip middleware for API routes, admin login page, static files, and Next.js internals
   if (
     pathname.startsWith('/api') ||
-    pathname.startsWith('/admin') ||
+    pathname === '/admin' ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
     pathname.includes('.') // Skip files with extensions
