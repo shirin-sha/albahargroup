@@ -8,6 +8,9 @@ import { absoluteUrl } from '@/libs/seo';
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import CareerSection from '@/components/sections/Career';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 const PAGE_TITLE: string = 'Careers';
 

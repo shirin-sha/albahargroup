@@ -12,6 +12,9 @@ import type { Post } from '@/libs/models/post';
 import { DEFAULT_SITE_NAME, absoluteUrl } from '@/libs/seo';
 import { plainTextFromHtml } from '@/utils/plainText';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const db = await getDb();

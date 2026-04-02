@@ -11,6 +11,9 @@ import { absoluteUrl } from '@/libs/seo';
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ServiceDetails from '@/components/sections/ServiceDetails';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const PAGE_TITLE: string = 'Service Details';
 
 export async function generateMetadata(

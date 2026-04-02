@@ -7,6 +7,9 @@ import { absoluteUrl } from '@/libs/seo';
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import BlogGrid from '@/components/sections/BlogGrid';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const PAGE_TITLE: string = 'الأخبار';
 
 async function getNewsCMSData(lang: 'en' | 'ar' = 'ar') {

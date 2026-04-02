@@ -11,6 +11,9 @@ import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ContactSection from '@/components/sections/Contact';
 import MapSection from '@/components/sections/Map';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const PAGE_TITLE = 'اتصل بنا';
 
 async function getContactCMSData(lang: 'en' | 'ar') {

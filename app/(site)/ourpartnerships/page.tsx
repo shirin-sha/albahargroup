@@ -8,6 +8,9 @@ import { partnershipsSectionToSectionProps } from '@/libs/cms/partnershipsPage';
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import Partnerships from '@/components/sections/Partnerships';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const PAGE_TITLE = 'Partnerships';
 
 async function getPartnershipsCMSData(lang: 'en' | 'ar') {
