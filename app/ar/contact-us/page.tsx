@@ -1,26 +1,28 @@
 import type { Metadata } from 'next';
-import { getDb } from '@/libs/mongodb';
-import { HomePageSection } from '@/libs/models/homePage';
 import { absoluteUrl } from '@/libs/seo';
 import {
   buildContactBannerPicture,
   contactFormToSectionProps,
 } from '@/libs/cms/contactPage';
+import { getCmsSectionsCached } from '@/libs/cms/pageSections';
+import { CacheTags } from '@/libs/cacheTags';
 
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ContactSection from '@/components/sections/Contact';
 import MapSection from '@/components/sections/Map';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 const PAGE_TITLE = 'اتصل بنا';
 
 async function getContactCMSData(lang: 'en' | 'ar') {
   try {
-    const db = await getDb();
-    const collection = db.collection<HomePageSection>('contactPageSections');
-    const sections = await collection.find({}).sort({ order: 1 }).toArray();
+    const getSections = getCmsSectionsCached({
+      collectionName: 'contactPageSections',
+      cacheKey: 'cms-contact',
+      tag: CacheTags.cms.contact,
+    });
+    const sections = await getSections();
 
     const metadataSection = sections.find((s) => s.sectionId === 'metadata');
     const bannerSection = sections.find((s) => s.sectionId === 'banner');

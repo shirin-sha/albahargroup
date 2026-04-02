@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/libs/mongodb";
 import { HomePageSection } from "@/libs/models/homePage";
+import { revalidateTag } from "next/cache";
+import { CacheTags } from "@/libs/cacheTags";
 
 // GET - Fetch all home page sections
 export async function GET(req: NextRequest) {
@@ -73,6 +75,7 @@ export async function POST(req: NextRequest) {
       { upsert: true, returnDocument: "after" }
     );
 
+    revalidateTag(CacheTags.cms.home, 'default');
     return NextResponse.json({
       success: true,
       data: result,
@@ -104,6 +107,7 @@ export async function DELETE(req: NextRequest) {
 
     await collection.deleteOne({ sectionId });
 
+    revalidateTag(CacheTags.cms.home, 'default');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting section:", error);

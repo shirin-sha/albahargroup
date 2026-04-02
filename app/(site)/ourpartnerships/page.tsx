@@ -1,23 +1,25 @@
 import type { Metadata } from 'next';
-import { getDb } from '@/libs/mongodb';
-import { HomePageSection } from '@/libs/models/homePage';
 import { absoluteUrl } from '@/libs/seo';
 import { buildContactBannerPicture } from '@/libs/cms/contactPage';
 import { partnershipsSectionToSectionProps } from '@/libs/cms/partnershipsPage';
+import { getCmsSectionsCached } from '@/libs/cms/pageSections';
+import { CacheTags } from '@/libs/cacheTags';
 
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import Partnerships from '@/components/sections/Partnerships';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 const PAGE_TITLE = 'Partnerships';
 
 async function getPartnershipsCMSData(lang: 'en' | 'ar') {
   try {
-    const db = await getDb();
-    const collection = db.collection<HomePageSection>('partnershipsPageSections');
-    const sections = await collection.find({}).sort({ order: 1 }).toArray();
+    const getSections = getCmsSectionsCached({
+      collectionName: 'partnershipsPageSections',
+      cacheKey: 'cms-partnerships',
+      tag: CacheTags.cms.partnerships,
+    });
+    const sections = await getSections();
 
     const metadataSection = sections.find((s) => s.sectionId === 'metadata');
     const bannerSection = sections.find((s) => s.sectionId === 'banner');

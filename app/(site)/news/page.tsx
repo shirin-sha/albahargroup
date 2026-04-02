@@ -1,22 +1,24 @@
 import type { Metadata } from 'next';
 import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
-import { getDb } from '@/libs/mongodb';
-import { HomePageSection } from '@/libs/models/homePage';
 import { absoluteUrl } from '@/libs/seo';
+import { getCmsSectionsCached } from '@/libs/cms/pageSections';
+import { CacheTags } from '@/libs/cacheTags';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import BlogGrid from '@/components/sections/BlogGrid';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 const PAGE_TITLE: string = 'News';
 
 async function getNewsCMSData(lang: 'en' | 'ar' = 'en') {
   try {
-    const db = await getDb();
-    const collection = db.collection<HomePageSection>("newsPageSections");
-    const sections = await collection.find({}).sort({ order: 1 }).toArray();
+    const getSections = getCmsSectionsCached({
+      collectionName: 'newsPageSections',
+      cacheKey: 'cms-news',
+      tag: CacheTags.cms.news,
+    });
+    const sections = await getSections();
     
     const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const bannerSection = sections.find(s => s.sectionId === 'banner');

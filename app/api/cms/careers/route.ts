@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/libs/mongodb";
 import { HomePageSection } from "@/libs/models/homePage";
+import { revalidateTag } from "next/cache";
+import { CacheTags } from "@/libs/cacheTags";
 
 export async function GET(req: NextRequest) {
   try {
@@ -51,6 +53,7 @@ export async function POST(req: NextRequest) {
       { $set: updateData, $setOnInsert: { createdAt: new Date() } },
       { upsert: true, returnDocument: "after" }
     );
+    revalidateTag(CacheTags.cms.careers, 'default');
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
     console.error("Error saving careers page section:", error);

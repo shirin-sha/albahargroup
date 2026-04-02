@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/libs/mongodb';
 import { Service } from '@/libs/models/service';
 import { ObjectId } from 'mongodb';
+import { revalidateTag } from 'next/cache';
+import { CacheTags } from '@/libs/cacheTags';
 
 const CAPABILITY_SLUGS = new Set([
   'human-capital',
@@ -100,6 +102,7 @@ export async function PUT(
       );
     }
 
+    revalidateTag(CacheTags.data.services, 'default');
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
     console.error('Error updating service:', error);
@@ -139,6 +142,7 @@ export async function DELETE(
       );
     }
 
+    revalidateTag(CacheTags.data.services, 'default');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting service:', error);

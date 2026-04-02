@@ -3,23 +3,26 @@ import BreadcrumbBannerImage from '@/public/img/banner/page-banner.jpg';
 import { CareerData } from '@/data/sections/careerData';
 import { Job } from '@/libs/models/job';
 import { getDb } from '@/libs/mongodb';
-import { HomePageSection } from '@/libs/models/homePage';
 import { absoluteUrl } from '@/libs/seo';
+import { getCmsSectionsCached } from '@/libs/cms/pageSections';
+import { CacheTags } from '@/libs/cacheTags';
 
 import BreadcrumbBanner from "@/components/BreadcrumbBanner";
 import CareerSection from '@/components/sections/Career';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 
 const PAGE_TITLE: string = 'الوظائف';
 
 async function getCareersCMSData(lang: 'en' | 'ar' = 'ar') {
   try {
-    const db = await getDb();
-    const collection = db.collection<HomePageSection>("careersPageSections");
-    const sections = await collection.find({}).sort({ order: 1 }).toArray();
+    const getSections = getCmsSectionsCached({
+      collectionName: 'careersPageSections',
+      cacheKey: 'cms-careers',
+      tag: CacheTags.cms.careers,
+    });
+    const sections = await getSections();
     
     const metadataSection = sections.find(s => s.sectionId === 'metadata');
     const bannerSection = sections.find(s => s.sectionId === 'banner');

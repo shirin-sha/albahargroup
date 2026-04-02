@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/libs/mongodb';
 import { Post } from '@/libs/models/post';
 import { ObjectId } from 'mongodb';
+import { revalidateTag } from 'next/cache';
+import { CacheTags } from '@/libs/cacheTags';
 
 export async function GET(
   req: NextRequest,
@@ -92,7 +94,8 @@ export async function PUT(
         { status: 404 }
       );
     }
-    
+
+    revalidateTag(CacheTags.data.posts, 'default');
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
     console.error('Error updating post:', error);
@@ -135,7 +138,8 @@ export async function DELETE(
         { status: 404 }
       );
     }
-    
+
+    revalidateTag(CacheTags.data.posts, 'default');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting post:', error);

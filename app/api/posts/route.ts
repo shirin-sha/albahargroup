@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/libs/mongodb';
 import { Post } from '@/libs/models/post';
+import { revalidateTag } from 'next/cache';
+import { CacheTags } from '@/libs/cacheTags';
 
 export async function GET(req: NextRequest) {
   try {
@@ -56,6 +58,7 @@ export async function POST(req: NextRequest) {
     const result = await collection.insertOne(body);
     const newPost = await collection.findOne({ _id: result.insertedId });
     
+    revalidateTag(CacheTags.data.posts, 'default');
     return NextResponse.json({ success: true, data: newPost });
   } catch (error) {
     console.error('Error creating post:', error);

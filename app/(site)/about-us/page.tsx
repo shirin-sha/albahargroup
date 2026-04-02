@@ -14,8 +14,7 @@ import Collaboration from '@/components/sections/Collaboration';
 import Timeline from '@/components/sections/Timeline';
 import { absoluteUrl } from '@/libs/seo';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 async function getAboutCMSData(lang: 'en' | 'ar' = 'en') {
   try {

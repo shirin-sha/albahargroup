@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/libs/mongodb';
 import { Service } from '@/libs/models/service';
+import { revalidateTag } from 'next/cache';
+import { CacheTags } from '@/libs/cacheTags';
 
 const CAPABILITY_SLUGS = new Set([
   'human-capital',
@@ -71,6 +73,7 @@ export async function POST(req: NextRequest) {
     const result = await collection.insertOne(body);
     const newService = await collection.findOne({ _id: result.insertedId });
 
+    revalidateTag(CacheTags.data.services, 'default');
     return NextResponse.json({ success: true, data: newService });
   } catch (error) {
     console.error('Error creating service:', error);

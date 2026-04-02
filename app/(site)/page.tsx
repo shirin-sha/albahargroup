@@ -11,8 +11,7 @@ import TestimonialSliderWithThumb from '@/components/sections/TestimonialSliderW
 import { getHomeCMSData } from '@/libs/cms/home';
 import { absoluteUrl } from '@/libs/seo';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const cmsData = await getHomeCMSData();
