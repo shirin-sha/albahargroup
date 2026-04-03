@@ -239,7 +239,7 @@ const SECTION_META: Record<string, { label: string; desc: string; icon: string }
   services:     { label: 'Capabilities',         desc: 'Services section heading and link',              icon: '⚙️' },
   whyChooseUs:  { label: 'Why Al Bahar Group',   desc: 'Key reasons with image and items',               icon: '✅' },
   pricing:      { label: 'How We Create Value',    desc: 'Pricing cards with features list',               icon: '💳' },
-  testimonials: { label: 'Serivces',     desc: 'Testimonial slider items with images',           icon: '💬' },
+  testimonials: { label: 'Services',     desc: 'Business verticals heading (items from Services → Businesses)', icon: '💬' },
   faq:          { label: 'FAQ',              desc: 'Frequently asked questions accordion',           icon: '❓' },
   blog:         { label: 'Blog Section',     desc: 'Latest posts section heading and link',          icon: '📝' },
   projects:     { label: 'Image Archive', desc: 'Featured projects section heading',              icon: '🗂️' },
@@ -299,7 +299,8 @@ const SectionEditor = ({
       } else if (sectionId === 'testimonials') {
         return {
           ...data,
-          items: Array.isArray(data?.items) ? data.items : []
+          subheading: data?.subheading ?? '',
+          items: Array.isArray(data?.items) ? data.items : [],
         };
       } else if (sectionId === 'faq') {
         return {
@@ -337,8 +338,8 @@ const SectionEditor = ({
         setFormDataEn({ cards: [] });
         setFormDataAr({ cards: [] });
       } else if (sectionId === 'testimonials') {
-        setFormDataEn({ items: [] });
-        setFormDataAr({ items: [] });
+        setFormDataEn({ subheading: '', items: [] });
+        setFormDataAr({ subheading: '', items: [] });
       } else if (sectionId === 'faq') {
         setFormDataEn({ items: [] });
         setFormDataAr({ items: [] });
@@ -908,12 +909,15 @@ const SectionEditor = ({
       case 'testimonials':
         return (
           <>
+            {renderBilingualField('Subheading', 'subheading')}
             <div className="form-group">
-              <small>Items are managed from Admin → Services → Businesses.</small>
+              <small>
+                Slide content (images, text, icons) comes from Admin → Services → Businesses.
+              </small>
             </div>
             <div className="form-group">
               <a href="/admin/dashboard/services/businesses" className="button button-primary">
-                Services - Business Verticals
+                Open Services — Business Verticals
               </a>
             </div>
           </>
@@ -1210,14 +1214,14 @@ const SectionEditor = ({
           </div>
         )}
         {renderFields()}
-        {sectionId !== 'testimonials' && (
-          <div className="form-actions">
-            <button type="submit" className="button button-primary" disabled={isSaving}>
-              {isSaving ? 'Saving...' : 'Save'}
-            </button>
-            <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>Cancel</button>
-          </div>
-        )}
+        <div className="form-actions">
+          <button type="submit" className="button button-primary" disabled={isSaving}>
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+          <button type="button" className="admin-btn admin-btn-edit" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
       </form>
     </>
   );

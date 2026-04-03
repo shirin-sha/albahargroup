@@ -137,7 +137,10 @@ const Home = async () => {
 
       {/* Testimonial Slider with Thumb */}
       {cmsData.testimonials ? (() => {
-        const data = getBilingualData(cmsData.testimonials, {  container: "container" });
+        const data = getBilingualData(cmsData.testimonials, {
+          wrapperCls: 'testimonial-2 mt-100',
+          container: 'container',
+        });
         return data ? <TestimonialSliderWithThumb data={data} /> : null;
       })() : null}
 

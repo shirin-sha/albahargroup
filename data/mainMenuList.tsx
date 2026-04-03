@@ -27,7 +27,7 @@ const Menus: MenuItem[] = [
                         titleAr: 'السلع الاستهلاكية',
                         text: 'Leading FMCG brands across Kuwait’s key channels.',
                         textAr: 'علامات تجارية استهلاكية رائدة عبر قنوات الكويت الرئيسية.',
-                path: '/services/consumer-fmcg',
+                path: '/services/consumer-and-fmcg',
                     },
                     {
                         title: 'Consumer Electronics',
