@@ -15,6 +15,7 @@
     "seed:careers": "node scripts/seed-careers-cms.js",
     "seed:news": "node scripts/seed-news-cms.js",
     "seed:services": "node scripts/seed-services.js",
+    "seed:teams": "node scripts/migrate-teams.js",
     "migrate:posts": "node scripts/migrate-posts.js",
     "migrate:projects": "node scripts/migrate-projects.js",
     "migrate:teams": "node scripts/migrate-teams.js",

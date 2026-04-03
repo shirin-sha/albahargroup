@@ -179,6 +179,35 @@
   height: 70px;
 }
 
+.testimonial-2 .custom-bullet .testimonial-bullet-inline-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: #fff;
+}
+
+.testimonial-2 .custom-bullet .testimonial-bullet-inline-svg svg {
+  display: block;
+  max-width: 70px;
+  max-height: 70px;
+}
+
+.testimonial-2 .custom-bullet .testimonial-bullet-data-svg {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.testimonial-2 .custom-bullet .testimonial-bullet-fallback-img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 70px !important;
+  height: 70px !important;
+  max-width: 70px;
+  max-height: 70px;
+}
+
 .testimonial-2 .custom-bullet img {
   object-fit: cover;
   display: flex;

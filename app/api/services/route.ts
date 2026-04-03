@@ -36,7 +36,10 @@ export async function GET(req: NextRequest) {
 
     const services = await collection.find(query).sort({ created_at: -1 }).toArray();
 
-    return NextResponse.json({ success: true, data: services });
+    return NextResponse.json(
+      { success: true, data: services },
+      { headers: { 'Cache-Control': 'no-store, must-revalidate' } }
+    );
   } catch (error) {
     console.error('Error fetching services:', error);
     return NextResponse.json(

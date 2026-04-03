@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Coolify/Docker: copy `public` + `.next/standalone` per Next docs; see Dockerfile
+  output: "standalone",
+  images: {
+    // Image optimizer fetches `/api/upload/file/...` via loopback/internal IP on self-hosted hosts;
+    // Coolify often needs this or images break while Vercel is fine.
+    dangerouslyAllowLocalIP: process.env.IMAGE_OPTIMIZER_ALLOW_LOCAL_IP !== "false",
+  },
   turbopack: {
     rules: {
       '*.svg': {

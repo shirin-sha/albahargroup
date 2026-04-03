@@ -20,7 +20,6 @@ import Heading from "../Heading";
 import CardTestimonialContent from "../CardTestimonialContent";
 import Image from 'next/image';
 import Icons from "../Icons";
-import parser from 'html-react-parser';
 
 
 const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
@@ -51,7 +50,9 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
     useEffect(() => {
         const loadBusinessServices = async () => {
             try {
-                const res = await fetch('/api/services?enabled=true&section=businesses');
+                const res = await fetch('/api/services?enabled=true&section=businesses', {
+                    cache: 'no-store',
+                });
                 const result = await res.json();
                 if (result?.success) {
                     setBusinessServices((result.data || []) as Service[]);
@@ -99,12 +100,42 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
 
     const displayHeading = activeHeading || heading;
 
-    const getIconElement = (iconValue: string | undefined) => {
-        if (!iconValue) return null;
-        const isInlineSvg = iconValue.includes('<');
-        if (isInlineSvg) return parser(iconValue);
-        const IconComponent = Icons[iconValue as keyof typeof Icons];
-        return IconComponent ? <IconComponent /> : null;
+    const getBulletVisual = (item: TestimonialProps) => {
+        const raw = item.icon?.trim();
+        if (raw) {
+            if (raw.startsWith('data:image/svg+xml')) {
+                return (
+                    <img
+                        src={raw}
+                        alt=""
+                        className="testimonial-bullet-data-svg"
+                    />
+                );
+            }
+            if (/<svg[\s>/]/i.test(raw)) {
+                return (
+                    <span
+                        className="testimonial-bullet-inline-svg"
+                        dangerouslySetInnerHTML={{ __html: raw }}
+                    />
+                );
+            }
+            const IconComponent = Icons[raw as keyof typeof Icons];
+            if (IconComponent) return <IconComponent />;
+        }
+        const imgSrc = item.image?.trim();
+        if (imgSrc) {
+            return (
+                <Image
+                    src={imgSrc}
+                    alt=""
+                    width={70}
+                    height={70}
+                    className="testimonial-bullet-fallback-img"
+                />
+            );
+        }
+        return null;
     };
 
     return (
@@ -170,7 +201,7 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
                                 </Swiper>
                                 <div className="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal custom-pagination-thumb-img">
                                     {testimonialList.map((item, index) => {
-                                        const iconElement = getIconElement(item.icon);
+                                        const iconElement = getBulletVisual(item);
                                         return (
                                             <div
                                                 key={`pagination-${index}`}

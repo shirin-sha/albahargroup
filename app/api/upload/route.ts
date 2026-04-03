@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { getCmsUploadImgRoot } from '@/libs/uploadsPath';
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,8 +43,7 @@ export async function POST(request: NextRequest) {
     const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filename = `${timestamp}-${originalName}`;
 
-    // Create directory path
-    const uploadDir = join(process.cwd(), 'public', 'img', folder);
+    const uploadDir = join(getCmsUploadImgRoot(), folder);
     
     // Create directory if it doesn't exist
     if (!existsSync(uploadDir)) {

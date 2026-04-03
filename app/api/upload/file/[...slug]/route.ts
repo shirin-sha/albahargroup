@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { getCmsUploadImgRoot } from '@/libs/uploadsPath';
 
 const CONTENT_TYPES: Record<string, string> = {
   '.jpg': 'image/jpeg',
@@ -28,7 +29,7 @@ export async function GET(
       return NextResponse.json({ success: false, error: 'Invalid file path' }, { status: 400 });
     }
 
-    const filePath = join(process.cwd(), 'public', 'img', folder, filename);
+    const filePath = join(getCmsUploadImgRoot(), folder, filename);
     if (!existsSync(filePath)) {
       return NextResponse.json({ success: false, error: 'File not found' }, { status: 404 });
     }

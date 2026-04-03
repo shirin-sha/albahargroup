@@ -11,6 +11,8 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
+const replaceAll = process.argv.includes('--replace');
+
 async function migrateTeams() {
   const client = new MongoClient(MONGODB_URI);
 
@@ -21,38 +23,56 @@ async function migrateTeams() {
     const db = client.db(DB_NAME);
     const collection = db.collection('teams');
 
-    // Read teams from JSON file
     const teamsPath = path.join(__dirname, '../data/teams.json');
     const teamsData = JSON.parse(fs.readFileSync(teamsPath, 'utf8'));
 
-    console.log(`Found ${teamsData.length} team members in JSON file`);
+    console.log(`Found ${teamsData.length} team members in data/teams.json`);
 
-    // Check if teams already exist
-    const existingCount = await collection.countDocuments();
-    if (existingCount > 0) {
-      console.log(`Warning: ${existingCount} team members already exist in database.`);
-      console.log('Skipping migration to avoid duplicates.');
-      console.log('If you want to migrate anyway, delete existing teams first.');
-      return;
+    const now = new Date().toISOString();
+
+    if (replaceAll) {
+      const deleted = await collection.deleteMany({});
+      console.log(`Removed ${deleted.deletedCount} existing team document(s) (--replace)`);
     }
 
-    // Transform teams data
-    const teamsToInsert = teamsData.map(team => ({
-      ...team,
-      enabled: true, // Set all existing teams as published
-      created_at: team.created_at || new Date().toISOString(),
-    }));
+    let inserted = 0;
+    let updated = 0;
 
-    // Insert teams
-    const result = await collection.insertMany(teamsToInsert);
-    console.log(`Successfully migrated ${result.insertedCount} team members to MongoDB`);
+    for (const team of teamsData) {
+      const doc = {
+        ...team,
+        enabled: team.enabled !== undefined ? team.enabled : true,
+        created_at: team.created_at || now,
+        updated_at: now,
+      };
 
+      const existing = await collection.findOne({ slug: team.slug });
+      if (existing) {
+        await collection.updateOne(
+          { slug: team.slug },
+          {
+            $set: {
+              ...doc,
+              created_at: existing.created_at || doc.created_at,
+            },
+          }
+        );
+        updated += 1;
+      } else {
+        await collection.insertOne(doc);
+        inserted += 1;
+      }
+    }
+
+    console.log(
+      `Team seed complete: ${inserted} inserted, ${updated} updated (slug match).`
+    );
   } catch (error) {
     console.error('Error migrating teams:', error);
     process.exit(1);
   } finally {
     await client.close();
-    console.log('Migration completed');
+    console.log('MongoDB connection closed');
   }
 }
 
