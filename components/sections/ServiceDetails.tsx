@@ -41,7 +41,10 @@ const ServiceDetails = ({
                     Filter
                 </DrawerOpener>
                 <div className="grid grid-cols-12 lg:gap-1">
-                    <div className="col-span-12 lg:col-span-7 order-1 lg:order-1">
+                    <div className="col-span-12 lg:col-span-5 order-2 lg:order-1">
+                        <ServiceSidebar slug={slug} section={section} locale={locale} />
+                    </div>
+                    <div className="col-span-12 lg:col-span-7 order-1 lg:order-2">
                         <div className="service-details-content blog-details">
                             <div className="card-blog-list" data-aos="fade-up">
                                 {displayImage && (
@@ -78,9 +81,6 @@ const ServiceDetails = ({
                                 data={ServiceAccordionData}
                             /> */}
                         </div>
-                    </div>
-                    <div className="col-span-12 lg:col-span-5 order-2 lg:order-2">
-                        <ServiceSidebar slug={slug} section={section} locale={locale} />
                     </div>
                 </div>
             </div>

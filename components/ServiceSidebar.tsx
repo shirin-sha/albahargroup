@@ -48,6 +48,7 @@ const ServiceSidebar = async ({
         label: serviceDisplayTitle(service, locale),
         slug: service.slug,
     }));
+    const listTitle = currentSection === 'businesses' ? 'Business Verticals' : 'Capabilities';
 
     return (
         <div className="sidebar-filter drawer-service-sidebar">
@@ -64,14 +65,14 @@ const ServiceSidebar = async ({
             <aside className="service-sidebar">
                 {categories.length > 0 &&
                     <SidebarCategories 
-                        title="Services List"
+                        title={listTitle}
                         categories={categories}
                         rootUrl={servicesRoot}
                     />
                 }
 
                 <SidebarPhone 
-                    heading="Contact us for any enquiry"
+                    heading="Contact us for more information"
                     text="Need assistance? Speak with our team"
                     phone="+965 XXX XXXX"
                     image={{
