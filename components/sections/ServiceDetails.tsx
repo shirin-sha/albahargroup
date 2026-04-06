@@ -2,7 +2,6 @@ import "@/styles/blog.css";
 import "@/styles/service-details.css";
 import Icons from "../Icons";
 import Image from "next/image";
-import parse from 'html-react-parser';
 
 import ServiceSidebar from "../ServiceSidebar";
 import { ServiceProps } from "@/types/service";
@@ -29,6 +28,11 @@ const ServiceDetails = ({
     } = data || {};
 
     const displayImage = detailImage || image;
+    const contentValue = (content || '')
+        // Convert non-breaking spaces to normal spaces so lines can wrap naturally
+        .replace(/\u00A0/g, ' ')
+        .replace(/&nbsp;/gi, ' ');
+    const isHtmlContent = /<\/?[a-z][\s\S]*>/i.test(contentValue);
 
     return (
         <div className="page-service-details mt-100 mb-100">
@@ -68,9 +72,16 @@ const ServiceDetails = ({
                                         </h2>
                                     )}
 
-                                    {content && (
+                                    {contentValue && (
                                         <div className="blog-description">
-                                            {parse(content)}
+                                            {isHtmlContent ? (
+                                                <div
+                                                    className="service-content-editor"
+                                                    dangerouslySetInnerHTML={{ __html: contentValue }}
+                                                />
+                                            ) : (
+                                                <div className="service-content-plain">{contentValue}</div>
+                                            )}
                                         </div>
                                     )}
                                 </div>

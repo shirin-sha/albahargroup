@@ -156,6 +156,35 @@
   text-decoration: none;
 }
 
+.service-content-plain {
+  white-space: pre-wrap;
+  hyphens: none;
+  -webkit-hyphens: none;
+  -ms-hyphens: none;
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-break: auto;
+}
+
+.service-content-editor p + p {
+  margin-block-start: 0.5em;
+}
+
+.service-details-content .card-blog-heading + .blog-description {
+  margin-block-start: 24px;
+}
+
+.service-content-editor,
+.service-content-editor :is(p, li, div, span, a, h1, h2, h3, h4, h5, h6) {
+  hyphens: none;
+  -webkit-hyphens: none;
+  -ms-hyphens: none;
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-break: auto;
+}
+
+
 @media (min-width: 992px) {
   .service-sidebar {
     padding-inline-end: 20px;
