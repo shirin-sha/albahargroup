@@ -6,7 +6,15 @@ import Text from "../Text";
 import Image from "next/image";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
+import Icons from "../Icons";
 
+/** Icons are fixed in code; titles, text, and layout copy all come from CMS (`items`). */
+const STATIC_CHOOSE_ICONS = [Icons.Mission, Icons.Vision, Icons.Values] as const;
+
+function StaticChooseIcon({ index }: { index: number }) {
+    const C = STATIC_CHOOSE_ICONS[index];
+    return C ? <C /> : null;
+}
 
 const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
     const {
@@ -20,6 +28,8 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
         items,
         backgroundImage,
     } = data || {};
+
+    const rowItems = items && items.length > 0 ? items : [];
 
     return (
         <div className={`why-choose-us ${wrapperCls}`}>
@@ -110,10 +120,10 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                 </div>
 
                 <div className="choose-bottom">
-                    {items &&
+                    {rowItems.length > 0 && (
                         <div className="choose-bottom-cards">
                             <div className="grid grid-cols-12 gap-1 justify-center">
-                                {items.map((item, index) => {
+                                {rowItems.map((item, index) => {
                                     // Give values card (index 2) more columns to prevent wrapping
                                     const isValuesCard = index === 2;
                                     const colClass = isValuesCard 
@@ -129,9 +139,11 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                             key={`promo-${index}`} 
                                         >
                                             <div className="card-icon-text card-icon-text-horizontal">
-                                                {item.icon && 
-                                                    <div className="svg-wrapper">{item.icon}</div>
-                                                }
+                                                {STATIC_CHOOSE_ICONS[index] ? (
+                                                    <div className="svg-wrapper">
+                                                        <StaticChooseIcon index={index} />
+                                                    </div>
+                                                ) : null}
 
                                                 <div className="content">
                                                     {item.title && 
@@ -152,7 +164,7 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                 })}    
                             </div>
                         </div>
-                    }
+                    )}
 
                   
                 </div>

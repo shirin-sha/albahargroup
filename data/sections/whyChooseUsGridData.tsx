@@ -1,6 +1,5 @@
 import { SectionProps } from "@/types/sectionProps";
 import WhyChooseUsImage from "@/public/img/why-choose-us/1.jpg";
-import WhyChooseUsImageMobile from "@/public/img/why-choose-us/575.jpg";
 import PromoImage from "@/public/img/why-choose-us/2.jpg";
 import Icons from "@/components/Icons";
 
@@ -27,19 +26,17 @@ export const WhyChooseUsGridData: SectionProps = {
         logo: <Icons.ChooseRotatingLogo />,
         text: "25",
     },
-    promotions: [
+    /* Icons for these rows are static in WhyChooseUsGrid; copy is dev/AR fallback until CMS is filled. */
+    items: [
         {
-            icon: <Icons.Mission />,
             title: "Our Mission",
             text: "Delivering excellence and success by directing our values, talents, resources and expertise to maximize customer satisfaction and to achieve sustainable growth for all stakeholders.",
         },
         {
-            icon: <Icons.Vision />,
             title: "Our Vision",
             text: "To Always be the Most Trusted and Best-in-Class Partner.",
         },
         {
-            icon: <Icons.Values />,
             title: "Our Values",
             text: "• We always deliver on our commitments\n• We consider our people to be our strength\n• We are one team\n• We listen, we care, we respect\n• We constantly work towards improvement",
         },
