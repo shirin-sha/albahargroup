@@ -8,6 +8,10 @@ import Icons from "./Icons";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { addLanguagePrefix } from "@/libs/language";
 
+/** Match ServiceDetails: nbsp and &nbsp; prevent normal line breaks in narrow accordion panels. */
+const normalizeServiceHtml = (html: string) =>
+  html.replace(/\u00A0/g, ' ').replace(/&nbsp;/gi, ' ');
+
 /** Collapsed column width uses --width from title offsetWidth. Active item hides title via display:none, so measure with a temporary display override. */
 const setCollapsedWidths = (buttons: Array<HTMLDivElement | undefined>) => {
   buttons.forEach((btn) => {
@@ -90,8 +94,8 @@ const AccordionHorizontal = ({ items }: { items: ServiceProps[] }) => {
                     {item.icon && <span className="icon-main">{parser(item.icon)}</span>}
                     <h2 className="heading text-24">{item.detailTitle || item.title}</h2>
                     {item.description && (
-                      <div className="text text-16">
-                        {parser(item.description)}
+                      <div className="text text-16 accordion-service-description">
+                        {parser(normalizeServiceHtml(item.description))}
                       </div>
                     )}
                 </div>
