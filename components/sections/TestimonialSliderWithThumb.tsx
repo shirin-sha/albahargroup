@@ -9,6 +9,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 
 import "@/styles/testimonial.css";
+import type { ImageProps } from '@/types/image';
+import testimonialSectionBg from '@/public/img/contact/contact-bg.jpg';
 import { SectionProps } from "@/types/sectionProps";
 import { TestimonialProps } from "@/types/testimonialProps";
 import { Service } from '@/libs/models/service';
@@ -21,6 +23,14 @@ import CardTestimonialContent from "../CardTestimonialContent";
 import Image from 'next/image';
 import Icons from "../Icons";
 
+/** Section backdrop; change the import above to swap image. CMS `backgroundImage` overrides when set. */
+const STATIC_TESTIMONIAL_BG: ImageProps = {
+    src: testimonialSectionBg.src,
+    width: 1920,
+    height: 883,
+    alt: 'Background image',
+    loading: 'lazy',
+};
 
 const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
     const { language } = useLanguage();
@@ -95,6 +105,8 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
         heading,
     } = data || {};
 
+    const resolvedBackground = backgroundImage ?? STATIC_TESTIMONIAL_BG;
+
     const updateHeading = (index: number) => {
         setActiveHeading(testimonialList[index]?.heading || heading);
         setActiveIndex(index);
@@ -142,17 +154,17 @@ const TestimonialSliderWithThumb = ({ data }: { data: SectionProps;}) => {
 
     return (
         <div className={wrapperCls}>
-            {backgroundImage &&
+            {resolvedBackground && (
                 <div className="media media-bg">
                     <Image
-                        src={backgroundImage.src}
-                        width={backgroundImage.width}
-                        height={backgroundImage.height}
-                        loading={backgroundImage.loading}
-                        alt={backgroundImage.alt ? backgroundImage.alt : 'Background image'}
+                        src={resolvedBackground.src}
+                        width={resolvedBackground.width}
+                        height={resolvedBackground.height}
+                        loading={resolvedBackground.loading}
+                        alt={resolvedBackground.alt ? resolvedBackground.alt : 'Background image'}
                     />
                 </div>
-            }
+            )}
 
             <div className={`section-padding ${container}`}>
                 <div className="section-headings lg:hidden">

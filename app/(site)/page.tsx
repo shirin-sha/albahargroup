@@ -146,7 +146,7 @@ const Home = async () => {
 
       {/* FAQ */}
       {cmsData.faq ? (() => {
-        const data = getBilingualData(cmsData.faq, {  container: "container" });
+        const data = getBilingualData(cmsData.faq, {   wrapperCls: "mt-100",container: "container" });
         return data ? <Faq data={data} /> : null;
       })() : null}
 
