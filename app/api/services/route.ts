@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
       query.section = section;
     }
 
-    const services = await collection.find(query).sort({ created_at: -1 }).toArray();
+    const services = await collection.find(query).toArray();
 
     return NextResponse.json(
       { success: true, data: services },
