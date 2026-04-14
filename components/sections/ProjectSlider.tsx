@@ -18,9 +18,12 @@ import Heading from "../Heading";
 import Subheading from "../Subheading";
 import Icons from "../Icons";
 import { SectionProps } from "@/types/sectionProps";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 
 const ProjectSlider = ({ data }: {data: SectionProps}) => {
+    const { language } = useLanguage();
+    const isRTL = language === 'ar';
     // Refs for custom navigation buttons
     const prevRef = useRef<HTMLDivElement>(null);
     const nextRef = useRef<HTMLDivElement>(null);
@@ -54,16 +57,18 @@ const ProjectSlider = ({ data }: {data: SectionProps}) => {
             nextRef.current &&
             swiperInstance.params.navigation
         ) {
+            const prevEl = isRTL ? nextRef.current : prevRef.current;
+            const nextEl = isRTL ? prevRef.current : nextRef.current;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            swiperInstance.params.navigation.prevEl = prevRef.current;
+            swiperInstance.params.navigation.prevEl = prevEl;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            swiperInstance.params.navigation.nextEl = nextRef.current;
+            swiperInstance.params.navigation.nextEl = nextEl;
             swiperInstance.navigation.init();
             swiperInstance.navigation.update();
         }
-    }, [swiperInstance]);
+    }, [swiperInstance, isRTL]);
 
     if (loading) {
         return null;
