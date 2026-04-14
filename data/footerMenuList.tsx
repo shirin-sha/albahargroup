@@ -1,54 +1,66 @@
 interface MenuType {
   title: string;
+  titleAr?: string;
   path: string;
 }
 
 export const QuickLink: MenuType[] = [
     {
-        title: 'Technology',
-        path: '/services/technology'
-    },
-    {
         title: 'Consumer Goods',
-        path: '/services/consumer'
+        titleAr: 'السلع الاستهلاكية',
+        path: '/services/consumer-goods'
     },
     {
-        title: 'Shipping',
-        path: '/services/shipping'
+        title: 'Consumer Electronics',
+        titleAr: 'الإلكترونيات الاستهلاكية',
+        path: '/services/consumer-electronics'
     },
     {
-        title: 'Travel',
-        path: '/services/travel'
+        title: 'Home Automation',
+        titleAr: 'الأتمتة المنزلية',
+        path: '/services/home-automation'
     },
     {
-        title: 'Retail',
-        path: '/services/retail'
+        title: 'Enterprise Technology',
+        titleAr: 'تقنيات المؤسسات',
+        path: '/services/enterprise-technology'
+    },
+    {
+        title: 'Shipping, Travel & Tourism',
+        titleAr: 'الشحن والسفر والسياحة',
+        path: '/services/shipping-travel-and-tourism'
     }
 ];
 
 export const Services: MenuType[] = [
     {
         title: 'Human Capital',
-        path: '#'
-    },
-    {
-        title: 'Logistics',
-        path: '#'
-    },
-    {
-        title: 'Supply Chain',
-        path: '#'
-    },
-    {
-        title: 'Omni Channel',
-        path: '#'
-    },
-    {
-        title: 'Business Excellence',
+        titleAr: 'رأس المال البشري',
         path: '#'
     },
     {
         title: 'Knowledge Capital',
+        titleAr: 'رأس المال المعرفي',
+        path: '#'
+    },
+    {
+        title: 'Business Excellence',
+        titleAr: 'التميز المؤسسي',
+        path: '#'
+    },
+    {
+        title: 'Warehouse & Logistics',
+        titleAr: 'المستودعات والخدمات اللوجستية',
+        path: '#'
+    },
+    {
+        title: 'Customer Care',
+        titleAr: 'خدمة العملاء',
+        path: '#'
+    },
+    {
+        title: 'Omni Channel',
+        titleAr: 'القنوات المتكاملة',
         path: '#'
     }
 ];
@@ -74,15 +86,18 @@ export const Information: MenuType[] = [
 
 export const MenuPolicies: MenuType[] = [
     {
+        title: 'Contact Us',
+        titleAr: 'اتصل بن',
+        path: '/contact-us'
+    },
+    {
         title: 'Careers',
+        titleAr: 'الوظائف',
         path: '/careers'
     },
     {
         title: 'Partnerships',
+        titleAr: 'الشراكات',
         path: '/ourpartnerships'
-    },
-    {
-        title: 'Contact',
-        path: '/contact-us'
     }
 ];

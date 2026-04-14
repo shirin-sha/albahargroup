@@ -1,8 +1,11 @@
+'use client';
+
 import { 
     QuickLink,
     Services,
     Information
 } from "@/data/footerMenuList";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import FooterBrand from "./FooterBrand";
 import FooterMenu from "./FooterMenu";
@@ -15,6 +18,8 @@ interface FooterTopProps {
 const FooterTop = ({
     container,
 }: FooterTopProps) => {
+    const { language } = useLanguage();
+
     return (
         <div className="footer-top">
           <div className={container}>
@@ -24,13 +29,13 @@ const FooterTop = ({
               </div>
               <div className="max-md:col-span-12 max-lg:col-span-6">
                 <FooterMenu 
-                    heading="Our Business"
+                    heading={language === 'ar' ? 'قطاعات الأعمال' : 'Business Verticals'}
                     menus={QuickLink}
                 />
               </div>
               <div className="max-md:col-span-12 max-lg:col-span-6">
                 <FooterMenu 
-                    heading="Business Enablers"
+                    heading={language === 'ar' ? 'قدرات الأعمال' : 'Business Capabilities'}
                     menus={Services}
                 />
               </div>

@@ -43,6 +43,7 @@ export interface MenuItem {
 
 export interface MenuType {
     title: string;
+    titleAr?: string;
     path: string;
     dropdown?: boolean;
     text?: string; 

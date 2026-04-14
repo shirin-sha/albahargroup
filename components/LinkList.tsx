@@ -1,5 +1,6 @@
 import LanguageLink from "./LanguageLink";
 import { MenuType } from "@/types/menu";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LinkListProps {
     wrapperCls: string;
@@ -10,6 +11,8 @@ const LinkList = ({
     wrapperCls,
     menus
 }: LinkListProps) => {
+    const { language } = useLanguage();
+
     return(
         <ul className={`${wrapperCls} list-unstyled`}>
             {menus?.map((item, index) => (
@@ -17,9 +20,9 @@ const LinkList = ({
                     <LanguageLink
                         href={item.path}
                         className="text text-16 link"
-                        aria-label={item.title}
+                        aria-label={language === "ar" && item.titleAr ? item.titleAr : item.title}
                     >
-                        {item.title}
+                        {language === "ar" && item.titleAr ? item.titleAr : item.title}
                     </LanguageLink>
                 </li>
             ))}
