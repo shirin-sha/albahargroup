@@ -107,10 +107,12 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
                                 {promotions?.map((item: any, index: number) => {
                                     // Map icon based on iconType or fallback to icon prop
                                     let iconElement = item.icon;
+                                    let isPhonePromotion = false;
                                     if (!iconElement && item.iconType) {
                                         const iconType = item.iconType.toLowerCase();
                                         if (iconType === 'phone') {
                                             iconElement = <Icons.Phone />;
+                                            isPhonePromotion = true;
                                         } else if (iconType === 'email') {
                                             iconElement = <Icons.Email />;
                                         } else if (iconType === 'location') {
@@ -122,6 +124,7 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
                                         const titleLower = item.title?.toLowerCase() || '';
                                         if (titleLower.includes('call') || titleLower.includes('phone')) {
                                             iconElement = <Icons.Phone />;
+                                            isPhonePromotion = true;
                                         } else if (titleLower.includes('email') || titleLower.includes('mail')) {
                                             iconElement = <Icons.Email />;
                                         } else {
@@ -149,7 +152,11 @@ const ContactSection = ({ data }: { data: SectionProps }) => {
 
                                             {item.text &&
                                                 <p className="text text-16" data-aos="fade-up">
-                                                    {parser(item.text)}
+                                                    {isPhonePromotion ? (
+                                                        <span className="contact-phone-ltr">{item.text}</span>
+                                                    ) : (
+                                                        parser(item.text)
+                                                    )}
                                                 </p>
                                             }
                                         </div>

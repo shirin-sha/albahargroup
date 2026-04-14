@@ -6,7 +6,8 @@ import { createHandle } from "@/utils/createHandle";
 const SidebarCategories = ({
     title,
     categories,
-    rootUrl
+    rootUrl,
+    currentSlug,
 }: CategoriesType) => {
     return (
         <div className="sidebar-widget radius18" data-aos="fade-up">
@@ -16,12 +17,14 @@ const SidebarCategories = ({
                     const label = typeof item === 'string' ? item : item.label;
                     const slug =
                         typeof item === 'string' ? createHandle(item) : item.slug;
+                    const isActive = currentSlug === slug;
                     return (
                     <li key={`cate-${index}`}>
                         <Link
-                            className="blog-category subheading subheading-bg text-18 fw-400"
+                            className={`blog-category subheading subheading-bg text-18 fw-400${isActive ? ' active' : ''}`}
                             href={`${rootUrl}/${slug}`}
                             aria-label={label}
+                            aria-current={isActive ? 'page' : undefined}
                         >
                             {label}
                             <Icons.ArrowLong2 />

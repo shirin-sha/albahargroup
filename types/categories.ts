@@ -4,4 +4,5 @@ export interface CategoriesType {
     title?: string;
     categories: SidebarCategoryItem[];
     rootUrl: string;
+    currentSlug?: string;
 }

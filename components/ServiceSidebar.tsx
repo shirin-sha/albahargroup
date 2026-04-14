@@ -42,9 +42,8 @@ const ServiceSidebar = async ({
         .sort({ created_at: -1 })
         .toArray();
 
-    const filteredServices = services.filter((item: any) => item.slug != slug);
     const servicesRoot = addLanguagePrefix('/services', locale);
-    const categories = filteredServices.map((service: Service) => ({
+    const categories = services.map((service: Service) => ({
         label: serviceDisplayTitle(service, locale),
         slug: service.slug,
     }));
@@ -71,6 +70,7 @@ const ServiceSidebar = async ({
                         title={listTitle}
                         categories={categories}
                         rootUrl={servicesRoot}
+                        currentSlug={slug}
                     />
                 }
 
