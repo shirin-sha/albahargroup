@@ -17,6 +17,7 @@ const SidebarPhone = ({
         loading,
         alt
     } = image
+    const dialPhone = phone ? phone.replace(/\s+/g, "") : "";
 
     return (
         <div
@@ -39,7 +40,7 @@ const SidebarPhone = ({
                 {phone && 
                     <Link
                         className="icon-contact"
-                        href={`tel:${phone}`}
+                        href={`tel:${dialPhone}`}
                         aria-label={`Call us at ${phone} number`}
                     >
                         <Icons.PhoneLarge />
@@ -58,8 +59,10 @@ const SidebarPhone = ({
                 {phone && 
                     <Link
                         className="contact-number heading text-24"
-                        href={`tel:${phone}`}
+                        href={`tel:${dialPhone}`}
                         aria-label={`Call us at ${phone} number`}
+                        dir="ltr"
+                        style={{ unicodeBidi: "isolate" }}
                     >
                         {phone}
                     </Link>

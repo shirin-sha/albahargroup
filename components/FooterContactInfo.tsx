@@ -5,6 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const FooterContactInfo = () => {
     const { language } = useLanguage();
     const isAr = language === 'ar';
+    const displayPhone = "+96522072111";
 
     return (
         <div
@@ -16,11 +17,15 @@ const FooterContactInfo = () => {
             <ul className="footer-contact-list list-unstyled">
                 <li className="contact-item">
                     <span className="contact-label contact-value">{isAr ? 'الاستفسارات:' : 'Queries:'}</span>
-                    <a href="tel:+96522072111" className="contact-value">+ 965 220 72111</a>
+                    <a href="tel:+96522072111" className="contact-value">
+                        <span className="contact-phone-ltr">{displayPhone}</span>
+                    </a>
                 </li>
                 <li className="contact-item">
                     <span className="contact-label contact-value">{isAr ? 'المبيعات:' : 'Sales:'}</span>
-                    <a href="tel:+96522072111" className="contact-value">+ 965 220 72111</a>
+                    <a href="tel:+96522072111" className="contact-value">
+                        <span className="contact-phone-ltr">{displayPhone}</span>
+                    </a>
                 </li>
                 <li className="contact-item">
                     <span className="contact-label contact-value">{isAr ? 'البريد الإلكتروني:' : 'Email:'}</span>

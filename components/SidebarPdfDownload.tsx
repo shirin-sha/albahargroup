@@ -5,6 +5,7 @@ import { PDFDownloadType } from "@/types/pdfDownload";
 const SidebarPdfDownload = ({
     heading,
     text,
+    ctaLabel,
 }: PDFDownloadType) => {
     return (
         <div className="sidebar-widget radius18" data-aos="fade-up">
@@ -22,9 +23,9 @@ const SidebarPdfDownload = ({
                         <Link
                             href="javascript:void(0)"
                             className="download-button text text-14 fw-600"
-                            aria-label="download"
+                            aria-label={ctaLabel || "download"}
                         >
-                            Click here to download
+                            {ctaLabel || "Click here to download"}
                         </Link>
                     </div>
                 </div>

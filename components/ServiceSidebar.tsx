@@ -48,7 +48,10 @@ const ServiceSidebar = async ({
         label: serviceDisplayTitle(service, locale),
         slug: service.slug,
     }));
-    const listTitle = currentSection === 'businesses' ? 'Business Verticals' : 'Capabilities';
+    const listTitle =
+        currentSection === 'businesses'
+            ? (locale === 'ar' ? 'قطاعات الأعمال' : 'Business Verticals')
+            : (locale === 'ar' ? 'قدرات الأعمال' : 'Capabilities');
 
     return (
         <div className="sidebar-filter drawer-service-sidebar">
@@ -72,9 +75,9 @@ const ServiceSidebar = async ({
                 }
 
                 <SidebarPhone 
-                    heading="Contact us for more information"
-                    text="Need assistance? Speak with our team"
-                    phone="+965 XXX XXXX"
+                    heading={locale === 'ar' ? 'تواصل معنا لمزيد من المعلومات' : 'Contact us for more information'}
+                    text={locale === 'ar' ? 'هل تحتاج إلى مساعدة؟ تحدّث مع فريقنا' : 'Need assistance? Speak with our team'}
+                    phone="+ 965 220 72111"
                     image={{
                         src: SidebarPhoneImage.src,                      
                         width: 1000,
@@ -85,8 +88,13 @@ const ServiceSidebar = async ({
                 />
                 
                 <SidebarPdfDownload 
-                    heading="Download Our Profile"
-                    text="Explore Mohamed Abdulrahman Al-Bahar Group’s businesses, capabilities, partnerships and corporate information through our company profile brochure."
+                    heading={locale === 'ar' ? 'حمّل الملف التعريفي' : 'Download Our Profile'}
+                    text={
+                        locale === 'ar'
+                            ? 'تعرّف على أعمال مجموعة محمد عبدالرحمن البهار، وقدراتها، وشراكاتها، ومعلوماتها المؤسسية من خلال كتيب الملف التعريفي للشركة.'
+                            : "Explore Mohamed Abdulrahman Al-Bahar Group's businesses, capabilities, partnerships and corporate information through our company profile brochure."
+                    }
+                    ctaLabel={locale === 'ar' ? 'اضغط هنا للتحميل' : 'Click here to download'}
                 />
             </aside>
         </div>

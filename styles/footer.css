@@ -92,6 +92,12 @@ footer .social-link:hover {
   transition: opacity 0.3s ease;
 }
 
+.footer-contact-list .contact-phone-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
 .footer-contact-list .contact-value:hover {
   opacity: 0.75;
 }
