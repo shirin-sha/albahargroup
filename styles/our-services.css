@@ -190,7 +190,7 @@
   }
 
   .service-list .accordion-li:not(:first-child) {
-    border-left: var(--style-border-width) solid var(--color-border);
+    border-inline-start: var(--style-border-width) solid var(--color-border);
   }
 
   .service-list .accordion-li:first-child .accordion-content {
@@ -207,6 +207,7 @@
     transform: rotate(-180deg);
     max-height: 240px;
   }
+
 }
 
 @media (max-width: 991px) {
