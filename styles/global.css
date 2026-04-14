@@ -666,7 +666,6 @@ h6,
   font-style: normal;
   line-height: 1.4;
   letter-spacing: normal;
-  padding: 10px 10px 10px 30px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -677,6 +676,9 @@ h6,
   outline: none;
   box-shadow: none;
   transition: all 0.3s;
+  padding-block: 10px;
+  padding-inline-start: 30px;
+  padding-inline-end: 10px;
 }
 
 .button-without-icon {
@@ -782,6 +784,10 @@ h6,
 .button--secondary:hover .svg-wrapper {
   color: var(--color-secondary-button-hover-icon);
   background-color: var(--color-secondary-button-hover-icon-background);
+}
+
+[dir="rtl"] .button .svg-wrapper svg {
+  transform: scaleX(-1);
 }
 
 .button--cta {
