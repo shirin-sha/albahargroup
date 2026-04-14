@@ -27,6 +27,30 @@
   --color-background-subheading: rgba(242, 242, 242, 1);
   --color-border-subheading-bg: rgba(242, 242, 242, 1);
 }
+
+.page-blog .product-grid > [class*="col-span-"] {
+  display: flex;
+}
+
+.page-blog .product-grid .card-blog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.page-blog .product-grid .card-blog-top {
+  flex: 1 1 auto;
+}
+
+.page-blog .product-grid .card-blog-heading a {
+  display: -webkit-box;
+  overflow: hidden;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-height: calc(1.45em * 2);
+}
  
 .featured-blog.blog-style-3 .card-blog-list-media {
   --height: 300px

@@ -13,6 +13,30 @@
   --color-background: rgba(255, 255, 255, 1);
 }
 
+.featured-blog .product-grid > [class*="col-span-"] {
+  display: flex;
+}
+
+.featured-blog .card-blog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.featured-blog .card-blog-top {
+  flex: 1 1 auto;
+}
+
+.featured-blog .card-blog-heading a {
+  display: -webkit-box;
+  overflow: hidden;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-height: calc(1.45em * 2);
+}
+
 .featured-blog .buttons-discover {
   display: flex;
   justify-content: center;

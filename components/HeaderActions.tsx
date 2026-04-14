@@ -20,7 +20,7 @@ const HeaderActions = () => {
             </button>
             <HeaderSeparator />
             <SlimButton 
-                label="Profile"
+                label={language === 'en' ? 'Profile' : ' الملف التعريفي'}
                 href="#"
                 ariaLabel="contact us"
                 cls="button--secondary !hidden lg:!inline-flex"
