@@ -103,6 +103,11 @@
     position: static;
 }
 
+/* Keep nav arrow order consistent on Arabic pages */
+.project-slider .swiper-nav-inner {
+  direction: ltr;
+}
+
 .project-slider .swiper-button-prev, 
 .project-slider .swiper-button-next {
   --swiper-navigation-color: rgba(28, 37, 57, 1);;
