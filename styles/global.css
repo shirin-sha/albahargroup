@@ -161,6 +161,12 @@
   --swiper-pagination-bullet-inactive-opacity: 1;
 }
 
+[dir="rtl"] {
+  --font-body--family: var(--font-arabic--family);
+  --font-heading--family: var(--font-arabic--family);
+  --font-button--family: var(--font-arabic--family);
+}
+
 @media (max-width: 767px) {
   :root {
     --font-h1--size: 48px;

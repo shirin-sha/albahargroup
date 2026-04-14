@@ -1,4 +1,4 @@
-import { Inter, Poppins } from 'next/font/google';
+import { Inter, Noto_Sans_Arabic, Poppins } from 'next/font/google';
  
 export const inter = Inter({ 
     weight: ['300', '400', '500', '600', '700'],
@@ -21,4 +21,11 @@ export const poppinsButton = Poppins({
     variable: '--font-button--family'
 });
 
-export const fonts = [inter, poppins, poppinsButton].map(font => font.variable).join(" ");
+export const notoSansArabic = Noto_Sans_Arabic({
+    weight: ['300', '400', '500', '600', '700'],
+    subsets: ['arabic'],
+    display: 'swap',
+    variable: '--font-arabic--family'
+});
+
+export const fonts = [inter, poppins, poppinsButton, notoSansArabic].map(font => font.variable).join(" ");
