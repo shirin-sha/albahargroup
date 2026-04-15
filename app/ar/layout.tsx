@@ -11,13 +11,15 @@ export default function ArLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SiteShellClient>
-      <Header />
-      <main>{children}</main>
-      <Footer />
+    <div lang="ar" dir="rtl">
+      <SiteShellClient>
+        <Header />
+        <main>{children}</main>
+        <Footer />
 
-      {/* Modal and Drawer Overlay */}
-      <drawer-opener id="drawer-overlay"></drawer-opener>
-    </SiteShellClient>
+        {/* Modal and Drawer Overlay */}
+        <drawer-opener id="drawer-overlay"></drawer-opener>
+      </SiteShellClient>
+    </div>
   );
 }

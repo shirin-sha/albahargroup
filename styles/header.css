@@ -89,6 +89,15 @@ sticky-header[data-sticky-type="always"] {
   color: var(--color-foreground);
 }
 
+.header-actions .button--slim {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+[dir="rtl"] .header-actions .button--slim {
+  min-width: 168px;
+}
+
 .header-language {
   --color-border: rgba(255, 255, 255, 1);
   --style-border-width: 2px;
@@ -129,12 +138,6 @@ sticky-header[data-sticky-type="always"] {
   text-align: center;
   position: relative;
 
-}
-
-/* Language-specific tweaks */
-.header-language.is-en .language-text {
-  /* example: slightly smaller EN, adjust vertical alignment if needed */
- 
 }
 
 .header-language.is-ar .language-text {
@@ -228,6 +231,12 @@ sticky-header[data-sticky-type="always"] {
   
   .header-logo {
     max-width: 180px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1440px) {
+  [dir="rtl"] .header-grid {
+    grid-template-columns: 180px 1fr 220px;
   }
 }
 
