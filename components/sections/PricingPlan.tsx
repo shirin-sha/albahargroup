@@ -57,7 +57,7 @@ const PricingPlan = ({ data }: { data: SectionProps }) => {
                     <div className="pricing-cards">
                         <div className="grid grid-cols-3 gap-1 product-grid justify-center">
                             {pricingTable.map((item, index) => (
-                                <div className="col-span-3 xl:col-span-1" key={`price-box-${index}`}>
+                                <div className="col-span-3 xl:col-span-1 pricing-card-col" key={`price-box-${index}`}>
                                     <CardPricing data={item} />
                                 </div>
                             ))}

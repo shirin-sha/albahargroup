@@ -10,6 +10,9 @@ const BreadcrumbBanner = ({
     image
 }: BreadcrumbType) => {
     const activeTitle = breadcrumbTitle || title;
+    const isArabic = /[\u0600-\u06FF]/.test(`${title} ${activeTitle}`);
+    const homeLabel = isArabic ? 'الرئيسية' : 'Home';
+    const homeHref = isArabic ? '/ar' : '/';
 
     return (
         <div className="page-banner overlay">            
@@ -30,11 +33,11 @@ const BreadcrumbBanner = ({
                     >
                         <li>
                             <Link
-                                href="/"
+                                href={homeHref}
                                 className="text text-18"
-                                aria-label="Home Page"
+                                aria-label={homeLabel}
                             >
-                                Home
+                                {homeLabel}
                             </Link>
                         </li>
                         <li><Icons.ChevronRight /></li>

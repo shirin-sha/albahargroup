@@ -26,6 +26,15 @@
   gap: 40px;
 }
 
+.pricing-card-col {
+  display: flex;
+}
+
+.pricing-card-col .card-pricing {
+  width: 100%;
+  height: 100%;
+}
+
 .card-pricing.active {
   --color-card-background: rgba(32, 40, 45, 1);
   --color-foreground: rgba(242, 242, 242, 1);

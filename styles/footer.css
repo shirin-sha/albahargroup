@@ -119,6 +119,20 @@ footer .social-link:hover {
   padding: 20px 0;
 }
 
+.footer-powered-by {
+  text-align: center;
+}
+
+.footer-powered-by a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-powered-by a:hover,
+.footer-powered-by a:focus {
+  opacity: 0.75;
+}
+
 .footer-contact {
   position: relative;
   padding-block-start: 100px;
@@ -178,6 +192,10 @@ footer .social-link:hover {
   }
 
   .footer-copyright {
+    text-align: center;
+  }
+
+  .footer-powered-by {
     text-align: center;
   }
 

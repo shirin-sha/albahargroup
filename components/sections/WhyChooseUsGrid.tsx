@@ -30,6 +30,10 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
     } = data || {};
 
     const rowItems = items && items.length > 0 ? items : [];
+    const imageWidth = Number(image?.width) || 992;
+    const imageHeight = Number(image?.height) || 863;
+    const backgroundWidth = Number(backgroundImage?.width) || 1920;
+    const backgroundHeight = Number(backgroundImage?.height) || 1080;
 
     return (
         <div className={`why-choose-us ${wrapperCls}`}>
@@ -38,8 +42,8 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                     <Image
                         src={backgroundImage.src}
                         alt={backgroundImage.alt ? backgroundImage.alt : "Background image"}
-                        width={backgroundImage.width}
-                        height={backgroundImage.height}
+                        width={backgroundWidth}
+                        height={backgroundHeight}
                         loading={backgroundImage.loading}
                     />
                 </div>
@@ -59,8 +63,8 @@ const WhyChooseUsGrid = ({ data }: { data: SectionProps }) => {
                                 <Image 
                                     src={image.src}
                                     alt={image.alt ? image.alt : 'Image'}
-                                    width={image.width}
-                                    height={image.height}
+                                    width={imageWidth}
+                                    height={imageHeight}
                                     loading={image.loading}
                                 />
                                 </picture>

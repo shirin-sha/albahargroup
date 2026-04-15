@@ -37,6 +37,10 @@
   height: 12px;
 }
 
+[dir="rtl"] .breadcrumb li svg {
+  transform: scaleX(-1);
+}
+
 .breadcrumb a {
   text-decoration: none;
 }

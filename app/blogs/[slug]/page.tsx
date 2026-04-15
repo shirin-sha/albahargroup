@@ -15,7 +15,7 @@ import { plainTextFromHtml } from '@/utils/plainText';
 export const revalidate = 3600;
 
 const BLOG_LISTING_PATH = '/blogs';
-const DETAIL_BANNER_TITLE = 'News and Updates';
+const DETAIL_BANNER_TITLE = 'News & Updates';
 
 async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
