@@ -15,6 +15,7 @@ import { plainTextFromHtml } from '@/utils/plainText';
 export const revalidate = 3600;
 
 const BLOG_LISTING_PATH = '/blogs';
+const DETAIL_BANNER_TITLE = 'News and Updates';
 
 async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
@@ -138,7 +139,8 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> | { slug: st
       />
 
       <BreadcrumbBanner
-        title={post.title || 'Blog'}
+        title={DETAIL_BANNER_TITLE}
+        breadcrumbTitle={post.title || 'Blog'}
         image={{
           src: BreadcrumbBannerImage.src,
           srcMobile: BreadcrumbBannerImageTablet.src,

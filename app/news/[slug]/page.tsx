@@ -13,6 +13,7 @@ import { DEFAULT_SITE_NAME, absoluteUrl } from '@/libs/seo';
 import { plainTextFromHtml } from '@/utils/plainText';
 
 export const revalidate = 3600;
+const DETAIL_BANNER_TITLE = 'News & Updates';
 
 async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
@@ -145,7 +146,8 @@ const Page = async ({ params }: {params: Promise<{slug: string}>}) => {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
               />
               <BreadcrumbBanner 
-                  title={post.title || 'News'}
+                  title={DETAIL_BANNER_TITLE}
+                  breadcrumbTitle={post.title || 'News'}
                   image={{
                       src: BreadcrumbBannerImage.src,
                       srcMobile: BreadcrumbBannerImageTablet.src,

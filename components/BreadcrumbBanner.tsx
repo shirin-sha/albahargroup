@@ -6,8 +6,11 @@ import { BreadcrumbType } from "@/types/breadcrumb";
 
 const BreadcrumbBanner = ({
     title,
+    breadcrumbTitle,
     image
 }: BreadcrumbType) => {
+    const activeTitle = breadcrumbTitle || title;
+
     return (
         <div className="page-banner overlay">            
             {image ? <Picture image={image} /> : null}
@@ -37,7 +40,7 @@ const BreadcrumbBanner = ({
                         <li><Icons.ChevronRight /></li>
                         <li>
                             <a role="link" aria-disabled="true" className="text text-18 active">
-                                {title}
+                                {activeTitle}
                             </a>
                         </li>
                     </ul>
