@@ -477,8 +477,8 @@ const SectionEditor = ({
           <>
             <div className="hero-slides-container">
               {Array.from({ length: maxSlides }).map((_, index) => {
-                const slideEn = slidesEn[index] || { subheading: '', heading: '', text: '', button: { label: '', href: '' }, image: '' };
-                const slideAr = slidesAr[index] || { subheading: '', heading: '', text: '', button: { label: '', href: '' }, image: '' };
+                const slideEn = slidesEn[index] || { subheading: '', heading: '', text: '', button: { label: '', href: '', type: 'primary' }, image: '' };
+                const slideAr = slidesAr[index] || { subheading: '', heading: '', text: '', button: { label: '', href: '', type: 'primary' }, image: '' };
                 return (
                   <div key={index} className="cms-item-card">
                     <div className="cms-item-header">
@@ -548,7 +548,7 @@ const SectionEditor = ({
                     subheading: '',
                     heading: '',
                     text: '',
-                    button: { label: '', href: '' },
+                    button: { label: '', href: '', type: 'primary' },
                     image: ''
                   };
                   setFormDataEn({

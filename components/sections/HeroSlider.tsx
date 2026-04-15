@@ -11,7 +11,6 @@ import Subheading from "../Subheading";
 import Heading from "../Heading";
 import Text from "../Text";
 import PrimaryButton from "../buttons/PrimaryButton";
-import SecondaryButton from "../buttons/SecondaryButton";
 import Icons from "../Icons";
 import Image from "next/image";
 import { HeroSliderType } from "@/types/heroSlider";
@@ -160,19 +159,11 @@ const HeroSlider = ({
 
                                         {slide.button && 
                                             <div className="buttons">
-                                                {slide.button.type == 'primary' ? (
-                                                    <PrimaryButton 
-                                                        label={slide.button.label}
-                                                        href={slide.button.href}
-                                                        ariaLabel="Hero button"
-                                                    />
-                                                ) : (
-                                                    <SecondaryButton 
-                                                        label={slide.button.label}
-                                                        href={slide.button.href}
-                                                        ariaLabel="Hero button"
-                                                    />
-                                                )}
+                                                <PrimaryButton 
+                                                    label={slide.button.label}
+                                                    href={slide.button.href}
+                                                    ariaLabel="Hero button"
+                                                />
                                             </div>
                                         }
                                     </div>
