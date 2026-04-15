@@ -205,7 +205,20 @@
     text-orientation: mixed;
     writing-mode: vertical-rl;
     transform: rotate(-180deg);
-    max-height: 240px;
+    max-height: 300px;
+  }
+
+  /* Anchor Arabic vertical labels from one bottom start point. */
+  [dir="rtl"] .service-list .text-rotate {
+    direction: rtl;
+    text-align: start;
+    display: inline-flex;
+    height: 300px;
+    max-height: none;
+    align-items: flex-start;
+    justify-content: start;
+    line-height: 1.2;
+    margin: 0;
   }
 
 }
