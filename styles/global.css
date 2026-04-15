@@ -165,6 +165,7 @@
   --font-body--family: var(--font-arabic--family);
   --font-heading--family: var(--font-arabic--family);
   --font-button--family: var(--font-arabic--family);
+  font-family: var(--font-arabic--family);
 }
 
 @media (max-width: 767px) {
@@ -184,6 +185,9 @@
 body {
   color: var(--color-foreground);
   background: var(--color-background);
+  font-family: var(--font-body--family);
+  font-style: var(--font-body--style);
+  font-weight: var(--font-body--weight);
   display: flex;
   flex-direction: column;
   margin: 0;
