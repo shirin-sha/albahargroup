@@ -630,15 +630,24 @@ const SectionEditor = ({
               onChange={(url) => {
                 const smallDefaults = { width: 195, height: 202, alt: 'Image', loading: 'lazy' };
                 const enImageList = Array.isArray(formDataEn.imageList) ? [...formDataEn.imageList] : [];
-                const arImageList = Array.isArray(formDataAr.imageList) ? [...formDataAr.imageList] : [];
                 enImageList[1] = { ...smallDefaults, ...(enImageList[1] || {}), src: url };
-                arImageList[1] = { ...smallDefaults, ...(arImageList[1] || {}), src: url };
                 setFormDataEn({ ...formDataEn, imageList: enImageList });
+              }}
+              placeholder="/img/image-text/img-small.svg"
+              folder="image-text"
+              label="Small Image (English)"
+            />
+            <ImageUpload
+              value={formDataAr.imageList?.[1]?.src || formDataEn.imageList?.[1]?.src || ''}
+              onChange={(url) => {
+                const smallDefaults = { width: 195, height: 202, alt: 'Image', loading: 'lazy' };
+                const arImageList = Array.isArray(formDataAr.imageList) ? [...formDataAr.imageList] : [];
+                arImageList[1] = { ...smallDefaults, ...(arImageList[1] || {}), src: url };
                 setFormDataAr({ ...formDataAr, imageList: arImageList });
               }}
               placeholder="/img/image-text/img-small.svg"
               folder="image-text"
-              label="Small Image (shared)"
+              label="Small Image (Arabic)"
             />
             <div className="form-group">
               <label>Scrolling brand strip (under images)</label>
