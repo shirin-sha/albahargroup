@@ -66,8 +66,8 @@ const Menus: MenuItem[] = [
                 path: '#',
                 dropdown: [
                     {
-                        imageUrl: '/img/menu/megamenunew.png',
-                        imageUrlMobile: '/img/menu/575.jpg',
+                        imageUrl: '/menu/megamenunew.png',
+                        imageUrlMobile: '/menu/megamenunew.png',
                         title: 'Inside the Group Portfolio',
                         titleAr: 'داخل محفظة المجموعة',
                         text: 'Six diverse businesses connecting consumers, enterprises and traders with leading global brands.',
