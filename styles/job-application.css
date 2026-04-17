@@ -1,0 +1,119 @@
+.job-application-page {
+  background: #f8fafc;
+}
+
+.job-application-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.job-application-card {
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+  padding: 32px;
+}
+
+.job-application-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  margin-bottom: 28px;
+}
+
+.job-application-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(28, 37, 57, 0.06);
+  color: rgba(28, 37, 57, 1);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.job-application-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.job-application-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.job-application-field.full {
+  grid-column: 1 / -1;
+}
+
+.job-application-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(28, 37, 57, 1);
+}
+
+.job-application-field input,
+.job-application-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: #fff;
+  color: rgba(28, 37, 57, 1);
+}
+
+.job-application-field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.job-application-field input[type="file"] {
+  padding: 12px;
+  cursor: pointer;
+}
+
+.job-application-field input[type="file"]::file-selector-button {
+  cursor: pointer;
+}
+
+.job-application-help {
+  font-size: 12px;
+  color: rgba(100, 116, 139, 1);
+}
+
+.job-application-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.job-application-status {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.job-application-status.success {
+  color: #15803d;
+}
+
+.job-application-status.error {
+  color: #dc2626;
+}
+
+.job-application-empty {
+  padding: 80px 0;
+}
+
+@media (max-width: 767px) {
+  .job-application-card {
+    padding: 22px;
+  }
+
+  .job-application-grid {
+    grid-template-columns: 1fr;
+  }
+}

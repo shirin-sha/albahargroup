@@ -1861,6 +1861,26 @@ h6,
   color: #dc2626;
 }
 
+.admin-badge.application-new {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.admin-badge.application-reviewed {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.admin-badge.application-shortlisted {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.admin-badge.application-rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 /* Table action buttons */
 .admin-table-actions {
   display: flex;

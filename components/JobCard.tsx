@@ -3,6 +3,8 @@
 import { Job } from "@/libs/models/job";
 import Icons from "./Icons";
 import { useState } from "react";
+import { plainTextFromHtml } from "@/utils/plainText";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface JobCardProps {
     job: Job;
@@ -10,6 +12,8 @@ interface JobCardProps {
 
 const JobCard = ({ job }: JobCardProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const { language } = useLanguage();
+    const applyHref = `${language === 'ar' ? '/ar/careers/apply' : '/careers/apply'}?jobId=${encodeURIComponent(String(job._id || job.id || ''))}`;
 
     return (
         <div className="job-card radius18">
@@ -33,7 +37,9 @@ const JobCard = ({ job }: JobCardProps) => {
             </div>
 
             <div className="job-card-body">
-                <p className="text text-16 job-description">{job.description}</p>
+                <p className="text text-16 job-description">
+                    {plainTextFromHtml(job.description)}
+                </p>
 
                 {isExpanded && (
                     <div className="job-details">
@@ -67,7 +73,7 @@ const JobCard = ({ job }: JobCardProps) => {
 
             <div className="job-card-footer">
                 <a
-                    href={`/contact-us?subject=Application for ${job.title}`}
+                    href={applyHref}
                     className="job-apply-btn"
                 >
                     <span className="text text-16 fw-600">Apply Now</span>

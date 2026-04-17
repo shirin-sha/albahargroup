@@ -11,6 +11,9 @@ const CONTENT_TYPES: Record<string, string> = {
   '.gif': 'image/gif',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
+  '.pdf': 'application/pdf',
+  '.doc': 'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 };
 
 export async function GET(

@@ -174,6 +174,14 @@ export default function AdminDashboardLayout({
             <Icons.Launch />
             <span>Job Listings</span>
           </Link>
+
+          <Link
+            href="/admin/dashboard/job-applications"
+            className={`admin-sidebar-link ${isActive('/admin/dashboard/job-applications') ? 'active' : ''}`}
+          >
+            <Icons.Contact />
+            <span>Job Applications</span>
+          </Link>
   
           
           {/* Add more nav links here later */}
