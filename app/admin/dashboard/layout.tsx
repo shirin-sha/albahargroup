@@ -13,11 +13,19 @@ export default function AdminDashboardLayout({
   const router = useRouter();
   const pathname = usePathname();
   const [cmsOpen, setCmsOpen] = useState(false);
+  const [enquiriesOpen, setEnquiriesOpen] = useState(false);
 
   useEffect(() => {
     // Auto-expand CMS menu if on CMS pages
     if (pathname?.startsWith('/admin/dashboard/cms')) {
       setCmsOpen(true);
+    }
+    // Auto-expand Enquiries menu if on enquiries pages
+    if (
+      pathname?.startsWith('/admin/dashboard/enquiries') ||
+      pathname?.startsWith('/admin/dashboard/job-applications')
+    ) {
+      setEnquiriesOpen(true);
     }
   }, [pathname]);
 
@@ -37,6 +45,13 @@ export default function AdminDashboardLayout({
     return pathname?.startsWith('/admin/dashboard/cms');
   };
 
+  const isEnquiriesActive = () => {
+    return (
+      pathname?.startsWith('/admin/dashboard/enquiries') ||
+      pathname?.startsWith('/admin/dashboard/job-applications')
+    );
+  };
+
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
@@ -44,13 +59,6 @@ export default function AdminDashboardLayout({
          <img src={LogoImage.src} alt="logo" className="admin-sidebar-logo" />
         </div>
         <nav className="admin-sidebar-nav">
-        <Link
-            href="/admin/dashboard/enquiries"
-            className={`admin-sidebar-link ${isActive('/admin/dashboard/enquiries') ? 'active' : ''}`}
-          >
-            <Icons.Contact />
-            <span>Enquiries</span>
-          </Link>
           <Link
             href="/admin/dashboard"
             className={`admin-sidebar-link ${isActive('/admin/dashboard') ? 'active' : ''}`}
@@ -58,6 +66,40 @@ export default function AdminDashboardLayout({
             <Icons.Admin />
             <span>Dashboard</span>
           </Link>
+
+          <div className={`admin-sidebar-group ${isEnquiriesActive() ? 'active' : ''}`}>
+            <button
+              type="button"
+              className={`admin-sidebar-group-toggle ${enquiriesOpen ? 'open' : ''}`}
+              onClick={() => setEnquiriesOpen(!enquiriesOpen)}
+            >
+              <span className="admin-sidebar-link-label">
+                <Icons.Contact />
+                <span>Enquiries</span>
+              </span>
+              <span className="admin-sidebar-arrow">
+                {enquiriesOpen ? <Icons.ChevronDown /> : <Icons.ChevronRight />}
+              </span>
+            </button>
+            {enquiriesOpen && (
+              <div className="admin-sidebar-submenu">
+                <Link
+                  href="/admin/dashboard/enquiries"
+                  className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/enquiries') ? 'active' : ''}`}
+                >
+                  <Icons.Phone />
+                  <span>Contacts</span>
+                </Link>
+                <Link
+                  href="/admin/dashboard/job-applications"
+                  className={`admin-sidebar-link admin-sidebar-sublink ${isActive('/admin/dashboard/job-applications') ? 'active' : ''}`}
+                >
+                  <Icons.Launch />
+                  <span>Job Applications</span>
+                </Link>
+              </div>
+            )}
+          </div>
           
           <div className={`admin-sidebar-group ${isCmsActive() ? 'active' : ''}`}>
             <button
@@ -175,15 +217,6 @@ export default function AdminDashboardLayout({
             <span>Job Listings</span>
           </Link>
 
-          <Link
-            href="/admin/dashboard/job-applications"
-            className={`admin-sidebar-link ${isActive('/admin/dashboard/job-applications') ? 'active' : ''}`}
-          >
-            <Icons.Contact />
-            <span>Job Applications</span>
-          </Link>
-  
-          
           {/* Add more nav links here later */}
         </nav>
       </aside>
