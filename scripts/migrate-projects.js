@@ -36,11 +36,12 @@ async function migrateProjects() {
       return;
     }
 
-    // Transform projects data
-    const projectsToInsert = projectsData.map(project => ({
-      ...project,
-      enabled: true, // Set all existing projects as published
-      created_at: project.created_at || new Date().toISOString(),
+    const projectsToInsert = projectsData.map((project) => ({
+      title: project.title || '',
+      titleAr: project.titleAr || '',
+      description: project.description || '',
+      descriptionAr: project.descriptionAr || '',
+      image: project.image || '',
     }));
 
     // Insert projects

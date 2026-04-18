@@ -1,7 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/libs/mongodb';
 import { Project } from '@/libs/models/project';
-import { ObjectId } from 'mongodb';
+import { ObjectId, UpdateFilter } from 'mongodb';
+
+const LEGACY_PROJECT_FIELDS = [
+  'slug',
+  'id',
+  'category',
+  'categoryAr',
+  'client',
+  'owner',
+  'starting_date',
+  'ending_date',
+  'website',
+  'content',
+  'contentAr',
+  'enabled',
+  'created_at',
+  'updated_at',
+] as const;
+
+function pickProjectBody(body: Record<string, unknown>): Omit<Project, '_id'> | null {
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
+  const titleAr = typeof body.titleAr === 'string' ? body.titleAr.trim() : '';
+  const description = typeof body.description === 'string' ? body.description.trim() : '';
+  const descriptionAr = typeof body.descriptionAr === 'string' ? body.descriptionAr.trim() : '';
+  const image = typeof body.image === 'string' ? body.image.trim() : '';
+  if (!image || !(title || titleAr) || !(description || descriptionAr)) {
+    return null;
+  }
+  return { title, titleAr, description, descriptionAr, image };
+}
 
 export async function GET(
   req: NextRequest,
@@ -53,21 +82,31 @@ export async function PUT(
     const db = await getDb();
     const collection = db.collection<Project>('projects');
     const body = await req.json();
-    
+
+    const doc = pickProjectBody(body);
+    if (!doc) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            'image is required, and each entry needs a title and description in at least one language (English and/or Arabic).',
+        },
+        { status: 400 }
+      );
+    }
+
+    const $unset = LEGACY_PROJECT_FIELDS.reduce(
+      (acc, key) => {
+        acc[key] = '';
+        return acc;
+      },
+      {} as Record<(typeof LEGACY_PROJECT_FIELDS)[number], ''>
+    );
+
     // Handle both sync and async params (Next.js 15+)
     const resolvedParams = params instanceof Promise ? await params : params;
     const id = resolvedParams.id;
-    
-    // Generate slug if title changed and slug not provided
-    if (body.title && !body.slug) {
-      body.slug = body.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-    }
-    
-    body.updated_at = new Date().toISOString();
-    
+
     let query: any;
     if (ObjectId.isValid(id)) {
       query = { _id: new ObjectId(id) };
@@ -80,11 +119,11 @@ export async function PUT(
       };
     }
     
-    const result = await collection.findOneAndUpdate(
-      query,
-      { $set: body },
-      { returnDocument: 'after' }
-    );
+    const update: UpdateFilter<Project> = { $set: doc, $unset };
+
+    const result = await collection.findOneAndUpdate(query, update, {
+      returnDocument: 'after',
+    });
     
     if (!result) {
       return NextResponse.json(

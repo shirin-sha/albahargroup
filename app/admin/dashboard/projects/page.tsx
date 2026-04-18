@@ -3,24 +3,15 @@
 import { useState, useEffect } from 'react';
 import { Project } from '@/libs/models/project';
 import ImageUpload from '@/components/admin/ImageUpload';
-import RichTextEditor from '@/components/admin/RichTextEditor';
 import BilingualField from '@/components/admin/BilingualField';
+import { stripHtmlToPlain } from '@/utils/plainText';
 
 const EMPTY_PROJECT_FORM: Partial<Project> = {
   title: '',
   titleAr: '',
   description: '',
   descriptionAr: '',
-  category: '',
-  categoryAr: '',
-  client: '',
-  owner: '',
-  starting_date: '',
-  ending_date: '',
-  content: '',
-  contentAr: '',
   image: '',
-  enabled: true,
 };
 
 const ProjectsPage = () => {
@@ -51,29 +42,33 @@ const ProjectsPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const projectId = editingProject?._id ? String(editingProject._id) : editingProject?.id ? String(editingProject.id) : null;
-      const url = projectId 
-        ? `/api/projects/${projectId}`
-        : '/api/projects';
+      const projectId = editingProject?._id ? String(editingProject._id) : null;
+      const url = projectId ? `/api/projects/${projectId}` : '/api/projects';
       const method = projectId ? 'PUT' : 'POST';
-      
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title: formData.title,
+          titleAr: formData.titleAr,
+          description: stripHtmlToPlain(formData.description),
+          descriptionAr: stripHtmlToPlain(formData.descriptionAr),
+          image: formData.image,
+        }),
       });
-      
+
       const result = await res.json();
       if (result.success) {
         await fetchProjects();
         resetForm();
         setIsAdding(false);
       } else {
-        alert(result.error || 'Failed to save project');
+        alert(result.error || 'Failed to save');
       }
     } catch (error) {
-      console.error('Error saving project:', error);
-      alert('Failed to save project');
+      console.error('Error saving:', error);
+      alert('Failed to save');
     }
   };
 
@@ -83,26 +78,17 @@ const ProjectsPage = () => {
     setFormData({
       title: project.title || '',
       titleAr: project.titleAr || '',
-      description: project.description || '',
-      descriptionAr: project.descriptionAr || '',
-      category: project.category || '',
-      categoryAr: project.categoryAr || '',
-      client: project.client || '',
-      owner: project.owner || '',
-      starting_date: project.starting_date ? (typeof project.starting_date === 'string' ? project.starting_date : new Date(project.starting_date).toISOString().split('T')[0]) : '',
-      ending_date: project.ending_date ? (typeof project.ending_date === 'string' ? project.ending_date : new Date(project.ending_date).toISOString().split('T')[0]) : '',
-      content: project.content || '',
-      contentAr: project.contentAr || '',
+      description: stripHtmlToPlain(project.description),
+      descriptionAr: stripHtmlToPlain(project.descriptionAr),
       image: project.image || '',
-      enabled: project.enabled !== undefined ? project.enabled : true,
     });
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) {
+    if (!confirm('Are you sure you want to delete this item?')) {
       return;
     }
-    
+
     try {
       const res = await fetch(`/api/projects/${id}`, {
         method: 'DELETE',
@@ -111,11 +97,11 @@ const ProjectsPage = () => {
       if (result.success) {
         await fetchProjects();
       } else {
-        alert(result.error || 'Failed to delete project');
+        alert(result.error || 'Failed to delete');
       }
     } catch (error) {
-      console.error('Error deleting project:', error);
-      alert('Failed to delete project');
+      console.error('Error deleting:', error);
+      alert('Failed to delete');
     }
   };
 
@@ -130,7 +116,6 @@ const ProjectsPage = () => {
     setFormData({ ...EMPTY_PROJECT_FORM });
     setIsAdding(true);
 
-    // Ensure the opened panel is brought into view.
     setTimeout(() => {
       const panel = document.querySelector('.admin-edit-panel');
       if (panel) {
@@ -147,11 +132,7 @@ const ProjectsPage = () => {
     <div className="admin-cms-container">
       <div className="admin-cms-header">
         <h1>Image Archive Management</h1>
-        <button
-          type="button"
-          className="button button-primary"
-          onClick={handleAddNew}
-        >
+        <button type="button" className="button button-primary" onClick={handleAddNew}>
           + Add New Image
         </button>
       </div>
@@ -160,118 +141,59 @@ const ProjectsPage = () => {
         <div className="admin-edit-panel" style={{ marginBottom: '30px' }}>
           <div className="admin-edit-panel-header">
             <div className="admin-edit-panel-title">
-              <strong>{editingProject ? 'Editing Project' : 'Add New Project'}</strong>
-              <span>{editingProject ? `Editing: ${editingProject.title}` : 'Create a new project'}</span>
+              <strong>{editingProject ? 'Edit entry' : 'Add entry'}</strong>
+              <span>
+                {editingProject
+                  ? `Editing: ${editingProject.title || editingProject.titleAr || 'entry'}`
+                  : 'Image plus title and description (English and/or Arabic)'}
+              </span>
             </div>
-            <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>✕ Close</button>
+            <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>
+              ✕ Close
+            </button>
           </div>
-            <form
-              key={editingProject ? `edit-${editingProject._id || editingProject.id}` : 'add-new'}
-              onSubmit={handleSubmit}
-              className="admin-cms-form"
-            >
-              <BilingualField
-                label="Title"
-                enValue={formData.title || ''}
-                arValue={formData.titleAr || ''}
-                onEnChange={(value) => setFormData({ ...formData, title: value })}
-                onArChange={(value) => setFormData({ ...formData, titleAr: value })}
-                type="text"
-                required
-              />
+          <form
+            key={editingProject ? `edit-${editingProject._id}` : 'add-new'}
+            onSubmit={handleSubmit}
+            className="admin-cms-form"
+          >
+            <BilingualField
+              label="Title"
+              enValue={formData.title || ''}
+              arValue={formData.titleAr || ''}
+              onEnChange={(value) => setFormData({ ...formData, title: value })}
+              onArChange={(value) => setFormData({ ...formData, titleAr: value })}
+              type="text"
+            />
 
-              <BilingualField
-                label="Description"
-                enValue={formData.description || ''}
-                arValue={formData.descriptionAr || ''}
-                onEnChange={(value) => setFormData({ ...formData, description: value })}
-                onArChange={(value) => setFormData({ ...formData, descriptionAr: value })}
-                type="richtext"
-                required
-              />
+            <BilingualField
+              label="Description"
+              enValue={formData.description || ''}
+              arValue={formData.descriptionAr || ''}
+              onEnChange={(value) => setFormData({ ...formData, description: value })}
+              onArChange={(value) => setFormData({ ...formData, descriptionAr: value })}
+              type="textarea"
+              rows={5}
+            />
 
-              <BilingualField
-                label="Category"
-                enValue={formData.category || ''}
-                arValue={formData.categoryAr || ''}
-                onEnChange={(value) => setFormData({ ...formData, category: value })}
-                onArChange={(value) => setFormData({ ...formData, categoryAr: value })}
-                type="text"
-                required
-              />
+            <ImageUpload
+              value={formData.image || ''}
+              onChange={(url) => setFormData({ ...formData, image: url })}
+              placeholder="/img/project/project-1.jpg"
+              folder="project"
+              required
+              label="Image"
+            />
 
-              <div className="form-group">
-                <label>Client</label>
-                <input
-                  type="text"
-                  value={formData.client}
-                  onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Owner</label>
-                <input
-                  type="text"
-                  value={formData.owner}
-                  onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Starting Date</label>
-                <input
-                  type="date"
-                  value={typeof formData.starting_date === 'string' ? formData.starting_date : (formData.starting_date ? new Date(formData.starting_date).toISOString().split('T')[0] : '')}
-                  onChange={(e) => setFormData({ ...formData, starting_date: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Ending Date</label>
-                <input
-                  type="date"
-                  value={typeof formData.ending_date === 'string' ? formData.ending_date : (formData.ending_date ? new Date(formData.ending_date).toISOString().split('T')[0] : '')}
-                  onChange={(e) => setFormData({ ...formData, ending_date: e.target.value })}
-                />
-              </div>
-
-              <BilingualField
-                label="Content"
-                enValue={formData.content || ''}
-                arValue={formData.contentAr || ''}
-                onEnChange={(value) => setFormData({ ...formData, content: value })}
-                onArChange={(value) => setFormData({ ...formData, contentAr: value })}
-                type="richtext"
-              />
-
-              <ImageUpload
-                value={formData.image || ''}
-                onChange={(url) => setFormData({ ...formData, image: url })}
-                placeholder="/img/project/project-1.jpg"
-                folder="project"
-                required
-                label="Image"
-              />
-
-              <div className="form-group">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={formData.enabled}
-                    onChange={(e) => setFormData({ ...formData, enabled: e.target.checked })}
-                  />
-                  {' '}Published
-                </label>
-              </div>
-
-              <div className="form-actions">
-                <button type="submit" className="button button-primary">
-                  {editingProject ? 'Update Project' : 'Create Project'}
-                </button>
-                <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>Cancel</button>
-              </div>
-            </form>
+            <div className="form-actions">
+              <button type="submit" className="button button-primary">
+                {editingProject ? 'Save changes' : 'Create'}
+              </button>
+              <button type="button" className="admin-btn admin-btn-edit" onClick={resetForm}>
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
@@ -281,61 +203,56 @@ const ProjectsPage = () => {
             <tr>
               <th>Image</th>
               <th>Title</th>
-              <th>Category</th>
-              <th>Date</th>
-              <th>Status</th>
+              <th>Description</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {projects.length === 0 ? (
               <tr>
-                <td colSpan={5} className="admin-table-empty">
-                  No projects found. Click &ldquo;Add New Project&rdquo; to create one.
+                <td colSpan={4} className="admin-table-empty">
+                  No entries yet. Use &ldquo;Add New Image&rdquo; to create one.
                 </td>
               </tr>
             ) : (
               projects.map((project) => {
-                const projectId = project._id ? String(project._id) : project.id ? String(project.id) : null;
-                const editingProjectId = editingProject?._id ? String(editingProject._id) : editingProject?.id ? String(editingProject.id) : null;
+                const projectId = project._id ? String(project._id) : null;
+                const editingProjectId = editingProject?._id ? String(editingProject._id) : null;
                 const isEditing = projectId === editingProjectId;
-                
+                const titleLine = [project.title, project.titleAr].filter(Boolean).join(' · ') || '—';
+                const descPlain =
+                  stripHtmlToPlain(project.description) || stripHtmlToPlain(project.descriptionAr) || '';
+                const descPreview =
+                  descPlain.length > 120 ? `${descPlain.slice(0, 120)}…` : descPlain;
+
                 return (
-                  <tr key={project._id || project.id} className={isEditing ? 'admin-table-row-active' : ''}>
+                  <tr key={project._id || titleLine} className={isEditing ? 'admin-table-row-active' : ''}>
                     <td>
                       <div className="admin-section-thumb">
                         {project.image ? (
-                          <img src={project.image} alt={project.title || "Project image"} />
+                          <img src={project.image} alt={titleLine} />
                         ) : (
-                          <span className="admin-section-thumb-placeholder">
-                            No Image
-                          </span>
+                          <span className="admin-section-thumb-placeholder">No Image</span>
                         )}
                       </div>
                     </td>
-                    <td><strong>{project.title}</strong></td>
-                    <td>{project.category}</td>
-                    <td>{project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}</td>
                     <td>
-                      <span className={`admin-badge ${project.enabled !== false ? 'published' : 'draft'}`}>
-                        {project.enabled !== false ? 'Published' : 'Draft'}
-                      </span>
+                      <strong>{titleLine}</strong>
                     </td>
+                    <td style={{ maxWidth: 360 }}>{descPreview || '—'}</td>
                     <td>
                       <div className="admin-table-actions">
-                        <button 
-                          type="button" 
-                          onClick={() => isEditing ? resetForm() : handleEdit(project)} 
+                        <button
+                          type="button"
+                          onClick={() => (isEditing ? resetForm() : handleEdit(project))}
                           className={`admin-btn ${isEditing ? 'admin-btn-delete' : 'admin-btn-edit'}`}
                         >
                           {isEditing ? 'Close' : 'Edit'}
                         </button>
-                        {!isEditing && (
+                        {!isEditing && projectId && (
                           <button
                             type="button"
-                            onClick={() => {
-                              if (projectId) handleDelete(projectId);
-                            }}
+                            onClick={() => handleDelete(projectId)}
                             className="admin-btn admin-btn-delete"
                           >
                             Delete

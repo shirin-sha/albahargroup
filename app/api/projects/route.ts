@@ -2,21 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/libs/mongodb';
 import { Project } from '@/libs/models/project';
 
-export async function GET(req: NextRequest) {
+function pickProjectBody(body: Record<string, unknown>): Omit<Project, '_id'> | null {
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
+  const titleAr = typeof body.titleAr === 'string' ? body.titleAr.trim() : '';
+  const description = typeof body.description === 'string' ? body.description.trim() : '';
+  const descriptionAr = typeof body.descriptionAr === 'string' ? body.descriptionAr.trim() : '';
+  const image = typeof body.image === 'string' ? body.image.trim() : '';
+  if (!image || !(title || titleAr) || !(description || descriptionAr)) {
+    return null;
+  }
+  return { title, titleAr, description, descriptionAr, image };
+}
+
+export async function GET(_req: NextRequest) {
   try {
     const db = await getDb();
     const collection = db.collection<Project>('projects');
-    const { searchParams } = new URL(req.url);
-    const enabled = searchParams.get('enabled');
-    
-    let query: any = {};
-    if (enabled !== null) {
-      query.enabled = enabled === 'true';
-    }
-    
+
     const projects = await collection
-      .find(query)
-      .sort({ created_at: -1 })
+      .find({})
+      .sort({ _id: -1 })
       .toArray();
     
     return NextResponse.json({ success: true, data: projects });
@@ -34,26 +39,20 @@ export async function POST(req: NextRequest) {
     const db = await getDb();
     const collection = db.collection<Project>('projects');
     const body = await req.json();
-    
-    // Generate slug if not provided
-    if (!body.slug && body.title) {
-      body.slug = body.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
+
+    const doc = pickProjectBody(body);
+    if (!doc) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            'image is required, and each entry needs a title and description in at least one language (English and/or Arabic).',
+        },
+        { status: 400 }
+      );
     }
-    
-    // Set created_at if not provided
-    if (!body.created_at) {
-      body.created_at = new Date().toISOString();
-    }
-    
-    // Set enabled to true by default
-    if (body.enabled === undefined) {
-      body.enabled = true;
-    }
-    
-    const result = await collection.insertOne(body);
+
+    const result = await collection.insertOne(doc);
     const newProject = await collection.findOne({ _id: result.insertedId });
     
     return NextResponse.json({ success: true, data: newProject });

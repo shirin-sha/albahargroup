@@ -1,10 +1,14 @@
-/** Strip HTML and collapse whitespace for card previews. */
-export function plainTextFromHtml(html: string | undefined, maxLen = 220): string {
+/** Strip HTML and collapse whitespace (no length cap). Use for admin edit fields. */
+export function stripHtmlToPlain(html: string | undefined): string {
   if (!html) return '';
   const decoded = decodeHtmlEntities(html);
   const stripped = decoded.replace(/<[^>]*>/g, ' ');
-  // Normalize all whitespace including non-breaking spaces to regular spaces
-  const plain = stripped.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
+  return stripped.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/** Strip HTML and collapse whitespace for card previews. */
+export function plainTextFromHtml(html: string | undefined, maxLen = 220): string {
+  const plain = stripHtmlToPlain(html);
   if (plain.length <= maxLen) return plain;
   return `${plain.slice(0, maxLen).trimEnd()}…`;
 }

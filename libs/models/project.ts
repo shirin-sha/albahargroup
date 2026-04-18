@@ -1,22 +1,13 @@
+/** Image archive item (MongoDB may still return legacy fields until saved again). */
 export interface Project {
   _id?: string;
-  id?: number; // Legacy ID for backward compatibility
-  slug: string;
+  /** English title (may be empty if only Arabic is provided). */
   title: string;
-  titleAr?: string; // Arabic title
+  /** English description (may be empty if only Arabic is provided). */
   description: string;
-  descriptionAr?: string; // Arabic description
-  category: string;
-  categoryAr?: string; // Arabic category
-  client?: string;
-  owner?: string;
-  starting_date?: string | Date;
-  ending_date?: string | Date;
-  website?: string;
-  content?: string;
-  contentAr?: string; // Arabic content
+  /** Arabic title (optional; used on /ar with fallback to `title`). */
+  titleAr?: string;
+  /** Arabic description (optional; used on /ar with fallback to `description`). */
+  descriptionAr?: string;
   image: string;
-  created_at?: string | Date;
-  updated_at?: string | Date;
-  enabled?: boolean; // For draft/published status
 }

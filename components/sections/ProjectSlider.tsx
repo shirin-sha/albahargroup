@@ -19,6 +19,7 @@ import Subheading from "../Subheading";
 import Icons from "../Icons";
 import { SectionProps } from "@/types/sectionProps";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { stripHtmlToPlain } from '@/utils/plainText';
 
 
 const ProjectSlider = ({ data }: {data: SectionProps}) => {
@@ -35,7 +36,7 @@ const ProjectSlider = ({ data }: {data: SectionProps}) => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const res = await fetch('/api/projects?enabled=true');
+                const res = await fetch('/api/projects');
                 const result = await res.json();
                 if (result.success) {
                     setProjects(result.data);
@@ -119,24 +120,29 @@ const ProjectSlider = ({ data }: {data: SectionProps}) => {
                         className="swiper"
                     >
                         {projects.map((project) => {
-                            // Transform Project to ProjectType format
+                            const titleAr = (project.titleAr || '').trim();
+                            const titleEn = (project.title || '').trim();
+                            const descAr = stripHtmlToPlain(project.descriptionAr);
+                            const descEn = stripHtmlToPlain(project.description);
+                            const displayTitle =
+                                language === 'ar'
+                                    ? titleAr || titleEn
+                                    : titleEn || titleAr;
+                            const displayDescription =
+                                language === 'ar' ? descAr || descEn : descEn || descAr;
                             const projectData: ProjectType = {
-                                slug: project.slug,
-                                title: project.title,
-                                description: project.description,
-                                category: project.category,
-                                client: project.client,
-                                owner: project.owner,
-                                starting_date: typeof project.starting_date === 'string' ? project.starting_date : project.starting_date?.toISOString(),
-                                ending_date: typeof project.ending_date === 'string' ? project.ending_date : project.ending_date?.toISOString(),
-                                website: project.website,
-                                content: project.content,
+                                title: displayTitle,
+                                description: displayDescription,
                                 image: project.image,
-                                created_at: typeof project.created_at === 'string' ? project.created_at : project.created_at?.toISOString(),
                             };
                             return (
-                                <SwiperSlide key={project._id || project.id}>
-                                    <CardProject data={projectData} />
+                                <SwiperSlide key={project._id || displayTitle}>
+                                    <div
+                                        dir={isRTL ? 'rtl' : 'ltr'}
+                                        lang={isRTL ? 'ar' : 'en'}
+                                    >
+                                        <CardProject data={projectData} />
+                                    </div>
                                 </SwiperSlide>
                             );
                         })}
