@@ -81,11 +81,11 @@
 }
 
 .partnerships-categories {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
-  margin: 0 0 30px;
+  margin: 0 auto 30px;
 }
 
 .partnership-category-btn {
@@ -100,7 +100,7 @@
   line-height: 1.2;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;
+  width: auto;
   text-align: center;
 }
 
