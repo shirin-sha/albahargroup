@@ -5,6 +5,7 @@ export interface ImageProps {
     width?: number,
     height?: number,
     alt?: string,
+    category?: string;
     loading?: 'lazy' | 'eager',
     cls?: string;
     href?: string;

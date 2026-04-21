@@ -81,28 +81,15 @@ const ImageUpload = ({
   };
 
   return (
-    <div className="form-group">
+    <div className="form-group image-upload-field">
       <label>{label} {required && '*'}</label>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="image-upload-stack">
+        <div className="image-upload-row">
           <label
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '10px 14px',
-              border: '1px solid #111',
-              borderRadius: '6px',
-              background: '#fff',
-              color: '#111',
-              fontWeight: 600,
-              cursor: uploading ? 'not-allowed' : 'pointer',
-              userSelect: 'none',
-              whiteSpace: 'nowrap',
-              opacity: uploading ? 0.7 : 1,
-            }}
+            className="image-upload-button"
             aria-disabled={uploading}
             title={uploading ? 'Uploading...' : 'Choose an image'}
+            style={{ opacity: uploading ? 0.7 : 1 }}
           >
             {uploading ? 'Uploading...' : 'Choose file'}
             <input
@@ -116,15 +103,7 @@ const ImageUpload = ({
           </label>
 
           <span
-            style={{
-              flex: 1,
-              minWidth: 0,
-              fontSize: '12px',
-              color: fileName ? '#111827' : '#6b7280',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
+            className={`image-upload-filename ${fileName ? 'has-file' : ''}`}
             title={fileName || (value ? value : placeholder)}
           >
             {fileName || (value ? 'Image selected' : 'No file chosen')}
@@ -132,19 +111,11 @@ const ImageUpload = ({
         </div>
 
         {(preview || value) && (
-          <div style={{ marginTop: '6px', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+          <div className="image-upload-preview-wrap">
             <img
               src={preview || value}
               alt="Preview"
-              style={{
-                maxWidth: '200px',
-                maxHeight: '200px',
-                objectFit: 'contain',
-                border: '1px solid #e5e7eb',
-                borderRadius: '4px',
-                padding: '4px',
-                background: '#fff',
-              }}
+              className="image-upload-preview"
             />
             <button
               type="button"
@@ -156,20 +127,7 @@ const ImageUpload = ({
                 setFileName('');
                 if (fileInputRef.current) fileInputRef.current.value = '';
               }}
-              style={{
-                width: '26px',
-                height: '26px',
-                borderRadius: '999px',
-                border: '1px solid #d1d5db',
-                background: '#fff',
-                color: '#111827',
-                cursor: 'pointer',
-                lineHeight: 1,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px',
-              }}
+              className="image-upload-remove"
             >
               ×
             </button>

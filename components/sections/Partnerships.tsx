@@ -1,9 +1,20 @@
+'use client';
+
 import "@/styles/partnerships.css";
 import { SectionProps } from "@/types/sectionProps";
 import Subheading from "../Subheading";
 import Heading from "../Heading";
 import Text from "../Text";
 import Image from "next/image";
+import { useMemo, useState } from "react";
+
+const DEFAULT_PARTNERSHIP_CATEGORIES = [
+    "Consumer Goods",
+    "Consumer Electronics",
+    "Home Automation",
+    "Enterprise Technology",
+    "Shipping, Travel & Tourism",
+];
 
 const Partnerships = ({ data }: { data: SectionProps }) => {
     const {
@@ -14,6 +25,20 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
         text,
         imageList
     } = data || {};
+
+    const categories = useMemo(() => {
+        const unique = new Set<string>(DEFAULT_PARTNERSHIP_CATEGORIES);
+        (imageList || []).forEach((partner) => {
+            if (partner.category && partner.category.trim()) unique.add(partner.category.trim());
+        });
+        return ["All", ...Array.from(unique)];
+    }, [imageList]);
+
+    const [activeCategory, setActiveCategory] = useState<string>("All");
+    const filteredPartners = useMemo(() => {
+        if (activeCategory === "All") return imageList || [];
+        return (imageList || []).filter((partner) => (partner.category || "") === activeCategory);
+    }, [activeCategory, imageList]);
 
     return (
         <div className={wrapperCls}>
@@ -49,10 +74,28 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
                         }
                     </div>
 
+                    {categories.length > 1 && (
+                        <div className="partnerships-categories" data-aos="fade-up">
+                            {categories.map((category) => {
+                                const isActive = category === activeCategory;
+                                return (
+                                    <button
+                                        key={category}
+                                        type="button"
+                                        className={`partnership-category-btn ${isActive ? "active" : ""}`}
+                                        onClick={() => setActiveCategory(category)}
+                                    >
+                                        {category}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+
                     {/* Partners Grid */}
-                    {imageList && imageList.length > 0 && (
+                    {filteredPartners && filteredPartners.length > 0 && (
                         <div className="partners-grid mt-60">
-                            {imageList.map((partner, index) => (
+                            {filteredPartners.map((partner, index) => (
                                 <div 
                                     key={`partner-${index}`}
                                     className="partner-card"

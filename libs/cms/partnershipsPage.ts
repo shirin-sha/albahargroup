@@ -13,6 +13,7 @@ export function partnershipsSectionToSectionProps(
           width: typeof img?.width === 'number' ? img.width : 200,
           height: typeof img?.height === 'number' ? img.height : 120,
           alt: typeof img?.alt === 'string' ? img.alt : '',
+          category: typeof img?.category === 'string' ? img.category : '',
           // `ImageProps.loading` only allows 'lazy' | 'eager' (not generic string).
           loading: (img?.loading === 'eager' ? 'eager' : 'lazy') as ImageProps['loading'],
         }))

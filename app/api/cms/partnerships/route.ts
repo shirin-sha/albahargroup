@@ -46,8 +46,16 @@ export async function POST(req: NextRequest) {
       order: order !== undefined ? order : 0,
       updatedAt: new Date(),
     };
-    if (en) updateData.en = en;
-    if (ar) updateData.ar = ar;
+    if (en) {
+      const { imageList, ...enWithoutBrands } = en;
+      void imageList;
+      updateData.en = enWithoutBrands;
+    }
+    if (ar) {
+      const { imageList, ...arWithoutBrands } = ar;
+      void imageList;
+      updateData.ar = arWithoutBrands;
+    }
     const result = await collection.findOneAndUpdate(
       { sectionId },
       { $set: updateData, $setOnInsert: { createdAt: new Date() } },

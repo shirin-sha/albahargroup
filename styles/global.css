@@ -1756,6 +1756,236 @@ h6,
   background: #374151;
 }
 
+.admin-partner-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admin-partner-toolbar input {
+  flex: 1;
+  max-width: 360px;
+}
+
+.admin-partner-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-partner-editor {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.admin-partner-form-card {
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #dbe4ef;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.admin-partner-form-header {
+  margin-bottom: 14px;
+}
+
+.admin-partner-form-header h4 {
+  font-size: 16px;
+  color: #1c2539;
+  margin: 0 0 4px;
+}
+
+.admin-partner-form-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.admin-partner-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.admin-partner-form-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-partner-size-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-partner-pagination {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.admin-partner-pagination span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.admin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.admin-modal-card {
+  width: min(480px, 100%);
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #dbe4ef;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+  padding: 20px;
+}
+
+.admin-modal-card h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #1c2539;
+}
+
+.admin-modal-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.admin-modal-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.image-upload-field .image-upload-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.image-upload-field .image-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.image-upload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.image-upload-button:hover {
+  border-color: #94a3b8;
+  background-color: #f8fafc;
+}
+
+.image-upload-filename {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-upload-filename.has-file {
+  color: #111827;
+}
+
+.image-upload-preview-wrap {
+  margin-top: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.image-upload-preview {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: contain;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 4px;
+  background: #fff;
+}
+
+.image-upload-remove {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.admin-partner-alt-group .bilingual-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .admin-partner-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-partner-logo-thumb {
+  width: 64px;
+  height: 36px;
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 4px;
+}
+
 .form-actions {
   display: flex;
   align-items: center;
