@@ -16,7 +16,23 @@ const DEFAULT_PARTNERSHIP_CATEGORIES = [
     "Shipping, Travel & Tourism",
 ];
 
-const Partnerships = ({ data }: { data: SectionProps }) => {
+/** Display labels for Arabic locale; filter state stays on English CMS category keys. */
+const PARTNERSHIP_CATEGORY_LABEL_AR: Record<string, string> = {
+    All: "الكل",
+    "Consumer Goods": "السلع الاستهلاكية",
+    "Consumer Electronics": "الإلكترونيات الاستهلاكية",
+    "Home Automation": "الأتمتة المنزلية",
+    "Enterprise Technology": "تقنيات المؤسسات",
+    "Shipping, Travel & Tourism": "الشحن والسفر والسياحة",
+};
+
+const Partnerships = ({
+    data,
+    lang = "en",
+}: {
+    data: SectionProps;
+    lang?: "en" | "ar";
+}) => {
     const {
         wrapperCls,
         container,
@@ -39,6 +55,9 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
         if (activeCategory === "All") return imageList || [];
         return (imageList || []).filter((partner) => (partner.category || "") === activeCategory);
     }, [activeCategory, imageList]);
+
+    const categoryTabLabel = (category: string) =>
+        lang === "ar" ? PARTNERSHIP_CATEGORY_LABEL_AR[category] ?? category : category;
 
     return (
         <div className={wrapperCls}>
@@ -85,7 +104,7 @@ const Partnerships = ({ data }: { data: SectionProps }) => {
                                         className={`partnership-category-btn ${isActive ? "active" : ""}`}
                                         onClick={() => setActiveCategory(category)}
                                     >
-                                        {category}
+                                        {categoryTabLabel(category)}
                                     </button>
                                 );
                             })}

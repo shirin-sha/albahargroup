@@ -80,7 +80,7 @@ const PartnershipsPage = async () => {
   return (
     <>
       <BreadcrumbBanner title={bannerTitle} image={bannerImage} />
-      <Partnerships data={partnershipsData} />
+      <Partnerships data={partnershipsData} lang="ar" />
     </>
   );
 };
