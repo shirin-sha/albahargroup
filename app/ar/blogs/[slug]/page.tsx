@@ -12,9 +12,7 @@ import { plainTextFromHtml } from '@/utils/plainText';
 
 export const revalidate = 3600;
 
-const BLOG_LISTING_PATH = '/blogs';
-
-const DETAIL_BANNER_TITLE = 'News & Updates';
+const DETAIL_BANNER_TITLE = 'الأخبار والتحديثات';
 
 export async function generateMetadata({
   params,
@@ -27,15 +25,19 @@ export async function generateMetadata({
   const post = await getNewsPostBySlug(slug);
   if (!post) {
     return {
-      title: 'Post not found',
-      alternates: { canonical: absoluteUrl(BLOG_LISTING_PATH) },
+      title: 'المقال غير موجود',
+      alternates: { canonical: absoluteUrl('/blogs') },
     };
   }
 
-  const canonicalPath = `/blogs/${post.slug}`;
-  const title = post.title || 'Blog';
-  const description = plainTextFromHtml(post.excerpt || post.content, 170) || 'Read the latest update.';
-  const images = post.image ? [{ url: absoluteUrl(post.image), alt: post.title || 'Blog image' }] : undefined;
+  const canonicalPath = `/ar/blogs/${post.slug}`;
+  const title = (post.titleAr && post.titleAr.trim()) || post.title || 'المدونة';
+  const description =
+    plainTextFromHtml(
+      (post.excerptAr && post.excerptAr.trim()) || post.excerpt || post.contentAr || post.content,
+      170,
+    ) || 'اقرأ آخر التحديثات.';
+  const images = post.image ? [{ url: absoluteUrl(post.image), alt: title }] : undefined;
 
   return {
     title,
@@ -43,8 +45,8 @@ export async function generateMetadata({
     alternates: {
       canonical: absoluteUrl(canonicalPath),
       languages: {
-        en: absoluteUrl(canonicalPath),
-        ar: absoluteUrl(`/ar/blogs/${post.slug}`),
+        en: absoluteUrl(`/blogs/${post.slug}`),
+        ar: absoluteUrl(canonicalPath),
       },
     },
     openGraph: {
@@ -71,14 +73,19 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> | { slug: st
   const post = await getNewsPostBySlug(slug);
   if (!post) notFound();
 
-  const article = newsPostToArticle(post, 'en');
-  const canonicalPath = `/blogs/${post.slug}`;
+  const article = newsPostToArticle(post, 'ar');
+  const canonicalPath = `/ar/blogs/${post.slug}`;
+  const displayTitle = (post.titleAr && post.titleAr.trim()) || post.title || 'Blog';
 
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.title,
-    description: plainTextFromHtml(post.excerpt || post.content, 220),
+    headline: displayTitle,
+    inLanguage: 'ar',
+    description: plainTextFromHtml(
+      (post.excerptAr && post.excerptAr.trim()) || post.excerpt || post.contentAr || post.content,
+      220,
+    ),
     image: post.image ? [absoluteUrl(post.image)] : undefined,
     datePublished:
       typeof post.created_at === 'string' ? post.created_at : post.created_at?.toISOString(),
@@ -95,21 +102,21 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> | { slug: st
     isPartOf: {
       '@type': 'Blog',
       name: DEFAULT_SITE_NAME,
-      url: absoluteUrl(BLOG_LISTING_PATH),
+      url: absoluteUrl('/blogs'),
     },
   };
 
   return (
     <>
       <Script
-        id="blog-post-jsonld"
+        id="blog-post-jsonld-ar"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <BreadcrumbBanner
         title={DETAIL_BANNER_TITLE}
-        breadcrumbTitle={post.title || 'Blog'}
+        breadcrumbTitle={displayTitle}
         image={{
           src: BreadcrumbBannerImage.src,
           srcMobile: BreadcrumbBannerImageTablet.src,
@@ -122,7 +129,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> | { slug: st
         }}
       />
 
-      <BlogDetails container="container" article={article} />
+      <BlogDetails container="container" article={article} contentDir="rtl" />
     </>
   );
 };

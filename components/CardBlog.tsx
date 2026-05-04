@@ -10,8 +10,10 @@ const CardBlog = ({
     height,
     alt,
     author,
-    showDate
+    showDate,
+    detailHrefBase = '/blogs',
 }: ArticleCardType) => {
+    const detailHref = `${detailHrefBase.replace(/\/$/, '')}/${article.slug}`;
     return (
         <div className="card-blog radius18">
             <div className="card-blog-top">
@@ -32,14 +34,14 @@ const CardBlog = ({
                 </div>
 
                 <h2 className="card-blog-heading heading text-22">
-                    <Link href={`/blogs/${article.slug}`} className="heading text-22">
+                    <Link href={detailHref} className="heading text-22">
                         {article.title}
                     </Link>
                 </h2>
             </div>
             <Link
                 className="card-blog-bottom"
-                href={`/blogs/${article.slug}`}
+                href={detailHref}
                 aria-label={article.title}
             >
                 {article.category &&

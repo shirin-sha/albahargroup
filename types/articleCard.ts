@@ -8,4 +8,6 @@ export interface ArticleCardType {
     alt?: string;
     author?: AuthorType;
     showDate: boolean;
+    /** Post detail base path, e.g. `/news` or `/ar/news`. Defaults to `/blogs`. */
+    detailHrefBase?: string;
 }

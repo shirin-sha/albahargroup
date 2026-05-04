@@ -24,17 +24,19 @@ export async function generateMetadata({
   const post = await getNewsPostBySlug(slug);
   if (!post) {
     return {
-      title: 'News not found',
-      alternates: { canonical: absoluteUrl('/news') },
+      title: 'الخبر غير موجود',
+      alternates: { canonical: absoluteUrl('/ar/news') },
     };
   }
 
-  const canonicalPath = `/news/${post.slug}`;
-  const title = post.title || 'News';
+  const canonicalPath = `/ar/news/${post.slug}`;
+  const title = (post.titleAr && post.titleAr.trim()) || post.title || 'الأخبار';
   const description =
-    plainTextFromHtml(post.excerpt || post.content, 170) ||
-    'Latest Al Bahar Group news, updates, and announcements.';
-  const images = post.image ? [{ url: absoluteUrl(post.image), alt: post.title || 'News image' }] : undefined;
+    plainTextFromHtml(
+      (post.excerptAr && post.excerptAr.trim()) || post.excerpt || post.contentAr || post.content,
+      170,
+    ) || 'آخر أخبار مجموعة البهار والتحديثات والإعلانات.';
+  const images = post.image ? [{ url: absoluteUrl(post.image), alt: title }] : undefined;
 
   return {
     title,
@@ -42,8 +44,8 @@ export async function generateMetadata({
     alternates: {
       canonical: absoluteUrl(canonicalPath),
       languages: {
-        en: absoluteUrl(canonicalPath),
-        ar: absoluteUrl(`/ar/news/${post.slug}`),
+        en: absoluteUrl(`/news/${post.slug}`),
+        ar: absoluteUrl(canonicalPath),
       },
     },
     openGraph: {
@@ -69,21 +71,26 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   try {
     const [post, breadcrumbBannerTitle] = await Promise.all([
       getNewsPostBySlug(slug),
-      getNewsCmsBannerTitle('en'),
+      getNewsCmsBannerTitle('ar'),
     ]);
 
     if (!post) {
       notFound();
     }
 
-    const article = newsPostToArticle(post, 'en');
-    const canonicalPath = `/news/${post.slug}`;
+    const article = newsPostToArticle(post, 'ar');
+    const canonicalPath = `/ar/news/${post.slug}`;
+    const displayTitle = (post.titleAr && post.titleAr.trim()) || post.title || 'الأخبار';
 
     const jsonLd: Record<string, unknown> = {
       '@context': 'https://schema.org',
       '@type': 'NewsArticle',
-      headline: post.title,
-      description: plainTextFromHtml(post.excerpt || post.content, 220),
+      headline: displayTitle,
+      inLanguage: 'ar',
+      description: plainTextFromHtml(
+        (post.excerptAr && post.excerptAr.trim()) || post.excerpt || post.contentAr || post.content,
+        220,
+      ),
       image: post.image ? [absoluteUrl(post.image)] : undefined,
       datePublished:
         typeof post.created_at === 'string' ? post.created_at : post.created_at?.toISOString(),
@@ -100,20 +107,20 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
       isPartOf: {
         '@type': 'CollectionPage',
         name: breadcrumbBannerTitle,
-        url: absoluteUrl('/news'),
+        url: absoluteUrl('/ar/news'),
       },
     };
 
     return (
       <>
         <Script
-          id="news-article-jsonld"
+          id="news-article-jsonld-ar"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <BreadcrumbBanner
           title={breadcrumbBannerTitle}
-          breadcrumbTitle={post.title || 'News'}
+          breadcrumbTitle={displayTitle}
           image={{
             src: BreadcrumbBannerImage.src,
             srcMobile: BreadcrumbBannerImageTablet.src,
@@ -125,11 +132,11 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
             loading: 'eager',
           }}
         />
-        <BlogDetails container="container" article={article} />
+        <BlogDetails container="container" article={article} contentDir="rtl" />
       </>
     );
   } catch (error) {
-    console.error('Error fetching news:', error);
+    console.error('Error fetching news (ar):', error);
     notFound();
   }
 };

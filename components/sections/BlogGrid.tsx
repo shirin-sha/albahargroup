@@ -17,9 +17,17 @@ interface BlogGridProps {
     cls?: string;
     subheading?: string;
     heading?: string;
+    detailHrefBase?: string;
+    locale?: 'en' | 'ar';
 }
 
-const BlogGrid = ({ cls, subheading, heading }: BlogGridProps) => {
+const BlogGrid = ({
+    cls,
+    subheading,
+    heading,
+    detailHrefBase = '/blogs',
+    locale = 'en',
+}: BlogGridProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
@@ -97,11 +105,17 @@ const BlogGrid = ({ cls, subheading, heading }: BlogGridProps) => {
                         // Transform Post to ArticleType format
                         const article = {
                             id: post.id || parseInt(post._id?.substring(0, 8) || '0', 16) || 0,
-                            title: post.title,
+                            title:
+                                locale === 'ar'
+                                    ? (post.titleAr && post.titleAr.trim()) || post.title
+                                    : post.title,
                             slug: post.slug,
                             content: post.content,
                             excerpt: post.excerpt,
-                            category: post.category,
+                            category:
+                                locale === 'ar'
+                                    ? (post.categoryAr && post.categoryAr.trim()) || post.category
+                                    : post.category,
                             image: post.image,
                             video: post.video,
                             tags: post.tags || [],
@@ -123,6 +137,7 @@ const BlogGrid = ({ cls, subheading, heading }: BlogGridProps) => {
                                     alt="Article image"
                                     author={author}
                                     showDate={true}
+                                    detailHrefBase={detailHrefBase}
                                 />
                             </div>
                     )})}

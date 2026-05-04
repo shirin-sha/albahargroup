@@ -9,10 +9,12 @@ import parse from 'html-react-parser';
 
 interface ArticleProps {
     article: ArticleType;
+    contentDir?: 'ltr' | 'rtl';
 }
 
 const Article = ({
-    article
+    article,
+    contentDir = 'ltr',
 }: ArticleProps) => {
     const { image, title, authorId, comments } = article;    
     const author: AuthorType | undefined = Authors.find((author: AuthorType) => author.id === authorId);
@@ -62,11 +64,11 @@ const Article = ({
                         }
                     </div>
 
-                    <h2 className="card-blog-heading heading text-50">
+                    <h2 className="card-blog-heading heading text-50" dir={contentDir}>
                         {article.title}
                     </h2>
 
-                    <div className="blog-description">
+                    <div className="blog-description" dir={contentDir}>
                         {parse(article.content)}
                     </div>
                 </div>

@@ -80,6 +80,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
 
       entries.push({
+        url: `${siteUrl}/ar/blogs/${post.slug}`,
+        lastModified,
+        changeFrequency: 'weekly',
+        priority: 0.6,
+      });
+
+      entries.push({
         url: `${siteUrl}/news/${post.slug}`,
         lastModified,
         changeFrequency: 'weekly',

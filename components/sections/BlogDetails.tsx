@@ -14,11 +14,13 @@ import DrawerOpener from '../DrawerOpener';
 interface BlogDetailsType {
     container: string;
     article: ArticleType;
+    contentDir?: 'ltr' | 'rtl';
 }
 
 const BlogDetails = ({
     container,
-    article
+    article,
+    contentDir = 'ltr',
 }: BlogDetailsType) => {
     const { tags }: { tags: string[] } = article;
 
@@ -35,7 +37,7 @@ const BlogDetails = ({
                 </DrawerOpener>
                 <div className="grid grid-cols-12 lg:gap-1">
                     <div className="col-span-12 lg:col-span-7">
-                        <Article article={article} />
+                        <Article article={article} contentDir={contentDir} />
 
                         <div className="blog-share" data-aos="fade-up">
                             {tags.length > 0 && 
