@@ -2,8 +2,6 @@ import '@/styles/blog.css';
 import '@/styles/blog-details.css';
 import { ArticleType } from '@/types/article';
 import Article from "../Article";
-import Comments from "../Comments";
-import CommentForm from "../CommentForm";
 import BlogSidebar from "../BlogSidebar";
 import Share from '../Share';
 import Icons from '../Icons';
@@ -15,12 +13,14 @@ interface BlogDetailsType {
     container: string;
     article: ArticleType;
     contentDir?: 'ltr' | 'rtl';
+    showCommentsMeta?: boolean;
 }
 
 const BlogDetails = ({
     container,
     article,
     contentDir = 'ltr',
+    showCommentsMeta = true,
 }: BlogDetailsType) => {
     const { tags }: { tags: string[] } = article;
 
@@ -37,7 +37,7 @@ const BlogDetails = ({
                 </DrawerOpener>
                 <div className="grid grid-cols-12 lg:gap-1">
                     <div className="col-span-12 lg:col-span-7">
-                        <Article article={article} contentDir={contentDir} />
+                        <Article article={article} contentDir={contentDir} showCommentsMeta={showCommentsMeta} />
 
                         <div className="blog-share" data-aos="fade-up">
                             {tags.length > 0 && 

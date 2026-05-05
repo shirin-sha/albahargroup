@@ -153,7 +153,7 @@ const Home = async () => {
       {/* Featured Blog */}
       {cmsData.blog ? (() => {
         const data = getBilingualData(cmsData.blog, { wrapperCls: "mt-100 section-padding", container: "container" });
-        return data ? <FeaturedBlog data={data} /> : null;
+        return data ? <FeaturedBlog data={data} locale="en" /> : null;
       })() : null}
     </>
   );

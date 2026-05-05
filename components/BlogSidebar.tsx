@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Icons from "./Icons";
 import SidebarSearch from "./SidebarSearch";
-import SidebarCategories from "./SidebarCategories";
 import RecentPost from "./RecentPost";
 import SidebarTags from "./SidebarTags";
 import DrawerOpener from "./DrawerOpener";
@@ -13,22 +12,10 @@ interface BlogSidebarType {
 }
 
 const BlogSidebar = ({ slug }: BlogSidebarType) => {
-    const [categories, setCategories] = useState<string[]>([]);
     const [tags, setTags] = useState<string[]>([]);
 
     useEffect(() => {
         const load = async () => {
-            try {
-                // Categories
-                const catRes = await fetch('/api/categories?enabled=true');
-                const catJson = await catRes.json();
-                if (catJson?.success && Array.isArray(catJson.data)) {
-                    setCategories(catJson.data.map((c: any) => c.name).filter(Boolean));
-                }
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-
             try {
                 // Tags (from posts)
                 const postRes = await fetch('/api/posts?enabled=true');
@@ -64,14 +51,6 @@ const BlogSidebar = ({ slug }: BlogSidebarType) => {
                     placeholder="Search blog"
                     name="search"
                 />
-
-                {categories.length > 0 &&
-                    <SidebarCategories 
-                        title="Categories"
-                        categories={categories}
-                        rootUrl="/news/category"
-                    />
-                }
 
                 <RecentPost
                     title="Recent Post" 

@@ -76,7 +76,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
       notFound();
     }
 
-    const article = newsPostToArticle(post, 'en');
+    const article = newsPostToArticle(post, 'en', { includeComments: false });
     const canonicalPath = `/news/${post.slug}`;
 
     const jsonLd: Record<string, unknown> = {
@@ -125,7 +125,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
             loading: 'eager',
           }}
         />
-        <BlogDetails container="container" article={article} />
+        <BlogDetails container="container" article={article} showCommentsMeta={false} />
       </>
     );
   } catch (error) {

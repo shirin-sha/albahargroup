@@ -5,8 +5,6 @@ export interface Post {
   slug: string;
   title: string;
   titleAr?: string; // Arabic title
-  category: string;
-  categoryAr?: string; // Arabic category
   content: string;
   contentAr?: string; // Arabic content
   excerpt: string;

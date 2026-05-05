@@ -13,7 +13,13 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 
 
-const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
+const FeaturedBlog = ({
+    data,
+    locale = 'en',
+}: {
+    data: SectionProps;
+    locale?: 'en' | 'ar';
+}) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -47,6 +53,9 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
         heading,
         button,
     } = data || {};
+    const detailHrefBase = locale === 'ar' ? '/ar/news' : '/news';
+    const localizedButtonHref =
+        button?.href === '/news' ? detailHrefBase : button?.href || detailHrefBase;
 
     return (
         <div className={`featured-blog ${wrapperCls}`}>
@@ -73,11 +82,19 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
                         {posts.slice(0, 3).map((post) => {
                             const article = {
                                 id: post.id || parseInt(post._id?.substring(0, 8) || '0', 16) || 0,
-                                title: post.title,
+                                title:
+                                    locale === 'ar'
+                                        ? (post.titleAr && post.titleAr.trim()) || post.title
+                                        : post.title,
                                 slug: post.slug,
-                                content: post.content,
-                                excerpt: post.excerpt,
-                                category: post.category,
+                                content:
+                                    locale === 'ar'
+                                        ? (post.contentAr && post.contentAr.trim()) || post.content
+                                        : post.content,
+                                excerpt:
+                                    locale === 'ar'
+                                        ? (post.excerptAr && post.excerptAr.trim()) || post.excerpt
+                                        : post.excerpt,
                                 image: post.image,
                                 video: post.video,
                                 tags: post.tags || [],
@@ -98,6 +115,8 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
                                     height={707}
                                     alt="Article image"
                                     showDate={true}
+                                    showCategory={false}
+                                    detailHrefBase={detailHrefBase}
                                 />
                             </div>
                         )})}
@@ -108,7 +127,7 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
                             {button.type == 'primary' &&
                                 <PrimaryButton 
                                     label={button.label}
-                                    href={button.href}
+                                    href={localizedButtonHref}
                                     ariaLabel={button.label}
                                 />
                             }
@@ -116,7 +135,7 @@ const FeaturedBlog = ({ data }: { data: SectionProps; }) => {
                             {button.type == 'secondary' &&
                                 <SecondaryButton 
                                     label={button.label}
-                                    href={button.href}
+                                    href={localizedButtonHref}
                                     ariaLabel={button.label}
                                 />
                             }

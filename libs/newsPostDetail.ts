@@ -26,7 +26,12 @@ function numericIdFromPost(post: Post): number {
   return 0;
 }
 
-export function newsPostToArticle(post: Post, lang: 'en' | 'ar'): ArticleType {
+export function newsPostToArticle(
+  post: Post,
+  lang: 'en' | 'ar',
+  options?: { includeComments?: boolean },
+): ArticleType {
+  const includeComments = options?.includeComments ?? true;
   const createdAt =
     typeof post.created_at === 'string'
       ? post.created_at
@@ -39,11 +44,10 @@ export function newsPostToArticle(post: Post, lang: 'en' | 'ar'): ArticleType {
       slug: post.slug,
       content: (post.contentAr && post.contentAr.trim()) || post.content,
       excerpt: (post.excerptAr && post.excerptAr.trim()) || post.excerpt || '',
-      category: (post.categoryAr && post.categoryAr.trim()) || post.category,
       image: post.image || null,
       video: post.video ?? null,
       tags: post.tags || [],
-      comments: post.comments || 0,
+      comments: includeComments ? post.comments || 0 : undefined,
       authorId: post.authorId ?? null,
       created_at: createdAt,
     };
@@ -55,11 +59,10 @@ export function newsPostToArticle(post: Post, lang: 'en' | 'ar'): ArticleType {
     slug: post.slug,
     content: post.content,
     excerpt: post.excerpt || '',
-    category: post.category,
     image: post.image || null,
     video: post.video ?? null,
     tags: post.tags || [],
-    comments: post.comments || 0,
+    comments: includeComments ? post.comments || 0 : undefined,
     authorId: post.authorId ?? null,
     created_at: createdAt,
   };

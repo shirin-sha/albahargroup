@@ -78,7 +78,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
       notFound();
     }
 
-    const article = newsPostToArticle(post, 'ar');
+    const article = newsPostToArticle(post, 'ar', { includeComments: false });
     const canonicalPath = `/ar/news/${post.slug}`;
     const displayTitle = (post.titleAr && post.titleAr.trim()) || post.title || 'الأخبار';
 
@@ -132,7 +132,12 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
             loading: 'eager',
           }}
         />
-        <BlogDetails container="container" article={article} contentDir="rtl" />
+        <BlogDetails
+          container="container"
+          article={article}
+          contentDir="rtl"
+          showCommentsMeta={false}
+        />
       </>
     );
   } catch (error) {

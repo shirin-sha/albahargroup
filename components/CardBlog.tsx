@@ -11,6 +11,7 @@ const CardBlog = ({
     alt,
     author,
     showDate,
+    showCategory = true,
     detailHrefBase = '/blogs',
 }: ArticleCardType) => {
     const detailHref = `${detailHrefBase.replace(/\/$/, '')}/${article.slug}`;
@@ -44,7 +45,7 @@ const CardBlog = ({
                 href={detailHref}
                 aria-label={article.title}
             >
-                {article.category &&
+                {showCategory && article.category &&
                     <span className="blog-tag subheading subheading-bg text-16 fw-500">
                         {article.category}
                     </span>

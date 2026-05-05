@@ -19,6 +19,7 @@ interface BlogGridProps {
     heading?: string;
     detailHrefBase?: string;
     locale?: 'en' | 'ar';
+    showCategory?: boolean;
 }
 
 const BlogGrid = ({
@@ -27,6 +28,7 @@ const BlogGrid = ({
     heading,
     detailHrefBase = '/blogs',
     locale = 'en',
+    showCategory = true,
 }: BlogGridProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [posts, setPosts] = useState<Post[]>([]);
@@ -112,10 +114,6 @@ const BlogGrid = ({
                             slug: post.slug,
                             content: post.content,
                             excerpt: post.excerpt,
-                            category:
-                                locale === 'ar'
-                                    ? (post.categoryAr && post.categoryAr.trim()) || post.category
-                                    : post.category,
                             image: post.image,
                             video: post.video,
                             tags: post.tags || [],
@@ -137,6 +135,7 @@ const BlogGrid = ({
                                     alt="Article image"
                                     author={author}
                                     showDate={true}
+                                    showCategory={showCategory}
                                     detailHrefBase={detailHrefBase}
                                 />
                             </div>

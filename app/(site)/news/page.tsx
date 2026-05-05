@@ -83,6 +83,7 @@ const Blog = async () => {
                 cls="mt-100 mb-100"
                 subheading={cmsData.blogGrid?.subheading || undefined}
                 heading={cmsData.blogGrid?.heading || undefined}
+                showCategory={false}
                 detailHrefBase="/news"
                 locale="en"
             />

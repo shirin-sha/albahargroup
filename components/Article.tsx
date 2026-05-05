@@ -4,17 +4,18 @@ import Authors from '@/data/author.json';
 import Image from "next/image";
 import Icons from "./Icons";
 import { formatDate } from "@/utils/formatDate";
-import Link from "next/link";
 import parse from 'html-react-parser';
 
 interface ArticleProps {
     article: ArticleType;
     contentDir?: 'ltr' | 'rtl';
+    showCommentsMeta?: boolean;
 }
 
 const Article = ({
     article,
     contentDir = 'ltr',
+    showCommentsMeta = true,
 }: ArticleProps) => {
     const { image, title, authorId, comments } = article;    
     const author: AuthorType | undefined = Authors.find((author: AuthorType) => author.id === authorId);
@@ -47,20 +48,15 @@ const Article = ({
 
                         {article.created_at && 
                             <div className="card-blog-meta-item text text-18">
-                                <Icons.Calendar2 />
                                 {formatDate(article.created_at)}
                             </div>
                         }
 
-                        {comments &&
-                            <Link
-                                className="card-blog-meta-item text text-18"
-                                href="#blog-comments"
-                                aria-label="Blog Comments"
-                            >
+                        {showCommentsMeta && comments &&
+                            <div className="card-blog-meta-item text text-18">
                                 <Icons.Comment />
                                 {comments < 10 ? '0': ''}{comments} Comments
-                            </Link>
+                            </div>
                         }
                     </div>
 

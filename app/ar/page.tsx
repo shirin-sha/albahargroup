@@ -149,9 +149,9 @@ const Home = async () => {
 
       {/* Featured Blog */}
       {cmsData.blog ? (
-        <FeaturedBlog data={getArabicData(cmsData.blog, FeaturedBlogData)} />
+        <FeaturedBlog data={getArabicData(cmsData.blog, FeaturedBlogData)} locale="ar" />
       ) : (
-        <FeaturedBlog data={FeaturedBlogData} />
+        <FeaturedBlog data={FeaturedBlogData} locale="ar" />
       )}
     </>
   );

@@ -5,19 +5,15 @@ import { Post } from '@/libs/models/post';
 import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import BilingualField from '@/components/admin/BilingualField';
-import Link from 'next/link';
 
 const PostsPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<Post>>({
     title: '',
     titleAr: '',
-    category: '',
-    categoryAr: '',
     content: '',
     contentAr: '',
     excerpt: '',
@@ -32,7 +28,6 @@ const PostsPage = () => {
 
   useEffect(() => {
     fetchPosts();
-    fetchCategories();
   }, []);
 
   const fetchPosts = async () => {
@@ -46,18 +41,6 @@ const PostsPage = () => {
       console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch('/api/categories?enabled=true');
-      const result = await res.json();
-      if (result.success) {
-        setCategories(result.data);
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
     }
   };
 
@@ -95,8 +78,6 @@ const PostsPage = () => {
     setFormData({
       title: post.title || '',
       titleAr: post.titleAr || '',
-      category: post.category || '',
-      categoryAr: post.categoryAr || '',
       content: post.content || '',
       contentAr: post.contentAr || '',
       excerpt: post.excerpt || '',
@@ -134,8 +115,6 @@ const PostsPage = () => {
     setFormData({
       title: '',
       titleAr: '',
-      category: '',
-      categoryAr: '',
       content: '',
       contentAr: '',
       excerpt: '',
@@ -177,13 +156,6 @@ const PostsPage = () => {
       <div className="admin-cms-header">
         <h1>Posts Management</h1>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link
-            href="/admin/dashboard/categories"
-            className="button"
-            style={{ textDecoration: 'none' }}
-          >
-            Manage Categories
-          </Link>
           <button
             type="button"
             className="button button-primary"
@@ -216,44 +188,6 @@ const PostsPage = () => {
                 type="text"
                 required
               />
-
-              <div className="form-group-bilingual">
-                <label>Category *</label>
-                <div className="bilingual-inputs">
-                  <div className="bilingual-input-group">
-                    <span className="bilingual-label">English</span>
-                    <select
-                      value={formData.category || ''}
-                      onChange={(e) => {
-                        const selectedCategory = categories.find(cat => cat.name === e.target.value);
-                        setFormData({ 
-                          ...formData, 
-                          category: e.target.value,
-                          categoryAr: selectedCategory?.nameAr || ''
-                        });
-                      }}
-                      required
-                    >
-                      <option value="">Select a category</option>
-                      {categories.map((category) => (
-                        <option key={category._id || category.id} value={category.name}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="bilingual-input-group">
-                    <span className="bilingual-label">العربية</span>
-                    <input
-                      type="text"
-                      value={formData.categoryAr || ''}
-                      onChange={(e) => setFormData({ ...formData, categoryAr: e.target.value })}
-                      placeholder="Arabic category name"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-              </div>
 
               <BilingualField
                 label="Excerpt"
@@ -358,7 +292,6 @@ const PostsPage = () => {
             <tr>
               <th>Image</th>
               <th>Title</th>
-              <th>Category</th>
               <th>Date</th>
               <th>Status</th>
               <th>Actions</th>
@@ -391,7 +324,6 @@ const PostsPage = () => {
                       </div>
                     </td>
                     <td><strong>{post.title}</strong></td>
-                    <td>{post.category}</td>
                     <td>{post.created_at ? new Date(post.created_at).toLocaleDateString() : 'N/A'}</td>
                     <td>
                       <span className={`admin-badge ${post.enabled !== false ? 'published' : 'draft'}`}>
